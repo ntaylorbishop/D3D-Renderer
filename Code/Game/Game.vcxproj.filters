@@ -9,9 +9,6 @@
     <Filter Include="Source\GameApp">
       <UniqueIdentifier>{f412ecd8-49be-4e31-babb-775d02feb2f3}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source\Lights">
-      <UniqueIdentifier>{db428360-f74c-4f75-877a-b55b767cc571}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Data_x64">
       <UniqueIdentifier>{71d5d2c5-8077-4313-babe-81928fed88ef}</UniqueIdentifier>
     </Filter>
@@ -39,9 +36,6 @@
     <Filter Include="Data_x64\Shaders\Old">
       <UniqueIdentifier>{a9375fcd-d2d3-46c7-b236-dfa7370e3adc}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source\Water">
-      <UniqueIdentifier>{4610af50-a24c-4b6a-81b2-e01b81658b8c}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Data_x64\Shaders\Effects">
       <UniqueIdentifier>{785cb527-2ad2-4648-9a51-aef46a2cde85}</UniqueIdentifier>
     </Filter>
@@ -54,14 +48,8 @@
     <Filter Include="Data_x64\Shaders\3D\BlinnPhong">
       <UniqueIdentifier>{926e29df-34d1-4216-a658-9737fa7dced2}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source\DebugSceneTypes">
-      <UniqueIdentifier>{f68adb3f-4621-45a6-9de2-ecd01097435d}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Data_x64\Shaders\Debug">
       <UniqueIdentifier>{6a53ab34-f699-43e7-b13d-21421135000f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source\ParallaxCorrectedCubemaps">
-      <UniqueIdentifier>{50063dfe-063e-4f51-a382-637bd2410803}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -77,42 +65,6 @@
     <ClCompile Include="TheGame.cpp">
       <Filter>Source\GameApp</Filter>
     </ClCompile>
-    <ClCompile Include="MovingLight.cpp">
-      <Filter>Source\Lights</Filter>
-    </ClCompile>
-    <ClCompile Include="LightManager.cpp">
-      <Filter>Source\Lights</Filter>
-    </ClCompile>
-    <ClCompile Include="WaterPlane.cpp">
-      <Filter>Source\Water</Filter>
-    </ClCompile>
-    <ClCompile Include="DebugSceneTypes\DebugSceneType.cpp">
-      <Filter>Source\DebugSceneTypes</Filter>
-    </ClCompile>
-    <ClCompile Include="DebugSceneTypes\SceneTypeOIT.cpp">
-      <Filter>Source\DebugSceneTypes</Filter>
-    </ClCompile>
-    <ClCompile Include="DebugSceneTypes\SceneTypeSSAO.cpp">
-      <Filter>Source\DebugSceneTypes</Filter>
-    </ClCompile>
-    <ClCompile Include="DebugSceneTypes\SceneTypeHDR.cpp">
-      <Filter>Source\DebugSceneTypes</Filter>
-    </ClCompile>
-    <ClCompile Include="DebugSceneTypes\SceneTypeForwardPlus.cpp">
-      <Filter>Source\DebugSceneTypes</Filter>
-    </ClCompile>
-    <ClCompile Include="DebugSceneTypes\SceneTypeShadows.cpp">
-      <Filter>Source\DebugSceneTypes</Filter>
-    </ClCompile>
-    <ClCompile Include="DebugSceneTypes\SceneTypeDRP.cpp">
-      <Filter>Source\DebugSceneTypes</Filter>
-    </ClCompile>
-    <ClCompile Include="ShadowSphere.cpp">
-      <Filter>Source\Lights</Filter>
-    </ClCompile>
-    <ClCompile Include="ProbeManager.cpp">
-      <Filter>Source\ParallaxCorrectedCubemaps</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="TheApp.hpp">
@@ -123,42 +75,6 @@
     </ClInclude>
     <ClInclude Include="TheGame.hpp">
       <Filter>Source\GameApp</Filter>
-    </ClInclude>
-    <ClInclude Include="MovingLight.hpp">
-      <Filter>Source\Lights</Filter>
-    </ClInclude>
-    <ClInclude Include="LightManager.hpp">
-      <Filter>Source\Lights</Filter>
-    </ClInclude>
-    <ClInclude Include="WaterPlane.hpp">
-      <Filter>Source\Water</Filter>
-    </ClInclude>
-    <ClInclude Include="DebugSceneTypes\DebugSceneType.hpp">
-      <Filter>Source\DebugSceneTypes</Filter>
-    </ClInclude>
-    <ClInclude Include="DebugSceneTypes\SceneTypeOIT.hpp">
-      <Filter>Source\DebugSceneTypes</Filter>
-    </ClInclude>
-    <ClInclude Include="DebugSceneTypes\SceneTypeSSAO.hpp">
-      <Filter>Source\DebugSceneTypes</Filter>
-    </ClInclude>
-    <ClInclude Include="DebugSceneTypes\SceneTypeHDR.hpp">
-      <Filter>Source\DebugSceneTypes</Filter>
-    </ClInclude>
-    <ClInclude Include="DebugSceneTypes\SceneTypeForwardPlus.hpp">
-      <Filter>Source\DebugSceneTypes</Filter>
-    </ClInclude>
-    <ClInclude Include="DebugSceneTypes\SceneTypeShadows.hpp">
-      <Filter>Source\DebugSceneTypes</Filter>
-    </ClInclude>
-    <ClInclude Include="DebugSceneTypes\SceneTypeDRP.hpp">
-      <Filter>Source\DebugSceneTypes</Filter>
-    </ClInclude>
-    <ClInclude Include="ShadowSphere.hpp">
-      <Filter>Source\Lights</Filter>
-    </ClInclude>
-    <ClInclude Include="ProbeManager.hpp">
-      <Filter>Source\ParallaxCorrectedCubemaps</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -108,7 +108,7 @@ void TheApp::Update() {
 //---------------------------------------------------------------------------------------------------------------------------
 void TheApp::Render() {
 
-	g_theGame->Render();
+	TheGame::Get()->Render();
 	BeirusEngine::Render();
 
 	s_theApp->m_timer.m_end = Time::GetCurrentTimeSeconds();
