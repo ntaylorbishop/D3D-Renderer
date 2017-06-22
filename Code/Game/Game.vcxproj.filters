@@ -51,6 +51,9 @@
     <Filter Include="Data_x64\Shaders\Debug">
       <UniqueIdentifier>{6a53ab34-f699-43e7-b13d-21421135000f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source\RHI">
+      <UniqueIdentifier>{d3aac8c5-ce9b-46e7-848f-d440f4331dbe}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="TheApp.cpp">
