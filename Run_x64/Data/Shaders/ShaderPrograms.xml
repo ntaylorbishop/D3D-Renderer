@@ -1,0 +1,540 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--
+<defaults>
+	defaultProj
+	cameraPos
+	defaultView
+	screenSizeX
+	screenSizeY
+	defaultNear
+	defaultFar
+	blank
+	null
+	defaultDepth
+	defaultColorTarget
+</defaults>
+-->
+
+<ShaderPrograms>
+	<!-- ++++++++++++++++++++++++++++++++++ BLINN PHONG SHADER   +++++++++++++++++++++++++++++++++++++++ -->
+	<ShaderProgram name="BlinnPhong">
+		<VertexShader name="BlinnPhong">
+			<Uniform name="gModel"              type="mat4"								default="identity" />
+			<Uniform name="gView"               type="mat4"								default="defaultView" />
+			<Uniform name="gProj"               type="mat4"								default="defaultProj" />
+			<Uniform name="gVertColor"          type="vec4"								default="white" />
+		</VertexShader>
+		<FragmentShader name="BlinnPhong">
+			<Uniform name="gTexDiffuse"         type="texture2D"		    bindPoint="0"		default="null" />
+			<Uniform name="gTexNormal"          type="texture2D"		    bindPoint="1"		default="null" />
+			<Uniform name="gTexSpecular"        type="texture2D"		    bindPoint="2"		default="null" />
+			<Uniform name="gTexSSAO"			type="textureBuffer2D"		bindPoint="4"		default="null" />
+			<Uniform name="gAmbientLight"       type="vec4"										default="white" />
+			<Uniform name="gCameraPosition"     type="vec3"										default="cameraPos" />
+			<Uniform name="gSpecularPower"      type="float"									default="128.0" />
+			<Uniform name="gWhatToRender"       type="int"										default="0" />
+			<Uniform name="gTileSizePixels"     type="uint"										default="tileSizePixels" />
+			<Uniform name="gResX"               type="uint"										default="screenSizeX" />
+			<Uniform name="gResY"               type="uint"										default="screenSizeY" />
+			<Uniform name="gMaxLightsPerTile"   type="uint"										default="maxLightsPerTile" />
+			<Uniform name="gView"               type="mat4"										default="defaultView" />
+			<Uniform name="gProj"               type="mat4"										default="defaultProj" />
+			<Uniform name="gHeatmapView"        type="bool"										default="false" />
+			<Uniform name="gShadowMap"          type="cubemap"			    bindPoint="3"		default="blank" />
+			<Uniform name="gHasShadowLight"     type="bool"										default="false" />
+			<Uniform name="gShadowLightPos"     type="vec3"										default="(0, 0, 0)" />
+			<Uniform name="gNearPlane"          type="float"									default="defaultNear" />
+			<Uniform name="gFarPlane"           type="float"									default="defaultFar" />
+			<Uniform name="gIsUsingSSAO"		type="bool"										default="true" />
+
+			<Uniform name="gTexEnv0"			type="cubemap"			    bindPoint="5"		default="null" />
+			<Uniform name="gTexEnv1"			type="cubemap"			    bindPoint="6"		default="null" />
+			<Uniform name="gTexEnv2"			type="cubemap"			    bindPoint="7"		default="null" />
+			<Uniform name="gTexEnv3"			type="cubemap"			    bindPoint="8"		default="null" />
+			<Uniform name="gTexEnv4"			type="cubemap"			    bindPoint="9"		default="null" />
+			<Uniform name="gTexEnv5"			type="cubemap"			    bindPoint="10"		default="null" />
+			<Uniform name="gTexEnv6"			type="cubemap"			    bindPoint="11"		default="null" />
+			<Uniform name="gTexEnv7"			type="cubemap"			    bindPoint="12"		default="null" />
+			<Uniform name="gTexEnv8"			type="cubemap"			    bindPoint="13"		default="null" />
+			<Uniform name="gTexEnv9"			type="cubemap"			    bindPoint="14"		default="null" />
+			<Uniform name="gTexEnv10"			type="cubemap"			    bindPoint="15"		default="null" />
+			<Uniform name="gTexEnv11"			type="cubemap"			    bindPoint="16"		default="null" />
+			<Uniform name="gTexEnv12"			type="cubemap"			    bindPoint="17"		default="null" />
+			<Uniform name="gTexEnv13"			type="cubemap"			    bindPoint="18"		default="null" />
+			<Uniform name="gTexEnv14"			type="cubemap"			    bindPoint="19"		default="null" />
+			<Uniform name="gTexEnv15"			type="cubemap"			    bindPoint="20"		default="null" />
+			
+			<Uniform name="envRadius0"			type="float"									default="0.0" />
+			<Uniform name="envRadius1"			type="float"									default="0.0" />
+			<Uniform name="envRadius2"			type="float"									default="0.0" />
+			<Uniform name="envRadius3"			type="float"									default="0.0" />
+			<Uniform name="envRadius4"			type="float"									default="0.0" />
+			<Uniform name="envRadius5"			type="float"									default="0.0" />
+			<Uniform name="envRadius6"			type="float"									default="0.0" />
+			<Uniform name="envRadius7"			type="float"									default="0.0" />
+			<Uniform name="envRadius8"			type="float"									default="0.0" />
+			<Uniform name="envRadius9"			type="float"									default="0.0" />
+			<Uniform name="envRadius10"			type="float"									default="0.0" />
+			<Uniform name="envRadius11"			type="float"									default="0.0" />
+			<Uniform name="envRadius12"			type="float"									default="0.0" />
+			<Uniform name="envRadius13"			type="float"									default="0.0" />
+			<Uniform name="envRadius14"			type="float"									default="0.0" />
+			<Uniform name="envRadius15"			type="float"									default="0.0" />
+
+			<Uniform name="envPos0"				type="vec3"										default="(0, 0, 0)" />
+			<Uniform name="envPos1"				type="vec3"										default="(0, 0, 0)" />
+			<Uniform name="envPos2"				type="vec3"										default="(0, 0, 0)" />
+			<Uniform name="envPos3"				type="vec3"										default="(0, 0, 0)" />
+			<Uniform name="envPos4"				type="vec3"										default="(0, 0, 0)" />
+			<Uniform name="envPos5"				type="vec3"										default="(0, 0, 0)" />
+			<Uniform name="envPos6"				type="vec3"										default="(0, 0, 0)" />
+			<Uniform name="envPos7"				type="vec3"										default="(0, 0, 0)" />
+			<Uniform name="envPos8"				type="vec3"										default="(0, 0, 0)" />
+			<Uniform name="envPos9"				type="vec3"										default="(0, 0, 0)" />
+			<Uniform name="envPos10"			type="vec3"										default="(0, 0, 0)" />
+			<Uniform name="envPos11"			type="vec3"										default="(0, 0, 0)" />
+			<Uniform name="envPos12"			type="vec3"										default="(0, 0, 0)" />
+			<Uniform name="envPos13"			type="vec3"										default="(0, 0, 0)" />
+			<Uniform name="envPos14"			type="vec3"										default="(0, 0, 0)" />
+			<Uniform name="envPos15"			type="vec3"										default="(0, 0, 0)" />
+
+			<Uniform name="envMapCount"			type="uint"										default="0" />
+		</FragmentShader>
+	</ShaderProgram>
+
+	<!-- ++++++++++++++++++++++++++++++++++ WATER SHADER   +++++++++++++++++++++++++++++++++++++++ -->
+	<ShaderProgram name="Water">
+		<VertexShader name="Water">
+			<Uniform name="gModel"              type="mat4"								          default="identity" />
+			<Uniform name="gView"               type="mat4"								          default="defaultView" />
+			<Uniform name="gProj"               type="mat4"								          default="defaultProj" />
+			<Uniform name="gVertColor"          type="vec4"								          default="white" />
+		</VertexShader>
+		<FragmentShader name="Water">
+			<Uniform name="gTexDiffuse"         type="texture2D"		bindPoint="0"			  default="null" />
+			<Uniform name="gTexNormal"          type="texture2D"		bindPoint="1"			  default="null" />
+			<Uniform name="gTexSpecular"        type="texture2D"		bindPoint="2"			  default="null" />
+			<Uniform name="gTexDisplacement"    type="texture2D"		bindPoint="4"			  default="null" />
+			<Uniform name="gAmbientLight"       type="vec4"								          default="white" />
+			<Uniform name="gCameraPosition"     type="vec3"								          default="cameraPos" />
+			<Uniform name="gSpecularPower"      type="float"							          default="128.0" />
+			<Uniform name="gWhatToRender"       type="int"								          default="0" />
+			<Uniform name="gTileSizePixels"     type="uint"								          default="tileSizePixels" />
+			<Uniform name="gResX"               type="uint"								          default="screenSizeX" />
+			<Uniform name="gResY"               type="uint"								          default="screenSizeY" />
+			<Uniform name="gMaxLightsPerTile"   type="uint"								          default="maxLightsPerTile" />
+			<Uniform name="gView"               type="mat4"								          default="defaultView" />
+			<Uniform name="gProj"               type="mat4"								          default="defaultProj" />
+			<Uniform name="gHeatmapView"        type="bool"								          default="false" />
+			<Uniform name="gShadowMap"          type="cubemap"			bindPoint="3"			  default="blank" />
+			<Uniform name="gHasShadowLight"     type="bool"								          default="false" />
+			<Uniform name="gShadowLightPos"     type="vec3"								          default="(0, 0, 0)" />
+			<Uniform name="gNearPlane"          type="float"							          default="defaultNear" />
+			<Uniform name="gFarPlane"           type="float"							          default="defaultFar" />
+
+			<Uniform name="gTexEnv0"			type="cubemap"			    bindPoint="5"		default="null" />
+			<Uniform name="gTexEnv1"			type="cubemap"			    bindPoint="6"		default="null" />
+			<Uniform name="gTexEnv2"			type="cubemap"			    bindPoint="7"		default="null" />
+			<Uniform name="gTexEnv3"			type="cubemap"			    bindPoint="8"		default="null" />
+			<Uniform name="gTexEnv4"			type="cubemap"			    bindPoint="9"		default="null" />
+			<Uniform name="gTexEnv5"			type="cubemap"			    bindPoint="10"		default="null" />
+			<Uniform name="gTexEnv6"			type="cubemap"			    bindPoint="11"		default="null" />
+			<Uniform name="gTexEnv7"			type="cubemap"			    bindPoint="12"		default="null" />
+			<Uniform name="gTexEnv8"			type="cubemap"			    bindPoint="13"		default="null" />
+			<Uniform name="gTexEnv9"			type="cubemap"			    bindPoint="14"		default="null" />
+			<Uniform name="gTexEnv10"			type="cubemap"			    bindPoint="15"		default="null" />
+			<Uniform name="gTexEnv11"			type="cubemap"			    bindPoint="16"		default="null" />
+			<Uniform name="gTexEnv12"			type="cubemap"			    bindPoint="17"		default="null" />
+			<Uniform name="gTexEnv13"			type="cubemap"			    bindPoint="18"		default="null" />
+			<Uniform name="gTexEnv14"			type="cubemap"			    bindPoint="19"		default="null" />
+			<Uniform name="gTexEnv15"			type="cubemap"			    bindPoint="20"		default="null" />
+
+			<Uniform name="envMins0"			type="vec3"										default="(0, 0, 0)" />
+			<Uniform name="envMaxs0"			type="vec3"										default="(0, 0, 0)" />
+			<Uniform name="envMins1"			type="vec3"										default="(0, 0, 0)" />
+			<Uniform name="envMaxs1"			type="vec3"										default="(0, 0, 0)" />
+			<Uniform name="envMins2"			type="vec3"										default="(0, 0, 0)" />
+			<Uniform name="envMaxs2"			type="vec3"										default="(0, 0, 0)" />
+			<Uniform name="envMins3"			type="vec3"										default="(0, 0, 0)" />
+			<Uniform name="envMaxs3"			type="vec3"										default="(0, 0, 0)" />
+			<Uniform name="envMins4"			type="vec3"										default="(0, 0, 0)" />
+			<Uniform name="envMaxs4"			type="vec3"										default="(0, 0, 0)" />
+			<Uniform name="envMins5"			type="vec3"										default="(0, 0, 0)" />
+			<Uniform name="envMaxs5"			type="vec3"										default="(0, 0, 0)" />
+			<Uniform name="envMins6"			type="vec3"										default="(0, 0, 0)" />
+			<Uniform name="envMaxs6"			type="vec3"										default="(0, 0, 0)" />
+			<Uniform name="envMins7"			type="vec3"										default="(0, 0, 0)" />
+			<Uniform name="envMaxs7"			type="vec3"										default="(0, 0, 0)" />
+			<Uniform name="envMins8"			type="vec3"										default="(0, 0, 0)" />
+			<Uniform name="envMaxs8"			type="vec3"										default="(0, 0, 0)" />
+			<Uniform name="envMins9"			type="vec3"										default="(0, 0, 0)" />
+			<Uniform name="envMaxs9"			type="vec3"										default="(0, 0, 0)" />
+			<Uniform name="envMins10"			type="vec3"										default="(0, 0, 0)" />
+			<Uniform name="envMaxs10"			type="vec3"										default="(0, 0, 0)" />
+			<Uniform name="envMins11"			type="vec3"										default="(0, 0, 0)" />
+			<Uniform name="envMaxs11"			type="vec3"										default="(0, 0, 0)" />
+			<Uniform name="envMins12"			type="vec3"										default="(0, 0, 0)" />
+			<Uniform name="envMaxs12"			type="vec3"										default="(0, 0, 0)" />
+			<Uniform name="envMins13"			type="vec3"										default="(0, 0, 0)" />
+			<Uniform name="envMaxs13"			type="vec3"										default="(0, 0, 0)" />
+			<Uniform name="envMins14"			type="vec3"										default="(0, 0, 0)" />
+			<Uniform name="envMaxs14"			type="vec3"										default="(0, 0, 0)" />
+			<Uniform name="envMins15"			type="vec3"										default="(0, 0, 0)" />
+			<Uniform name="envMaxs15"			type="vec3"										default="(0, 0, 0)" />
+
+			<Uniform name="envPos0"				type="vec3"										default="(0, 0, 0)" />
+			<Uniform name="envPos1"				type="vec3"										default="(0, 0, 0)" />
+			<Uniform name="envPos2"				type="vec3"										default="(0, 0, 0)" />
+			<Uniform name="envPos3"				type="vec3"										default="(0, 0, 0)" />
+			<Uniform name="envPos4"				type="vec3"										default="(0, 0, 0)" />
+			<Uniform name="envPos5"				type="vec3"										default="(0, 0, 0)" />
+			<Uniform name="envPos6"				type="vec3"										default="(0, 0, 0)" />
+			<Uniform name="envPos7"				type="vec3"										default="(0, 0, 0)" />
+			<Uniform name="envPos8"				type="vec3"										default="(0, 0, 0)" />
+			<Uniform name="envPos9"				type="vec3"										default="(0, 0, 0)" />
+			<Uniform name="envPos10"			type="vec3"										default="(0, 0, 0)" />
+			<Uniform name="envPos11"			type="vec3"										default="(0, 0, 0)" />
+			<Uniform name="envPos12"			type="vec3"										default="(0, 0, 0)" />
+			<Uniform name="envPos13"			type="vec3"										default="(0, 0, 0)" />
+			<Uniform name="envPos14"			type="vec3"										default="(0, 0, 0)" />
+			<Uniform name="envPos15"			type="vec3"										default="(0, 0, 0)" />
+
+			<Uniform name="envMapCount"			type="uint"										default="0" />
+		</FragmentShader>
+	</ShaderProgram>
+
+	<!-- ++++++++++++++++++++++++++++++ BLINN PHONG PARTICLE LIGHTING SHADER   +++++++++++++++++++++++++++ -->
+	<ShaderProgram name="BlinnPhongParticleLighting">
+		<VertexShader name="BlinnPhongParticleLighting">
+			<Uniform name="gModel"              type="mat4"										  default="identity" />
+			<Uniform name="gView"               type="mat4"										  default="defaultView" />
+			<Uniform name="gProj"               type="mat4"										  default="defaultProj" />
+			<Uniform name="gVertColor"          type="vec4"										  default="white" />
+			<Uniform name="gSpriteIndex"        type="uint"										  default="0" />
+			<Uniform name="gTileSize"           type="vec2"										  default="(0, 0)" />
+		</VertexShader>																			  
+		<FragmentShader name="BlinnPhongParticleLighting">										  
+			<Uniform name="gTexDiffuse"         type="texture2D"		bindPoint="0"			  default="null" />
+			<Uniform name="gTexNormal"          type="texture2D"		bindPoint="1"			  default="null" />
+			<Uniform name="gTexSpecular"        type="texture2D"		bindPoint="2"			  default="null" />
+			<Uniform name="gTexSSAO"			type="textureBuffer2D"	bindPoint="4"			  default="null" />
+			<Uniform name="gAmbientLight"       type="vec4"										  default="white" />
+			<Uniform name="gCameraPosition"     type="vec3"										  default="cameraPos" />
+			<Uniform name="gSpecularPower"      type="float"									  default="128.0" />
+			<Uniform name="gWhatToRender"       type="int"										  default="0" />
+			<Uniform name="gTileSizePixels"     type="uint"										  default="tileSizePixels" />
+			<Uniform name="gResX"               type="uint"										  default="screenSizeX" />
+			<Uniform name="gResY"               type="uint"										  default="screenSizeY" />
+			<Uniform name="gMaxLightsPerTile"   type="uint"										  default="maxLightsPerTile" />
+			<Uniform name="gView"               type="mat4"										  default="defaultView" />
+			<Uniform name="gProj"               type="mat4"										  default="defaultProj" />
+			<Uniform name="gHeatmapView"        type="bool"										  default="false" />
+			<Uniform name="gShadowMap"          type="cubemap"			bindPoint="3"			  default="blank" />
+			<Uniform name="gHasShadowLight"     type="bool"										  default="false" />
+			<Uniform name="gShadowLightPos"     type="vec3"										  default="(0, 0, 0)" />
+			<Uniform name="gNearPlane"          type="float"									  default="defaultNear" />
+			<Uniform name="gFarPlane"           type="float"									  default="defaultFar" />
+			<Uniform name="gIsUsingSSAO"		type="bool"										  default="true" />
+		</FragmentShader>
+	</ShaderProgram>
+
+	<!-- ++++++++++++++++++++++++ BLINN PHONG PARTICLE LIGHTING NO OIT SHADER   +++++++++++++++++++++++++++ -->
+	<ShaderProgram name="BlinnPhongParticleLighting_NoOIT">
+		<VertexShader name="BlinnPhongParticleLighting_NoOIT">
+			<Uniform name="gModel"              type="mat4"								default="identity" />
+			<Uniform name="gView"               type="mat4"								default="defaultView" />
+			<Uniform name="gProj"               type="mat4"								default="defaultProj" />
+			<Uniform name="gVertColor"          type="vec4"								default="white" />
+			<Uniform name="gSpriteIndex"        type="uint"								default="0" />
+			<Uniform name="gTileSize"           type="vec2"								default="(0, 0)" />
+		</VertexShader>
+		<FragmentShader name="BlinnPhongParticleLighting_NoOIT">
+			<Uniform name="gTexDiffuse"         type="texture2D"		bindPoint="0"   default="null" />
+			<Uniform name="gTexNormal"          type="texture2D"		bindPoint="1"   default="null" />
+			<Uniform name="gTexSpecular"        type="texture2D"		bindPoint="2"   default="null" />
+			<Uniform name="gTexSSAO"			type="textureBuffer2D"	bindPoint="4"	default="null" />
+			<Uniform name="gAmbientLight"       type="vec4"								default="white" />
+			<Uniform name="gCameraPosition"     type="vec3"								default="cameraPos" />
+			<Uniform name="gSpecularPower"      type="float"							default="128.0" />
+			<Uniform name="gWhatToRender"       type="int"								default="0" />
+			<Uniform name="gTileSizePixels"     type="uint"								default="tileSizePixels" />
+			<Uniform name="gResX"               type="uint"								default="screenSizeX" />
+			<Uniform name="gResY"               type="uint"								default="screenSizeY" />
+			<Uniform name="gMaxLightsPerTile"   type="uint"								default="maxLightsPerTile" />
+			<Uniform name="gView"               type="mat4"								default="defaultView" />
+			<Uniform name="gProj"               type="mat4"								default="defaultProj" />
+			<Uniform name="gHeatmapView"        type="bool"								default="false" />
+			<Uniform name="gShadowMap"          type="cubemap"			bindPoint="3"   default="blank" />
+			<Uniform name="gHasShadowLight"     type="bool"								default="false" />
+			<Uniform name="gShadowLightPos"     type="vec3"								default="(0, 0, 0)" />
+			<Uniform name="gNearPlane"          type="float"							default="defaultNear" />
+			<Uniform name="gFarPlane"           type="float"							default="defaultFar" />
+			<Uniform name="gIsUsingSSAO"		type="bool"								default="true" />
+		</FragmentShader>
+	</ShaderProgram>
+
+	<!-- ++++++++++++++++++++++++++++++++ COOK-TORRANCE BRDF SHADER   +++++++++++++++++++++++++++++++++++++ -->
+	<ShaderProgram name="CookTorranceBRDF">
+		<VertexShader name="CookTorranceBRDF">
+			<Uniform name="gModel"              type="mat4"								default="identity" />
+			<Uniform name="gView"               type="mat4"								default="defaultView" />
+			<Uniform name="gProj"               type="mat4"								default="defaultProj" />
+		</VertexShader>
+		<FragmentShader name="CookTorranceBRDF">
+			<Uniform name="gTexSkybox"			type="cubemap"			bindPoint="0"   default="null" />
+			<Uniform name="gTexDiffuse"			type="texture2D"		bindPoint="1"   default="null" />
+			<Uniform name="gTexNormal"			type="texture2D"		bindPoint="2"   default="null" />
+			<Uniform name="gTexRoughness"		type="texture2D"		bindPoint="3"   default="null" />
+			<Uniform name="gCameraPosition"     type="vec3"								default="cameraPos" />
+			<Uniform name="gLightPos"			type="vec3"								default="(0, 0, 0)" />
+			<Uniform name="gLightColor"			type="vec4"								default="white" />
+			<Uniform name="gMinLightDist"		type="float"							default="0.f" />
+			<Uniform name="gMaxLightDist"       type="float"							default="0.f" />
+			<Uniform name="gMinLightPower"      type="float"							default="0.f" />
+			<Uniform name="gMaxLightPower"		type="float"							default="0.f" />
+			<Uniform name="gFresnelBias"        type="float"							default="0.f" />
+			<Uniform name="gFresnelScale"       type="float"							default="0.f" />
+			<Uniform name="gFresnelPower"       type="float"							default="0.f" />
+			<Uniform name="gSpecularIntensity"  type="float"							default="0.f" />
+		</FragmentShader>
+	</ShaderProgram>
+
+	<!-- ++++++++++++++++++++++++++++++++++++++++ UNLIT SHADER   ++++++++++++++++++++++++++++++++++++++++++++ -->
+	<ShaderProgram name="Unlit">
+		<VertexShader name="Unlit">
+			<Uniform name="gModel"              type="mat4"								default="identity" />
+			<Uniform name="gView"               type="mat4"								default="defaultView" />
+			<Uniform name="gProj"               type="mat4"								default="defaultProj" />
+		</VertexShader>
+		<FragmentShader name="Unlit">
+			<Uniform name="gTexDiffuse"			type="texture2D"		bindPoint="1"   default="null" />
+			<Uniform name="gTexNormal"			type="texture2D"		bindPoint="2"   default="null" />
+			<Uniform name="gDiffuseColor"		type="vec4"								default="white" />
+			<Uniform name="gUsesDiffuseTex"		type="bool"								default="false" />
+		</FragmentShader>
+	</ShaderProgram>
+
+	<!-- ++++++++++++++++++++++++++++++++++++ UNLITOPAQUE SHADER   ++++++++++++++++++++++++++++++++++++++++++++ -->
+	<ShaderProgram name="UnlitOpaque">
+		<VertexShader name="UnlitOpaque">
+			<Uniform name="gModel"              type="mat4"								default="identity" />
+			<Uniform name="gView"               type="mat4"								default="defaultView" />
+			<Uniform name="gProj"               type="mat4"								default="defaultProj" />
+		</VertexShader>
+		<FragmentShader name="UnlitOpaque">
+			<Uniform name="gDiffuseColor"		type="vec4"								default="white" />
+		</FragmentShader>
+	</ShaderProgram>
+
+	<!-- ++++++++++++++++++++++++++++++++++++++++ OUTLINE SHADER   ++++++++++++++++++++++++++++++++++++++++++++ -->
+	<ShaderProgram name="Outline">
+		<VertexShader name="Outline">
+			<Uniform name="gModel"              type="mat4"								default="identity" />
+			<Uniform name="gView"               type="mat4"								default="defaultView" />
+			<Uniform name="gProj"               type="mat4"								default="defaultProj" />
+		</VertexShader>
+		<FragmentShader name="Outline">
+			<Uniform name="gViewDir"		type="vec3"								default="null" />
+		</FragmentShader>
+	</ShaderProgram>
+
+	<!-- ++++++++++++++++++++++++++++++++++++++++ INTERSECTINGMESH SHADER   ++++++++++++++++++++++++++++++++++++++++++++ -->
+	<ShaderProgram name="IntersectingMesh">
+		<VertexShader name="IntersectingMesh">
+			<Uniform name="gModel"              type="mat4"								default="identity" />
+			<Uniform name="gView"               type="mat4"								default="defaultView" />
+			<Uniform name="gProj"               type="mat4"								default="defaultProj" />
+		</VertexShader>
+		<FragmentShader name="IntersectingMesh">
+			<Uniform name="gTexDiffuse"			type="texture2D"		bindPoint="1"   default="null" />
+			<Uniform name="gTexNormal"			type="texture2D"		bindPoint="2"   default="null" />
+			<Uniform name="gDiffuseColor"		type="vec4"								default="white" />
+			<Uniform name="gUsesDiffuseTex"		type="bool"								default="false" />
+		</FragmentShader>
+	</ShaderProgram>
+
+	<!-- ++++++++++++++++++++++++++++++++ DEPTH AND NORMALS PASS SHADER   ++++++++++++++++++++++++++++++++++++ -->
+	<ShaderProgram name="DepthAndNormalsPass">
+		<VertexShader name="DepthAndNormalsPass">
+			<Uniform name="gModel"              type="mat4"								default="identity" />
+			<Uniform name="gView"               type="mat4"								default="defaultView" />
+			<Uniform name="gProj"               type="mat4"								default="defaultProj" />
+		</VertexShader>
+		<FragmentShader name="DepthAndNormalsPass">
+			<Uniform name="gTexNormal"			type="texture2D"		bindPoint="0"   default="null" />
+		</FragmentShader>
+	</ShaderProgram>
+
+	<!-- +++++++++++++++++++++++++++++++++++++ SHADOW MAPPING SHADER   ++++++++++++++++++++++++++++++++++++++++ -->
+	<ShaderProgram name="ShadowMapping">
+		<VertexShader name="ShadowMapping">
+			<Uniform name="gModel"              type="mat4"								default="identity" />
+			<Uniform name="gProj"               type="mat4"								default="defaultProj" />
+		</VertexShader>
+		<FragmentShader name="ShadowMapping">
+		</FragmentShader>
+	</ShaderProgram>
+
+	<!-- +++++++++++++++++++++++++++++++++++++++  SKYBOX SHADER  ++++++++++++++++++++++++++++++++++++++++++++++ -->
+	<ShaderProgram name="Skybox">
+		<VertexShader name="Skybox">
+			<Uniform name="gModel"              type="mat4"								default="identity" />
+			<Uniform name="gView"               type="mat4"								default="defaultView" />
+			<Uniform name="gProj"               type="mat4"								default="defaultProj" />
+		</VertexShader>
+		<FragmentShader name="Skybox">
+			<Uniform name="gCubemap"			type="cubemap"		bindPoint="0"		default="null" />
+		</FragmentShader>
+	</ShaderProgram>
+
+	<!-- +++++++++++++++++++++++++++++++++++++++  SSAO SHADER  ++++++++++++++++++++++++++++++++++++++++++++++ -->
+	<ShaderProgram name="SSAO">
+		<VertexShader name="SSAO">
+		</VertexShader>
+		<FragmentShader name="SSAO">
+			<Uniform name="gTexDepth"			type="textureBuffer2D"	bindPoint="0"   default="defaultDepth" />
+			<Uniform name="gTexRandom"			type="texture2D"		bindPoint="1"	default="null" />
+			<Uniform name="gTexNormals"			type="textureBuffer2D"	bindPoint="2"	default="defaultNormals" />
+			<Uniform name="gSceneView"			type="mat4"								default="defaultView" />
+			<Uniform name="gSceneProj"			type="mat4"								default="defaultProj" />
+			<Uniform name="gNearPlane"			type="float"							default="defaultNear" />
+			<Uniform name="gFarPlane"			type="float"							default="defaultFar" />
+			<Uniform name="gDebugDraw"			type="uint"								default="2" />
+		</FragmentShader>
+	</ShaderProgram>
+
+	<!-- +++++++++++++++++++++++++++++++++++++++  FXAA SHADER  ++++++++++++++++++++++++++++++++++++++++++++++ -->
+	<ShaderProgram name="FXAA">
+		<VertexShader name="FXAA">
+		</VertexShader>
+		<FragmentShader name="FXAA">
+			<Uniform name="gTexDiffuse"			type="textureBuffer2D"	bindPoint="0"   default="defaultColorTarget" />
+			<Uniform name="gFrameBufSize"		type="vec2"								default="screenSize" />
+			<Uniform name="gUsingFXAA"			type="bool"								default="false" />
+		</FragmentShader>
+	</ShaderProgram>
+
+	<!-- +++++++++++++++++++++++++++++++++++++++  LUM MAPPING SHADER  +++++++++++++++++++++++++++++++++ -->
+	<ShaderProgram name="LuminanceMapping">
+		<VertexShader name="LuminanceMapping">
+		</VertexShader>
+		<FragmentShader name="LuminanceMapping">
+			<Uniform name="gTexSceneDiffuse"	type="textureBuffer2D"	bindPoint="0"	default="defaultColorTarget" />
+		</FragmentShader>
+	</ShaderProgram>
+
+	<!-- +++++++++++++++++++++++++++++++++++++++  TONEMAPPING SHADER  +++++++++++++++++++++++++++++++++ -->
+	<ShaderProgram name="Tonemapping">
+		<VertexShader name="Tonemapping">
+		</VertexShader>
+		<FragmentShader name="Tonemapping">
+			<Uniform name="gTexDiffuse"			type="textureBuffer2D"	bindPoint="0"	default="defaultColorTarget" />
+			<Uniform name="gExposure"			type="float"							default="0.0" />
+			<Uniform name="gWhitePoint"			type="float"							default="2.8" /> <!-- 0.24 -->
+			<Uniform name="gDebugDraw"			type="bool"								default="false" />
+		</FragmentShader>
+	</ShaderProgram>
+
+	<!-- +++++++++++++++++++++++++++++++++++  EXPOSURECALCULATION SHADER  ++++++++++++++++++++++++++++++++++++ -->
+	<ShaderProgram name="ExposureCalculation">
+		<VertexShader name="ExposureCalculation">
+		</VertexShader>
+		<FragmentShader name="ExposureCalculation">
+			<Uniform name="gPreviousExposure"	type="textureBuffer2D"	bindPoint="0"	default="null" />
+			<Uniform name="gTargetExposure"		type="float"							default="0.0" />
+			<Uniform name="gDeltaSeconds"		type="float"							default="0.0" />
+			<Uniform name="gMinExposure"		type="float"							default="0.0" />
+			<Uniform name="gMaxExposure"		type="float"							default="6.0" />
+			<Uniform name="gWhitePoint"			type="float"							default="1.0" />
+		</FragmentShader>
+	</ShaderProgram>
+
+	<!-- +++++++++++++++++++++++++++++++++++++++  OITBLEND SHADER  ++++++++++++++++++++++++++++++++++++++++++ -->
+	<ShaderProgram name="OITBlend">
+		<VertexShader name="OITBlend">
+		</VertexShader>
+		<FragmentShader name="OITBlend">
+			<Uniform name="gAccumTex"			type="textureBuffer2D"	bindPoint="0"	default="null" />
+			<Uniform name="gRevealageTex"		type="textureBuffer2D"	bindPoint="1"	default="null" />
+			<Uniform name="gResX"               type="uint"								default="screenSizeX" />
+			<Uniform name="gResY"               type="uint"								default="screenSizeY" />
+		</FragmentShader>
+	</ShaderProgram>
+
+
+	<!-- +++++++++++++++++++++++++++++++  DYNAMIC REFLECTION PROBE SHADER  ++++++++++++++++++++++++++++++++++ -->
+	<ShaderProgram name="DynamicReflectionProbe">
+		<VertexShader name="DynamicReflectionProbe">
+			<Uniform name="gProj"               type="mat4"								default="defaultProj" />
+			<Uniform name="gView"               type="mat4"								default="defaultView" />
+			<Uniform name="gModel"              type="mat4"								default="identity" />
+			<Uniform name="gVertColor"          type="mat4"								default="white" />
+		</VertexShader>
+		<FragmentShader name="DynamicReflectionProbe">
+			<Uniform name="gTexEnvironmentMap"	type="cubemap"			bindPoint="0"	default="null" />
+			<Uniform name="gTexNormal"			type="texture2D"		bindPoint="1"	default="null" />
+			<Uniform name="gCameraPosition"		type="vec3"								default="cameraPos" />
+		</FragmentShader>
+	</ShaderProgram>
+
+	<!-- +++++++++++++++++++++++++++++++++++++++  DEFAULT2D SHADER  +++++++++++++++++++++++++++++++++++++++++ -->
+	<ShaderProgram name="Default2D">
+		<VertexShader name="Default2D">
+			<Uniform name="gProj"               type="mat4"								default="defaultProjUI" />
+			<Uniform name="gView"               type="mat4"								default="identity" />
+		</VertexShader>
+		<FragmentShader name="Default2D">
+			<Uniform name="gTexDiffuse"			type="texture2D"		bindPoint="0"	default="null" />
+			<Uniform name="gIsUsingTex"			type="bool"								default="true" />
+
+		</FragmentShader>
+	</ShaderProgram>
+
+	<!-- ++++++++++++++++++++++++++++++++++++++  DEFAULT2D NO ALPHA SHADER  +++++++++++++++++++++++++++++++++ -->
+	<ShaderProgram name="Default2D_NoAlpha">
+		<VertexShader name="Default2D_NoAlpha">
+			<Uniform name="gProj"               type="mat4"								default="defaultProjUI" />
+			<Uniform name="gView"               type="mat4"								default="identity" />
+		</VertexShader>
+		<FragmentShader name="Default2D_NoAlpha">
+			<Uniform name="gTexDiffuse"			type="texture2D"		bindPoint="0"	default="null" />
+			<Uniform name="gIsUsingTex"			type="bool"								default="true" />
+
+		</FragmentShader>
+	</ShaderProgram>
+
+	<!-- ++++++++++++++++++++++++++++++  DEFAULT2D 1 CHANNEL NO ALPHA SHADER  +++++++++++++++++++++++++++++++ -->
+	<ShaderProgram name="Default2D_1Channel_NoAlpha">
+		<VertexShader name="Default2D_1Channel_NoAlpha">
+			<Uniform name="gProj"               type="mat4"								default="defaultProjUI" />
+			<Uniform name="gView"               type="mat4"								default="identity" />
+		</VertexShader>
+		<FragmentShader name="Default2D_1Channel_NoAlpha">
+			<Uniform name="gTexDiffuse"			type="texture2D"		bindPoint="0"	default="null" />
+			<Uniform name="gIsUsingTex"			type="bool"								default="true" />
+
+		</FragmentShader>
+	</ShaderProgram>
+
+	<!-- +++++++++++++++++++++++++++++++++++++++  LINEDRAWING SHADER  +++++++++++++++++++++++++++++++++++++++ -->
+	<ShaderProgram name="LineDrawing">
+		<VertexShader name="LineDrawing">
+      <Uniform name="gProj"               type="mat4"								default="defaultProj" />
+      <Uniform name="gView"               type="mat4"								default="defaultView" />
+      <Uniform name="gModel"              type="mat4"								default="identity" />
+		</VertexShader>
+		<FragmentShader name="LineDrawing">
+		</FragmentShader>
+	</ShaderProgram>
+	
+	<!-- +++++++++++++++++++++++++++++++++++++++  LIGHTHEATMAP SHADER  +++++++++++++++++++++++++++++++++++++++ -->
+	<ShaderProgram name="LightHeatmap">
+		<VertexShader name="LightHeatmap">
+			<Uniform name="gProj"               type="mat4"								default="identity" />
+		</VertexShader>
+		<FragmentShader name="LightHeatmap">
+			<Uniform name="gTexDiffuse"			type="textureBuffer2D"	bindPoint="0"	default="defaultColorTarget" />
+		</FragmentShader>
+	</ShaderProgram>
+</ShaderPrograms>
