@@ -20,7 +20,7 @@ public:
 class TheApp {
 public:
 	//INIT SHUTDOWN
-	static void Initialize(HINSTANCE applicationInstanceHandle);
+	static void Initialize(HINSTANCE applicationInstanceHandle, int nCmdShow);
 	static void Shutdown();
 
 	//LOOP

@@ -5,10 +5,10 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //DRIVER
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-int WINAPI WinMain(HINSTANCE applicationInstanceHandle, HINSTANCE, LPSTR commandLineString, int) {
+int WINAPI WinMain(HINSTANCE applicationInstanceHandle, HINSTANCE prevAppInstanceHandle, LPSTR commandLineString, int nCmdShow) {
 
 	UNREFERENCED_PARAMETER(commandLineString);
-	TheApp::Initialize(applicationInstanceHandle);
+	TheApp::Initialize(applicationInstanceHandle, nCmdShow);
 
 	while (!InputSystem::HasQuit())
 		TheApp::RunFrame();

@@ -12,13 +12,13 @@ STATIC TheApp* TheApp::s_theApp = nullptr;
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 //---------------------------------------------------------------------------------------------------------------------------
-STATIC void TheApp::Initialize(HINSTANCE applicationInstanceHandle) {
+STATIC void TheApp::Initialize(HINSTANCE applicationInstanceHandle, int nCmdShow) {
 
-	DeviceWindow::CreateDeviceWindow(applicationInstanceHandle);
+	//DeviceWindow::CreateDeviceWindow(applicationInstanceHandle);
 
 	s_theApp = new TheApp();
 	BeirusEngine::Initialize();
-	TheGame::Initialize();
+	TheGame::Initialize(applicationInstanceHandle, nCmdShow);
 }
 
 
@@ -109,7 +109,7 @@ void TheApp::Update() {
 void TheApp::Render() {
 
 	TheGame::Get()->Render();
-	BeirusEngine::Render();
+	//BeirusEngine::Render();
 
 	s_theApp->m_timer.m_end = Time::GetCurrentTimeSeconds();
 
@@ -120,5 +120,5 @@ void TheApp::Render() {
 	//String timeStr = StringUtils::Stringf("%.0f", m_frameTimeToPrint);
 	//Font::DrawText2DWithDefaultFont(Vector2(10.f, 800.f), timeStr, 0.4f, RGBA::WHITE);
 
-	SwapBuffers(g_displayDeviceContext);
+	//SwapBuffers(g_displayDeviceContext);
 }
