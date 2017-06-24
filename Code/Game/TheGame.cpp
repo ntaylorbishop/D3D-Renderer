@@ -44,13 +44,13 @@ STATIC TheGame* TheGame::Get() {
 //---------------------------------------------------------------------------------------------------------------------------
 TheGame::TheGame(HINSTANCE applicationInstanceHandle, int nCmdShow)
 {
-	DeviceWindow::Initialize(applicationInstanceHandle, nCmdShow);
+	RHIDeviceWindow::Initialize(applicationInstanceHandle, nCmdShow);
 }
 
 
 //---------------------------------------------------------------------------------------------------------------------------
 TheGame::~TheGame() {
-	DeviceWindow::Destroy();
+	RHIDeviceWindow::Destroy();
 }
 
 
@@ -76,6 +76,6 @@ void TheGame::Update(float deltaSeconds) {
 //---------------------------------------------------------------------------------------------------------------------------
 STATIC void TheGame::Render() {
 
-	DeviceWindow::ClearAndPresent();
+	RHIDeviceWindow::ClearAndPresent();
 }
 

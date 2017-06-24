@@ -1,7 +1,7 @@
-#include "Game/RHI/DeviceWindow.hpp"
+#include "Game/RHI/RHIDeviceWindow.hpp"
 #include "Engine/Input/InputSystem.hpp"
 
-STATIC DeviceWindow* DeviceWindow::s_deviceWindow = nullptr;
+STATIC RHIDeviceWindow* RHIDeviceWindow::s_deviceWindow = nullptr;
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -9,14 +9,14 @@ STATIC DeviceWindow* DeviceWindow::s_deviceWindow = nullptr;
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 //---------------------------------------------------------------------------------------------------------------------------
-STATIC void DeviceWindow::Initialize(HINSTANCE applicationInstanceHandle, int nCmdShow) {
+STATIC void RHIDeviceWindow::Initialize(HINSTANCE applicationInstanceHandle, int nCmdShow) {
 
-	s_deviceWindow = new DeviceWindow(applicationInstanceHandle, nCmdShow);
+	s_deviceWindow = new RHIDeviceWindow(applicationInstanceHandle, nCmdShow);
 }
 
 
 //---------------------------------------------------------------------------------------------------------------------------
-STATIC void DeviceWindow::Destroy() {
+STATIC void RHIDeviceWindow::Destroy() {
 
 	delete s_deviceWindow;
 	s_deviceWindow = nullptr;
@@ -28,7 +28,7 @@ STATIC void DeviceWindow::Destroy() {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 //---------------------------------------------------------------------------------------------------------------------------
-DeviceWindow::DeviceWindow(HINSTANCE applicationInstanceHandle, int nCmdShow) {
+RHIDeviceWindow::RHIDeviceWindow(HINSTANCE applicationInstanceHandle, int nCmdShow) {
 
 	InitWindow(applicationInstanceHandle, nCmdShow);
 	CreateDevice();
@@ -36,7 +36,7 @@ DeviceWindow::DeviceWindow(HINSTANCE applicationInstanceHandle, int nCmdShow) {
 
 
 //---------------------------------------------------------------------------------------------------------------------------
-DeviceWindow::~DeviceWindow() {
+RHIDeviceWindow::~RHIDeviceWindow() {
 
 	CleanupDeviceAndWindow();
 }
@@ -47,7 +47,7 @@ DeviceWindow::~DeviceWindow() {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 //---------------------------------------------------------------------------------------------------------------------------
-void DeviceWindow::ClearAndPresent() {
+void RHIDeviceWindow::ClearAndPresent() {
 
 	float col[] = { 1.f, 0.f, 0.f, 1.f };
 	s_deviceWindow->m_pImmediateContext->ClearRenderTargetView(s_deviceWindow->m_pRenderTargetView, col);
@@ -61,7 +61,7 @@ void DeviceWindow::ClearAndPresent() {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 //---------------------------------------------------------------------------------------------------------------------------
-void DeviceWindow::InitWindow(HINSTANCE applicationInstanceHandle, int nCmdShow) {
+void RHIDeviceWindow::InitWindow(HINSTANCE applicationInstanceHandle, int nCmdShow) {
 
 	WNDCLASSEX wcex;
 	wcex.cbSize = sizeof(WNDCLASSEX);
@@ -92,7 +92,7 @@ void DeviceWindow::InitWindow(HINSTANCE applicationInstanceHandle, int nCmdShow)
 
 
 //---------------------------------------------------------------------------------------------------------------------------
-void DeviceWindow::CreateDevice() {
+void RHIDeviceWindow::CreateDevice() {
 
 	RECT rc = { 0, 0, 800, 600 };
 	HRESULT hr = S_OK;
@@ -236,7 +236,7 @@ void DeviceWindow::CreateDevice() {
 
 
 //---------------------------------------------------------------------------------------------------------------------------
-void DeviceWindow::CleanupDeviceAndWindow() {
+void RHIDeviceWindow::CleanupDeviceAndWindow() {
 
 	if (m_pImmediateContext) {
 		m_pImmediateContext->ClearState();

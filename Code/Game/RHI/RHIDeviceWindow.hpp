@@ -5,7 +5,7 @@
 #include <d3d11_1.h>
 #include <directxcolors.h>
 
-class DeviceWindow {
+class RHIDeviceWindow {
 public:
 	static void Initialize(HINSTANCE applicationInstanceHandle, int nCmdShow);
 	static void Destroy();
@@ -14,8 +14,8 @@ public:
 
 private:
 	//STRUCTORS
-	DeviceWindow(HINSTANCE applicationInstanceHandle, int nCmdShow);
-	~DeviceWindow();
+	RHIDeviceWindow(HINSTANCE applicationInstanceHandle, int nCmdShow);
+	~RHIDeviceWindow();
 
 	//INIT DESTROY
 	void InitWindow(HINSTANCE applicationInstanceHandle, int nCmdShow);
@@ -38,5 +38,5 @@ private:
 	ID3D11InputLayout*      m_pVertexLayout			= nullptr;
 	ID3D11Buffer*           m_pVertexBuffer			= nullptr;
 
-	static DeviceWindow* s_deviceWindow;
+	static RHIDeviceWindow* s_deviceWindow;
 };							
