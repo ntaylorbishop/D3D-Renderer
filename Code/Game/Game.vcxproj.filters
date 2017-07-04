@@ -24,32 +24,8 @@
     <Filter Include="Data_x64\UI">
       <UniqueIdentifier>{02ae6ae7-4d1f-4d4d-8114-08cb4f2a7905}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Data_x64\Shaders\2D">
-      <UniqueIdentifier>{ba1fa507-ee0b-41b1-a072-fe87f0adc376}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Data_x64\Shaders\3D">
-      <UniqueIdentifier>{53e526e0-c25b-4fe2-9698-1c788fe503ab}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Data_x64\Shaders\Post">
-      <UniqueIdentifier>{065b595e-0f62-41c7-b45c-51f99fd8f042}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Data_x64\Shaders\Old">
-      <UniqueIdentifier>{a9375fcd-d2d3-46c7-b236-dfa7370e3adc}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Data_x64\Shaders\Effects">
-      <UniqueIdentifier>{785cb527-2ad2-4648-9a51-aef46a2cde85}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Data_x64\Shaders\Post\Tonemapping">
-      <UniqueIdentifier>{270ce943-e492-40c6-8329-4e1c483e5144}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Data_x64\Textures">
       <UniqueIdentifier>{40255bd6-3840-4270-9d03-231a361af471}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Data_x64\Shaders\3D\BlinnPhong">
-      <UniqueIdentifier>{926e29df-34d1-4216-a658-9737fa7dced2}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Data_x64\Shaders\Debug">
-      <UniqueIdentifier>{6a53ab34-f699-43e7-b13d-21421135000f}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source\RHI">
       <UniqueIdentifier>{d3aac8c5-ce9b-46e7-848f-d440f4331dbe}</UniqueIdentifier>
@@ -68,7 +44,13 @@
     <ClCompile Include="TheGame.cpp">
       <Filter>Source\GameApp</Filter>
     </ClCompile>
-    <ClCompile Include="RHI\DeviceWindow.cpp">
+    <ClCompile Include="RHI\RHIDeviceWindow.cpp">
+      <Filter>Source\RHI</Filter>
+    </ClCompile>
+    <ClCompile Include="RHI\RHIShaderUtils.cpp">
+      <Filter>Source\RHI</Filter>
+    </ClCompile>
+    <ClCompile Include="RHI\D3D11Shader.cpp">
       <Filter>Source\RHI</Filter>
     </ClCompile>
   </ItemGroup>
@@ -82,197 +64,15 @@
     <ClInclude Include="TheGame.hpp">
       <Filter>Source\GameApp</Filter>
     </ClInclude>
-    <ClInclude Include="RHI\DeviceWindow.hpp">
+    <ClInclude Include="RHI\RHIDeviceWindow.hpp">
       <Filter>Source\RHI</Filter>
     </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="..\..\Run_x64\Data\Shaders\BlurFullScreen.frag">
-      <Filter>Data_x64\Shaders\2D</Filter>
-    </None>
-    <None Include="..\..\Run_x64\Data\Shaders\BlurFullScreen.vert">
-      <Filter>Data_x64\Shaders\2D</Filter>
-    </None>
-    <None Include="..\..\Run_x64\Data\Shaders\Default2D.frag">
-      <Filter>Data_x64\Shaders\2D</Filter>
-    </None>
-    <None Include="..\..\Run_x64\Data\Shaders\Default2D.vert">
-      <Filter>Data_x64\Shaders\2D</Filter>
-    </None>
-    <None Include="..\..\Run_x64\Data\Shaders\DefaultSprite.frag">
-      <Filter>Data_x64\Shaders\2D</Filter>
-    </None>
-    <None Include="..\..\Run_x64\Data\Shaders\DefaultSprite.vert">
-      <Filter>Data_x64\Shaders\2D</Filter>
-    </None>
-    <None Include="..\..\Run_x64\Data\Shaders\BlendTransparentPass.frag">
-      <Filter>Data_x64\Shaders\3D</Filter>
-    </None>
-    <None Include="..\..\Run_x64\Data\Shaders\BlendTransparentPass.vert">
-      <Filter>Data_x64\Shaders\3D</Filter>
-    </None>
-    <None Include="..\..\Run_x64\Data\Shaders\CookTorranceBRDF.frag">
-      <Filter>Data_x64\Shaders\3D</Filter>
-    </None>
-    <None Include="..\..\Run_x64\Data\Shaders\CookTorranceBRDF.vert">
-      <Filter>Data_x64\Shaders\3D</Filter>
-    </None>
-    <None Include="..\..\Run_x64\Data\Shaders\DepthAndNormalsPass.frag">
-      <Filter>Data_x64\Shaders\3D</Filter>
-    </None>
-    <None Include="..\..\Run_x64\Data\Shaders\DepthAndNormalsPass.vert">
-      <Filter>Data_x64\Shaders\3D</Filter>
-    </None>
-    <None Include="..\..\Run_x64\Data\Shaders\LightCulling.glsl">
-      <Filter>Data_x64\Shaders\3D</Filter>
-    </None>
-    <None Include="..\..\Run_x64\Data\Shaders\ShadowMapping.frag">
-      <Filter>Data_x64\Shaders\3D</Filter>
-    </None>
-    <None Include="..\..\Run_x64\Data\Shaders\ShadowMapping.vert">
-      <Filter>Data_x64\Shaders\3D</Filter>
-    </None>
-    <None Include="..\..\Run_x64\Data\Shaders\Skybox.vert">
-      <Filter>Data_x64\Shaders\3D</Filter>
-    </None>
-    <None Include="..\..\Run_x64\Data\Shaders\Skybox.frag">
-      <Filter>Data_x64\Shaders\3D</Filter>
-    </None>
-    <None Include="..\..\Run_x64\Data\Shaders\SSAO.frag">
-      <Filter>Data_x64\Shaders\3D</Filter>
-    </None>
-    <None Include="..\..\Run_x64\Data\Shaders\SSAO.vert">
-      <Filter>Data_x64\Shaders\3D</Filter>
-    </None>
-    <None Include="..\..\Run_x64\Data\Shaders\Unlit.frag">
-      <Filter>Data_x64\Shaders\3D</Filter>
-    </None>
-    <None Include="..\..\Run_x64\Data\Shaders\Grayscale.glsl">
-      <Filter>Data_x64\Shaders\Old</Filter>
-    </None>
-    <None Include="..\..\Run_x64\Data\Shaders\multi_light_old.frag">
-      <Filter>Data_x64\Shaders\Old</Filter>
-    </None>
-    <None Include="..\..\Run_x64\Data\Shaders\multi_light_old.vert">
-      <Filter>Data_x64\Shaders\Old</Filter>
-    </None>
-    <None Include="..\..\Run_x64\Data\Shaders\FXAA.frag">
-      <Filter>Data_x64\Shaders\Post</Filter>
-    </None>
-    <None Include="..\..\Run_x64\Data\Shaders\FXAA.vert">
-      <Filter>Data_x64\Shaders\Post</Filter>
-    </None>
-    <None Include="..\..\Run_x64\Data\Shaders\OITBlend.frag">
-      <Filter>Data_x64\Shaders\Post</Filter>
-    </None>
-    <None Include="..\..\Run_x64\Data\Shaders\OITBlend.vert">
-      <Filter>Data_x64\Shaders\Post</Filter>
-    </None>
-    <None Include="..\..\Run_x64\Data\Shaders\SSAOBlend.frag">
-      <Filter>Data_x64\Shaders\Post</Filter>
-    </None>
-    <None Include="..\..\Run_x64\Data\Shaders\SSAOBlend.vert">
-      <Filter>Data_x64\Shaders\Post</Filter>
-    </None>
-    <None Include="..\..\Run_x64\Data\Shaders\SSAOBlur.frag">
-      <Filter>Data_x64\Shaders\Post</Filter>
-    </None>
-    <None Include="..\..\Run_x64\Data\Shaders\SSAOBlur.vert">
-      <Filter>Data_x64\Shaders\Post</Filter>
-    </None>
-    <None Include="..\..\Run_x64\Data\Shaders\DynamicReflectionProbe.frag">
-      <Filter>Data_x64\Shaders\3D</Filter>
-    </None>
-    <None Include="..\..\Run_x64\Data\Shaders\DynamicReflectionProbe.vert">
-      <Filter>Data_x64\Shaders\3D</Filter>
-    </None>
-    <None Include="..\..\Run_x64\Data\Shaders\Water.frag">
-      <Filter>Data_x64\Shaders\Effects</Filter>
-    </None>
-    <None Include="..\..\Run_x64\Data\Shaders\Water.vert">
-      <Filter>Data_x64\Shaders\Effects</Filter>
-    </None>
-    <None Include="..\..\Run_x64\Data\Shaders\Tonemapping.frag">
-      <Filter>Data_x64\Shaders\Post\Tonemapping</Filter>
-    </None>
-    <None Include="..\..\Run_x64\Data\Shaders\Tonemapping.vert">
-      <Filter>Data_x64\Shaders\Post\Tonemapping</Filter>
-    </None>
-    <None Include="..\..\Run_x64\Data\Shaders\ExposureCalculation.frag">
-      <Filter>Data_x64\Shaders\Post\Tonemapping</Filter>
-    </None>
-    <None Include="..\..\Run_x64\Data\Shaders\ExposureCalculation.vert">
-      <Filter>Data_x64\Shaders\Post\Tonemapping</Filter>
-    </None>
-    <None Include="..\..\Run_x64\Data\Shaders\LuminanceMapping.frag">
-      <Filter>Data_x64\Shaders\Post\Tonemapping</Filter>
-    </None>
-    <None Include="..\..\Run_x64\Data\Shaders\LuminanceMapping.vert">
-      <Filter>Data_x64\Shaders\Post\Tonemapping</Filter>
-    </None>
-    <None Include="..\..\Run_x64\Data\Shaders\Unlit.vert">
-      <Filter>Data_x64\Shaders\3D</Filter>
-    </None>
-    <None Include="..\..\Run_x64\Data\Shaders\LineDrawing.frag">
-      <Filter>Data_x64\Shaders\3D</Filter>
-    </None>
-    <None Include="..\..\Run_x64\Data\Shaders\LineDrawing.vert">
-      <Filter>Data_x64\Shaders\3D</Filter>
-    </None>
-    <None Include="..\..\Run_x64\Data\Shaders\BlinnPhong.frag">
-      <Filter>Data_x64\Shaders\3D\BlinnPhong</Filter>
-    </None>
-    <None Include="..\..\Run_x64\Data\Shaders\BlinnPhong.vert">
-      <Filter>Data_x64\Shaders\3D\BlinnPhong</Filter>
-    </None>
-    <None Include="..\..\Run_x64\Data\Shaders\BlinnPhongParticleLighting.frag">
-      <Filter>Data_x64\Shaders\3D\BlinnPhong</Filter>
-    </None>
-    <None Include="..\..\Run_x64\Data\Shaders\BlinnPhongParticleLighting.vert">
-      <Filter>Data_x64\Shaders\3D\BlinnPhong</Filter>
-    </None>
-    <None Include="..\..\Run_x64\Data\Shaders\BlinnPhongParticleLighting_NoOIT.frag">
-      <Filter>Data_x64\Shaders\3D\BlinnPhong</Filter>
-    </None>
-    <None Include="..\..\Run_x64\Data\Shaders\BlinnPhongParticleLighting_NoOIT.vert">
-      <Filter>Data_x64\Shaders\3D\BlinnPhong</Filter>
-    </None>
-    <None Include="..\..\Run_x64\Data\Shaders\Default2D_NoAlpha.frag">
-      <Filter>Data_x64\Shaders\2D</Filter>
-    </None>
-    <None Include="..\..\Run_x64\Data\Shaders\Default2D_NoAlpha.vert">
-      <Filter>Data_x64\Shaders\2D</Filter>
-    </None>
-    <None Include="..\..\Run_x64\Data\Shaders\LightHeatmap.frag">
-      <Filter>Data_x64\Shaders\Post</Filter>
-    </None>
-    <None Include="..\..\Run_x64\Data\Shaders\LightHeatmap.vert">
-      <Filter>Data_x64\Shaders\Post</Filter>
-    </None>
-    <None Include="..\..\Run_x64\Data\Shaders\IntersectingMesh.frag">
-      <Filter>Data_x64\Shaders\3D</Filter>
-    </None>
-    <None Include="..\..\Run_x64\Data\Shaders\IntersectingMesh.vert">
-      <Filter>Data_x64\Shaders\3D</Filter>
-    </None>
-    <None Include="..\..\Run_x64\Data\Shaders\Default2D_1Channel_NoAlpha.frag">
-      <Filter>Data_x64\Shaders\2D</Filter>
-    </None>
-    <None Include="..\..\Run_x64\Data\Shaders\Default2D_1Channel_NoAlpha.vert">
-      <Filter>Data_x64\Shaders\2D</Filter>
-    </None>
-    <None Include="..\..\Run_x64\Data\Shaders\Outline.frag">
-      <Filter>Data_x64\Shaders\3D</Filter>
-    </None>
-    <None Include="..\..\Run_x64\Data\Shaders\Outline.vert">
-      <Filter>Data_x64\Shaders\3D</Filter>
-    </None>
-    <None Include="..\..\Run_x64\Data\Shaders\UnlitOpaque.frag">
-      <Filter>Data_x64\Shaders\3D</Filter>
-    </None>
-    <None Include="..\..\Run_x64\Data\Shaders\UnlitOpaque.vert">
-      <Filter>Data_x64\Shaders\3D</Filter>
-    </None>
+    <ClInclude Include="RHI\RHIShaderUtils.hpp">
+      <Filter>Source\RHI</Filter>
+    </ClInclude>
+    <ClInclude Include="RHI\D3D11Shader.hpp">
+      <Filter>Source\RHI</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Xml Include="..\..\Run_x64\Data\Shaders\ShaderPrograms.xml">
@@ -355,5 +155,10 @@
     <Image Include="..\..\Run_x64\Data\Textures\WaterNormal2.jpg">
       <Filter>Data_x64\Textures</Filter>
     </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="RHI\SimpleTriangle.hlsl">
+      <Filter>Data_x64\Shaders</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>

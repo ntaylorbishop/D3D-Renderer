@@ -381,13 +381,17 @@
   <ItemGroup>
     <ClCompile Include="GameCommon.cpp" />
     <ClCompile Include="Main_Win32.cpp" />
-    <ClCompile Include="RHI\DeviceWindow.cpp" />
+    <ClCompile Include="RHI\D3D11Shader.cpp" />
+    <ClCompile Include="RHI\RHIDeviceWindow.cpp" />
+    <ClCompile Include="RHI\RHIShaderUtils.cpp" />
     <ClCompile Include="TheApp.cpp" />
     <ClCompile Include="TheGame.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameCommon.hpp" />
-    <ClInclude Include="RHI\DeviceWindow.hpp" />
+    <ClInclude Include="RHI\D3D11Shader.hpp" />
+    <ClInclude Include="RHI\RHIDeviceWindow.hpp" />
+    <ClInclude Include="RHI\RHIShaderUtils.hpp" />
     <ClInclude Include="TheApp.hpp" />
     <ClInclude Include="TheGame.hpp" />
   </ItemGroup>
@@ -395,70 +399,6 @@
     <ProjectReference Include="..\..\..\..\Beirus\Code\Engine\Engine.vcxproj">
       <Project>{17a3b9c3-1421-4704-a343-94c81129577a}</Project>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="..\..\Run_x64\Data\Shaders\BlendTransparentPass.frag" />
-    <None Include="..\..\Run_x64\Data\Shaders\BlendTransparentPass.vert" />
-    <None Include="..\..\Run_x64\Data\Shaders\BlinnPhong.frag" />
-    <None Include="..\..\Run_x64\Data\Shaders\BlinnPhong.vert" />
-    <None Include="..\..\Run_x64\Data\Shaders\BlinnPhongParticleLighting.frag" />
-    <None Include="..\..\Run_x64\Data\Shaders\BlinnPhongParticleLighting.vert" />
-    <None Include="..\..\Run_x64\Data\Shaders\BlinnPhongParticleLighting_NoOIT.frag" />
-    <None Include="..\..\Run_x64\Data\Shaders\BlinnPhongParticleLighting_NoOIT.vert" />
-    <None Include="..\..\Run_x64\Data\Shaders\BlurFullScreen.frag" />
-    <None Include="..\..\Run_x64\Data\Shaders\BlurFullScreen.vert" />
-    <None Include="..\..\Run_x64\Data\Shaders\CookTorranceBRDF.frag" />
-    <None Include="..\..\Run_x64\Data\Shaders\CookTorranceBRDF.vert" />
-    <None Include="..\..\Run_x64\Data\Shaders\Default2D.frag" />
-    <None Include="..\..\Run_x64\Data\Shaders\Default2D.vert" />
-    <None Include="..\..\Run_x64\Data\Shaders\Default2D_1Channel_NoAlpha.frag" />
-    <None Include="..\..\Run_x64\Data\Shaders\Default2D_1Channel_NoAlpha.vert" />
-    <None Include="..\..\Run_x64\Data\Shaders\Default2D_NoAlpha.frag" />
-    <None Include="..\..\Run_x64\Data\Shaders\Default2D_NoAlpha.vert" />
-    <None Include="..\..\Run_x64\Data\Shaders\DefaultSprite.frag" />
-    <None Include="..\..\Run_x64\Data\Shaders\DefaultSprite.vert" />
-    <None Include="..\..\Run_x64\Data\Shaders\DepthAndNormalsPass.frag" />
-    <None Include="..\..\Run_x64\Data\Shaders\DepthAndNormalsPass.vert" />
-    <None Include="..\..\Run_x64\Data\Shaders\DynamicReflectionProbe.frag" />
-    <None Include="..\..\Run_x64\Data\Shaders\DynamicReflectionProbe.vert" />
-    <None Include="..\..\Run_x64\Data\Shaders\ExposureCalculation.frag" />
-    <None Include="..\..\Run_x64\Data\Shaders\ExposureCalculation.vert" />
-    <None Include="..\..\Run_x64\Data\Shaders\FXAA.frag" />
-    <None Include="..\..\Run_x64\Data\Shaders\FXAA.vert" />
-    <None Include="..\..\Run_x64\Data\Shaders\Grayscale.glsl" />
-    <None Include="..\..\Run_x64\Data\Shaders\IntersectingMesh.frag" />
-    <None Include="..\..\Run_x64\Data\Shaders\IntersectingMesh.vert" />
-    <None Include="..\..\Run_x64\Data\Shaders\LightCulling.glsl" />
-    <None Include="..\..\Run_x64\Data\Shaders\LightHeatmap.frag" />
-    <None Include="..\..\Run_x64\Data\Shaders\LightHeatmap.vert" />
-    <None Include="..\..\Run_x64\Data\Shaders\LineDrawing.frag" />
-    <None Include="..\..\Run_x64\Data\Shaders\LineDrawing.vert" />
-    <None Include="..\..\Run_x64\Data\Shaders\LuminanceMapping.frag" />
-    <None Include="..\..\Run_x64\Data\Shaders\LuminanceMapping.vert" />
-    <None Include="..\..\Run_x64\Data\Shaders\multi_light_old.frag" />
-    <None Include="..\..\Run_x64\Data\Shaders\multi_light_old.vert" />
-    <None Include="..\..\Run_x64\Data\Shaders\OITBlend.frag" />
-    <None Include="..\..\Run_x64\Data\Shaders\OITBlend.vert" />
-    <None Include="..\..\Run_x64\Data\Shaders\Outline.frag" />
-    <None Include="..\..\Run_x64\Data\Shaders\Outline.vert" />
-    <None Include="..\..\Run_x64\Data\Shaders\ShadowMapping.frag" />
-    <None Include="..\..\Run_x64\Data\Shaders\ShadowMapping.vert" />
-    <None Include="..\..\Run_x64\Data\Shaders\Skybox.frag" />
-    <None Include="..\..\Run_x64\Data\Shaders\Skybox.vert" />
-    <None Include="..\..\Run_x64\Data\Shaders\SSAO.frag" />
-    <None Include="..\..\Run_x64\Data\Shaders\SSAO.vert" />
-    <None Include="..\..\Run_x64\Data\Shaders\SSAOBlend.frag" />
-    <None Include="..\..\Run_x64\Data\Shaders\SSAOBlend.vert" />
-    <None Include="..\..\Run_x64\Data\Shaders\SSAOBlur.frag" />
-    <None Include="..\..\Run_x64\Data\Shaders\SSAOBlur.vert" />
-    <None Include="..\..\Run_x64\Data\Shaders\Tonemapping.frag" />
-    <None Include="..\..\Run_x64\Data\Shaders\Tonemapping.vert" />
-    <None Include="..\..\Run_x64\Data\Shaders\Unlit.frag" />
-    <None Include="..\..\Run_x64\Data\Shaders\Unlit.vert" />
-    <None Include="..\..\Run_x64\Data\Shaders\UnlitOpaque.frag" />
-    <None Include="..\..\Run_x64\Data\Shaders\UnlitOpaque.vert" />
-    <None Include="..\..\Run_x64\Data\Shaders\Water.frag" />
-    <None Include="..\..\Run_x64\Data\Shaders\Water.vert" />
   </ItemGroup>
   <ItemGroup>
     <Xml Include="..\..\Run_x64\Data\Models\Sponza\SponzaMaterials.xml" />
@@ -491,6 +431,18 @@
     <Image Include="..\..\Run_x64\Data\Textures\WaterDisplacement.png" />
     <Image Include="..\..\Run_x64\Data\Textures\WaterNormal.jpg" />
     <Image Include="..\..\Run_x64\Data\Textures\WaterNormal2.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="RHI\SimpleTriangle.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='DebugInline|x64'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='DebugInline|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Tools Release|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Tools Release|x64'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
+    </FxCompile>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

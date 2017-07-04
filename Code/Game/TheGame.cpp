@@ -1,6 +1,6 @@
 #include "Game/TheGame.hpp"
 #include "Game/TheApp.hpp"
-#include "Game/RHI/DeviceWindow.hpp"
+#include "Game/RHI/RHIDeviceWindow.hpp"
 
 TheGame* TheGame::s_theGame = nullptr;
 

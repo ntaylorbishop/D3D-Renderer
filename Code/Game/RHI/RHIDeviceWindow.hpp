@@ -10,7 +10,11 @@ public:
 	static void Initialize(HINSTANCE applicationInstanceHandle, int nCmdShow);
 	static void Destroy();
 
+	static RHIDeviceWindow* GetDeviceWindow() { return s_deviceWindow; }
+
 	static void ClearAndPresent();
+
+	void GetD3DDevice() { return m_pd3dDevice; }
 
 private:
 	//STRUCTORS
