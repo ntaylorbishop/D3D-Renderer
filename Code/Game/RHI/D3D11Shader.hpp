@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Engine/General/Core/EngineCommon.hpp"
 #include <d3d11_1.h>
 
 enum eD3D11ShaderType {
@@ -15,5 +16,6 @@ public:
 
 private:
 	ID3D11VertexShader* m_shaderHandle = nullptr;
-
+	String				m_shaderName;
+	eD3D11ShaderType	m_shaderType;
 };

@@ -53,6 +53,9 @@
     <ClCompile Include="RHI\D3D11Shader.cpp">
       <Filter>Source\RHI</Filter>
     </ClCompile>
+    <ClCompile Include="RHI\D3D11Renderer.cpp">
+      <Filter>Source\RHI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="TheApp.hpp">
@@ -71,6 +74,9 @@
       <Filter>Source\RHI</Filter>
     </ClInclude>
     <ClInclude Include="RHI\D3D11Shader.hpp">
+      <Filter>Source\RHI</Filter>
+    </ClInclude>
+    <ClInclude Include="RHI\D3D11Renderer.hpp">
       <Filter>Source\RHI</Filter>
     </ClInclude>
   </ItemGroup>
