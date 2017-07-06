@@ -14,6 +14,8 @@ public:
 	D3D11Shader(const char* shaderName, eD3D11ShaderType shaderType);
 	~D3D11Shader();
 
+	ID3D11VertexShader* GetShaderHandle();
+
 private:
 	ID3D11VertexShader* m_shaderHandle = nullptr;
 	String				m_shaderName;

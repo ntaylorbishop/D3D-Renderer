@@ -5,6 +5,7 @@
 //---------------------------------------------------------------------------------------------------------------------------
 void D3D11Renderer::SetViewport() {
 
+/*
 	// Setup the viewport
 	D3D11_VIEWPORT vp;
 	vp.Width = (FLOAT)width;
@@ -13,5 +14,5 @@ void D3D11Renderer::SetViewport() {
 	vp.MaxDepth = 1.0f;
 	vp.TopLeftX = 0;
 	vp.TopLeftY = 0;
-	RHIDeviceWindow::Get()->GetD3DContext()->RSSetViewports(1, &vp);
+	RHIDeviceWindow::Get()->GetD3DContext()->RSSetViewports(1, &vp);*/
 }

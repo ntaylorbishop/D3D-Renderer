@@ -27,7 +27,7 @@
     <Filter Include="Data_x64\Textures">
       <UniqueIdentifier>{40255bd6-3840-4270-9d03-231a361af471}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source\RHI">
+    <Filter Include="Source\D3D11">
       <UniqueIdentifier>{d3aac8c5-ce9b-46e7-848f-d440f4331dbe}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -45,16 +45,16 @@
       <Filter>Source\GameApp</Filter>
     </ClCompile>
     <ClCompile Include="RHI\RHIDeviceWindow.cpp">
-      <Filter>Source\RHI</Filter>
+      <Filter>Source\D3D11</Filter>
     </ClCompile>
     <ClCompile Include="RHI\RHIShaderUtils.cpp">
-      <Filter>Source\RHI</Filter>
+      <Filter>Source\D3D11</Filter>
     </ClCompile>
     <ClCompile Include="RHI\D3D11Shader.cpp">
-      <Filter>Source\RHI</Filter>
+      <Filter>Source\D3D11</Filter>
     </ClCompile>
     <ClCompile Include="RHI\D3D11Renderer.cpp">
-      <Filter>Source\RHI</Filter>
+      <Filter>Source\D3D11</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -68,16 +68,16 @@
       <Filter>Source\GameApp</Filter>
     </ClInclude>
     <ClInclude Include="RHI\RHIDeviceWindow.hpp">
-      <Filter>Source\RHI</Filter>
+      <Filter>Source\D3D11</Filter>
     </ClInclude>
     <ClInclude Include="RHI\RHIShaderUtils.hpp">
-      <Filter>Source\RHI</Filter>
+      <Filter>Source\D3D11</Filter>
     </ClInclude>
     <ClInclude Include="RHI\D3D11Shader.hpp">
-      <Filter>Source\RHI</Filter>
+      <Filter>Source\D3D11</Filter>
     </ClInclude>
     <ClInclude Include="RHI\D3D11Renderer.hpp">
-      <Filter>Source\RHI</Filter>
+      <Filter>Source\D3D11</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -163,7 +163,7 @@
     </Image>
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="RHI\SimpleTriangle.hlsl">
+    <FxCompile Include="..\..\Run_x64\Data\Shaders\SimpleTriangle.hlsl">
       <Filter>Data_x64\Shaders</Filter>
     </FxCompile>
   </ItemGroup>

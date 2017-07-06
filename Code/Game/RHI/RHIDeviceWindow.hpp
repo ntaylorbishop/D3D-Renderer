@@ -18,7 +18,7 @@ public:
 	ID3D11Device*			GetD3DDevice()	{ return m_pd3dDevice;			}
 	ID3D11DeviceContext*	GetD3DContext() { return m_pImmediateContext;	}
 
-private:
+public:
 	//STRUCTORS
 	RHIDeviceWindow(HINSTANCE applicationInstanceHandle, int nCmdShow);
 	~RHIDeviceWindow();
