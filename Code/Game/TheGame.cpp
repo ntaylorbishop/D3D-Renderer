@@ -1,6 +1,8 @@
 #include "Game/TheGame.hpp"
 #include "Game/TheApp.hpp"
 #include "Game/RHI/RHIDeviceWindow.hpp"
+#include "Game/RHI/D3D11VertexShader.hpp"
+#include "Game/RHI/D3D11PixelShader.hpp"
 #include <d3dcompiler.h>
 
 TheGame* TheGame::s_theGame = nullptr;
@@ -42,41 +44,6 @@ STATIC TheGame* TheGame::Get() {
 //STRUCTORS INITIALIZATION
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-//---------------------------------------------------------------------------------------------------------------------------
-static HRESULT CompileShaderFromFile(WCHAR* szFileName, LPCSTR szEntryPoint, LPCSTR szShaderModel, ID3DBlob** ppBlobOut)
-{
-	HRESULT hr = S_OK;
-
-	DWORD dwShaderFlags = D3DCOMPILE_ENABLE_STRICTNESS;
-#ifdef _DEBUG
-	// Set the D3DCOMPILE_DEBUG flag to embed debug information in the shaders.
-	// Setting this flag improves the shader debugging experience, but still allows 
-	// the shaders to be optimized and to run exactly the way they will run in 
-	// the release configuration of this program.
-	dwShaderFlags |= D3DCOMPILE_DEBUG;
-
-	// Disable optimizations to further improve shader debugging
-	dwShaderFlags |= D3DCOMPILE_SKIP_OPTIMIZATION;
-#endif
-
-	ID3DBlob* pErrorBlob = nullptr;
-	hr = D3DCompileFromFile(szFileName, nullptr, nullptr, szEntryPoint, szShaderModel,
-		dwShaderFlags, 0, ppBlobOut, &pErrorBlob);
-	if (FAILED(hr))
-	{
-		if (pErrorBlob)
-		{
-			OutputDebugStringA(reinterpret_cast<const char*>(pErrorBlob->GetBufferPointer()));
-			pErrorBlob->Release();
-		}
-		return hr;
-	}
-	if (pErrorBlob) pErrorBlob->Release();
-
-	return S_OK;
-}
-
-
 using namespace DirectX;
 
 //--------------------------------------------------------------------------------------
@@ -97,15 +64,15 @@ struct ConstantBuffer
 };
 
 
-ID3D11VertexShader*     m_pVertexShader = nullptr;
-ID3D11PixelShader*      m_pPixelShader = nullptr;
-ID3D11InputLayout*      m_pVertexLayout = nullptr;
-ID3D11Buffer*           m_pVertexBuffer = nullptr;
-ID3D11Buffer*           m_pIndexBuffer = nullptr;
-ID3D11Buffer*           m_pConstantBuffer = nullptr;
-XMMATRIX                m_World;
-XMMATRIX                m_View;
-XMMATRIX                m_Projection;
+D3D11VertexShader*		m_pVertexShader		= nullptr;
+D3D11PixelShader*		m_pPixelShader		= nullptr;
+ID3D11InputLayout*	m_pVertexLayout		= nullptr;
+ID3D11Buffer*       m_pVertexBuffer		= nullptr;
+ID3D11Buffer*       m_pIndexBuffer		= nullptr;
+ID3D11Buffer*       m_pConstantBuffer	= nullptr;
+XMMATRIX            m_World;
+XMMATRIX            m_View;
+XMMATRIX            m_Projection;
 
 
 
@@ -114,26 +81,14 @@ TheGame::TheGame(HINSTANCE applicationInstanceHandle, int nCmdShow)
 {
 	RHIDeviceWindow::Initialize(applicationInstanceHandle, nCmdShow);
 
+	HRESULT hr;
+
 	UINT width = 800;
 	UINT height = 600;
 
-	// Compile the vertex shader
-	ID3DBlob* pVSBlob = nullptr;
-	HRESULT hr = CompileShaderFromFile(L"Data/Shaders/SimpleTriangle.hlsl", "VS", "vs_4_0", &pVSBlob);
-	if (FAILED(hr))
-	{
-		MessageBox(nullptr,
-			L"The FX file cannot be compiled.  Please run this executable from the directory that contains the FX file.", L"Error", MB_OK);
-		ERROR_AND_DIE("HR FAILED");
-	}
+	m_pVertexShader = new D3D11VertexShader("Data/Shaders/SimpleTriangle.hlsl", D3D11SHADERTYPE_VERTEX);
+	m_pPixelShader = new D3D11PixelShader("Data/Shaders/SimpleTriangle.hlsl", D3D11SHADERTYPE_FRAGMENT);
 
-	// Create the vertex shader
-	hr = RHIDeviceWindow::Get()->m_pd3dDevice->CreateVertexShader(pVSBlob->GetBufferPointer(), pVSBlob->GetBufferSize(), nullptr, &m_pVertexShader);
-	if (FAILED(hr))
-	{
-		pVSBlob->Release();
-		ERROR_AND_DIE("HR FAILED");
-	}
 
 	// Define the input layout
 	D3D11_INPUT_ELEMENT_DESC layout[] =
@@ -144,30 +99,16 @@ TheGame::TheGame(HINSTANCE applicationInstanceHandle, int nCmdShow)
 	UINT numElements = ARRAYSIZE(layout);
 
 	// Create the input layout
-	hr = RHIDeviceWindow::Get()->m_pd3dDevice->CreateInputLayout(layout, numElements, pVSBlob->GetBufferPointer(),
-		pVSBlob->GetBufferSize(), &m_pVertexLayout);
-	pVSBlob->Release();
+	hr = RHIDeviceWindow::Get()->m_pd3dDevice->CreateInputLayout(layout, numElements, 
+		m_pVertexShader->GetCompiledBlob()->GetBufferPointer(),
+		m_pVertexShader->GetCompiledBlob()->GetBufferSize(), &m_pVertexLayout);
+
+	m_pVertexShader->GetCompiledBlob()->Release();
 	if (FAILED(hr))
 		ERROR_AND_DIE("HR FAILED");
 
 	// Set the input layout
 	RHIDeviceWindow::Get()->m_pImmediateContext->IASetInputLayout(m_pVertexLayout);
-
-	// Compile the pixel shader
-	ID3DBlob* pPSBlob = nullptr;
-	hr = CompileShaderFromFile(L"Data/Shaders/SimpleTriangle.hlsl", "PS", "ps_4_0", &pPSBlob);
-	if (FAILED(hr))
-	{
-		MessageBox(nullptr,
-			L"The FX file cannot be compiled.  Please run this executable from the directory that contains the FX file.", L"Error", MB_OK);
-		ERROR_AND_DIE("HR FAILED");
-	}
-
-	// Create the pixel shader
-	hr = RHIDeviceWindow::Get()->m_pd3dDevice->CreatePixelShader(pPSBlob->GetBufferPointer(), pPSBlob->GetBufferSize(), nullptr, &m_pPixelShader);
-	pPSBlob->Release();
-	if (FAILED(hr))
-		ERROR_AND_DIE("HR FAILED");
 
 	// Create vertex buffer
 	SimpleVertex vertices[] =
@@ -316,9 +257,9 @@ STATIC void TheGame::Render() {
 	//
 	// Renders a triangle
 	//
-	RHIDeviceWindow::Get()->m_pImmediateContext->VSSetShader(m_pVertexShader, nullptr, 0);
+	RHIDeviceWindow::Get()->m_pImmediateContext->VSSetShader(m_pVertexShader->GetShaderHandle(), nullptr, 0);
 	RHIDeviceWindow::Get()->m_pImmediateContext->VSSetConstantBuffers(0, 1, &m_pConstantBuffer);
-	RHIDeviceWindow::Get()->m_pImmediateContext->PSSetShader(m_pPixelShader, nullptr, 0);
+	RHIDeviceWindow::Get()->m_pImmediateContext->PSSetShader(m_pPixelShader->GetShaderHandle(), nullptr, 0);
 	RHIDeviceWindow::Get()->m_pImmediateContext->DrawIndexed(36, 0, 0);        // 36 vertices needed for 12 triangles in a triangle list
 
 													   //

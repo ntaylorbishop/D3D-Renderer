@@ -7,7 +7,7 @@
 
 
 //---------------------------------------------------------------------------------------------------------------------------
-void CompileShaderFromFile(const char* fileName, const char* entryPoint, const char* shaderModel, ID3DBlob** ppBlobOut) {
+ID3DBlob* CompileShaderFromFile(const char* fileName, const char* entryPoint, const char* shaderModel) {
 
 	DWORD shaderFlags = D3DCOMPILE_ENABLE_STRICTNESS;
 #ifdef _DEBUG
@@ -16,11 +16,14 @@ void CompileShaderFromFile(const char* fileName, const char* entryPoint, const c
 #endif
 
 	ID3DBlob* errorBlob = nullptr;
+	ID3DBlob* blobOut = nullptr;
 
-	String workingPath = FileUtils::GetWorkingDirectoryPath();
+	String workingPath = "Data/Shaders/" + String(fileName);
 	WideString wFileName = StringUtils::ConvertStringToWideString(fileName);
 
-	HRESULT compileResult = D3DCompileFromFile(wFileName.c_str(), nullptr, nullptr, entryPoint, shaderModel, shaderFlags, 0, ppBlobOut, &errorBlob);
+	HRESULT compileResult = D3DCompileFromFile(wFileName.c_str(), nullptr, nullptr, entryPoint, shaderModel, 
+		shaderFlags, 0, &blobOut, &errorBlob);
+
 	if (FAILED(compileResult)) {
 		if (errorBlob) {
 			const char* errCStr = reinterpret_cast<const char*>(errorBlob->GetBufferPointer());
@@ -31,4 +34,6 @@ void CompileShaderFromFile(const char* fileName, const char* entryPoint, const c
 	if (errorBlob) {
 		errorBlob->Release();
 	}
+
+	return blobOut;
 }

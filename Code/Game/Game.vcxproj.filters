@@ -65,6 +65,9 @@
     <ClCompile Include="RHI\D3D11PixelShader.cpp">
       <Filter>Source\D3D11\Shaders</Filter>
     </ClCompile>
+    <ClCompile Include="RHI\D3D11ShaderProgram.cpp">
+      <Filter>Source\D3D11\Shaders</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="TheApp.hpp">
@@ -92,6 +95,9 @@
       <Filter>Source\D3D11\Shaders</Filter>
     </ClInclude>
     <ClInclude Include="RHI\D3D11PixelShader.hpp">
+      <Filter>Source\D3D11\Shaders</Filter>
+    </ClInclude>
+    <ClInclude Include="RHI\D3D11ShaderProgram.hpp">
       <Filter>Source\D3D11\Shaders</Filter>
     </ClInclude>
   </ItemGroup>

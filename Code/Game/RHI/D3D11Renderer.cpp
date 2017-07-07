@@ -3,16 +3,15 @@
 #include <d3d11_1.h>
 
 //---------------------------------------------------------------------------------------------------------------------------
-void D3D11Renderer::SetViewport() {
+void D3D11Renderer::SetViewport(const Vector2& viewportSize) {
 
-/*
-	// Setup the viewport
-	D3D11_VIEWPORT vp;
-	vp.Width = (FLOAT)width;
-	vp.Height = (FLOAT)height;
-	vp.MinDepth = 0.0f;
-	vp.MaxDepth = 1.0f;
-	vp.TopLeftX = 0;
-	vp.TopLeftY = 0;
-	RHIDeviceWindow::Get()->GetD3DContext()->RSSetViewports(1, &vp);*/
+	D3D11_VIEWPORT viewport;
+
+	viewport.Width		= (FLOAT)viewportSize.x;
+	viewport.Height		= (FLOAT)viewportSize.y;
+	viewport.MinDepth	= 0.0f;
+	viewport.MaxDepth	= 1.0f;
+	viewport.TopLeftX	= 0;
+	viewport.TopLeftY	= 0;
+	RHIDeviceWindow::Get()->GetD3DContext()->RSSetViewports(1, &viewport);
 }

@@ -5,19 +5,24 @@
 
 enum eD3D11ShaderType {
 	D3D11SHADERTYPE_VERTEX = 0,
-	D3D11SHADERTYPE_FRAGMENT
+	D3D11SHADERTYPE_FRAGMENT,
+	D3D11SHADERTYPE_NUM_SHADERTYPES
 };
 
 class D3D11Shader {
 public:
-	//STRUCTORS
-	D3D11Shader(const char* shaderName, eD3D11ShaderType shaderType);
 	~D3D11Shader();
 
-	ID3D11VertexShader* GetShaderHandle();
+	ID3DBlob* GetCompiledBlob() { return m_compiledBlob; }
+
+protected:
+	D3D11Shader(const char* shaderName, eD3D11ShaderType shaderType);
+
+	ID3D11VertexShader* CreateVertexShader();
+	ID3D11PixelShader* CreatePixelShader();
 
 private:
-	ID3D11VertexShader* m_shaderHandle = nullptr;
 	String				m_shaderName;
 	eD3D11ShaderType	m_shaderType;
+	ID3DBlob*			m_compiledBlob;
 };
