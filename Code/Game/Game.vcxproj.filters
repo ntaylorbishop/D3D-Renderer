@@ -68,6 +68,9 @@
     <ClCompile Include="RHI\D3D11ShaderProgram.cpp">
       <Filter>Source\D3D11\Shaders</Filter>
     </ClCompile>
+    <ClCompile Include="RHI\D3D11VertexDefinition.cpp">
+      <Filter>Source\D3D11</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="TheApp.hpp">
@@ -99,6 +102,9 @@
     </ClInclude>
     <ClInclude Include="RHI\D3D11ShaderProgram.hpp">
       <Filter>Source\D3D11\Shaders</Filter>
+    </ClInclude>
+    <ClInclude Include="RHI\D3D11VertexDefinition.hpp">
+      <Filter>Source\D3D11</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -385,6 +385,7 @@
     <ClCompile Include="RHI\D3D11Renderer.cpp" />
     <ClCompile Include="RHI\D3D11Shader.cpp" />
     <ClCompile Include="RHI\D3D11ShaderProgram.cpp" />
+    <ClCompile Include="RHI\D3D11VertexDefinition.cpp" />
     <ClCompile Include="RHI\D3D11VertexShader.cpp" />
     <ClCompile Include="RHI\RHIDeviceWindow.cpp" />
     <ClCompile Include="RHI\RHIShaderUtils.cpp" />
@@ -397,6 +398,7 @@
     <ClInclude Include="RHI\D3D11Renderer.hpp" />
     <ClInclude Include="RHI\D3D11Shader.hpp" />
     <ClInclude Include="RHI\D3D11ShaderProgram.hpp" />
+    <ClInclude Include="RHI\D3D11VertexDefinition.hpp" />
     <ClInclude Include="RHI\D3D11VertexShader.hpp" />
     <ClInclude Include="RHI\RHIDeviceWindow.hpp" />
     <ClInclude Include="RHI\RHIShaderUtils.hpp" />
