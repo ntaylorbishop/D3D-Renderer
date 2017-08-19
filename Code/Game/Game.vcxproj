@@ -381,6 +381,7 @@
   <ItemGroup>
     <ClCompile Include="GameCommon.cpp" />
     <ClCompile Include="Main_Win32.cpp" />
+    <ClCompile Include="RHI\D3D11Mesh.cpp" />
     <ClCompile Include="RHI\D3D11PixelShader.cpp" />
     <ClCompile Include="RHI\D3D11Renderer.cpp" />
     <ClCompile Include="RHI\D3D11Shader.cpp" />
@@ -389,11 +390,14 @@
     <ClCompile Include="RHI\D3D11VertexShader.cpp" />
     <ClCompile Include="RHI\RHIDeviceWindow.cpp" />
     <ClCompile Include="RHI\RHIShaderUtils.cpp" />
+    <ClCompile Include="RHI\Vertex.cpp" />
+    <ClCompile Include="RHI\VertexLayout.cpp" />
     <ClCompile Include="TheApp.cpp" />
     <ClCompile Include="TheGame.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameCommon.hpp" />
+    <ClInclude Include="RHI\D3D11Mesh.hpp" />
     <ClInclude Include="RHI\D3D11PixelShader.hpp" />
     <ClInclude Include="RHI\D3D11Renderer.hpp" />
     <ClInclude Include="RHI\D3D11Shader.hpp" />
@@ -402,6 +406,8 @@
     <ClInclude Include="RHI\D3D11VertexShader.hpp" />
     <ClInclude Include="RHI\RHIDeviceWindow.hpp" />
     <ClInclude Include="RHI\RHIShaderUtils.hpp" />
+    <ClInclude Include="RHI\Vertex.hpp" />
+    <ClInclude Include="RHI\VertexLayout.hpp" />
     <ClInclude Include="TheApp.hpp" />
     <ClInclude Include="TheGame.hpp" />
   </ItemGroup>

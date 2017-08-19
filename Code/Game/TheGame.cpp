@@ -3,6 +3,7 @@
 #include "Game/RHI/RHIDeviceWindow.hpp"
 #include "Game/RHI/D3D11VertexShader.hpp"
 #include "Game/RHI/D3D11PixelShader.hpp"
+#include "Game/RHI/D3D11Mesh.hpp"
 #include <d3dcompiler.h>
 
 TheGame* TheGame::s_theGame = nullptr;
@@ -64,8 +65,8 @@ struct ConstantBuffer
 };
 
 
-D3D11VertexShader*		m_pVertexShader		= nullptr;
-D3D11PixelShader*		m_pPixelShader		= nullptr;
+D3D11VertexShader*	m_pVertexShader		= nullptr;
+D3D11PixelShader*	m_pPixelShader		= nullptr;
 ID3D11InputLayout*	m_pVertexLayout		= nullptr;
 ID3D11Buffer*       m_pVertexBuffer		= nullptr;
 ID3D11Buffer*       m_pIndexBuffer		= nullptr;
@@ -111,17 +112,29 @@ TheGame::TheGame(HINSTANCE applicationInstanceHandle, int nCmdShow)
 	RHIDeviceWindow::Get()->m_pImmediateContext->IASetInputLayout(m_pVertexLayout);
 
 	// Create vertex buffer
+	D3D11Mesh newMesh(VERTEX_TYPE_PC, 8);
+
+	newMesh.AddVertex(Vector3(-1.0f,  1.0f, -1.0f), RGBA(0.0f, 0.0f, 1.0f, 1.0f));
+	newMesh.AddVertex(Vector3( 1.0f,  1.0f, -1.0f), RGBA(0.0f, 1.0f, 0.0f, 1.0f));
+	newMesh.AddVertex(Vector3( 1.0f,  1.0f,  1.0f), RGBA(0.0f, 1.0f, 1.0f, 1.0f));
+	newMesh.AddVertex(Vector3(-1.0f,  1.0f,  1.0f), RGBA(1.0f, 0.0f, 0.0f, 1.0f));
+	newMesh.AddVertex(Vector3(-1.0f, -1.0f, -1.0f), RGBA(1.0f, 0.0f, 1.0f, 1.0f));
+	newMesh.AddVertex(Vector3( 1.0f, -1.0f, -1.0f), RGBA(1.0f, 1.0f, 0.0f, 1.0f));
+	newMesh.AddVertex(Vector3( 1.0f, -1.0f,  1.0f), RGBA(1.0f, 1.0f, 1.0f, 1.0f));
+	newMesh.AddVertex(Vector3(-1.0f, -1.0f,  1.0f), RGBA(0.0f, 0.0f, 0.0f, 1.0f));
+
 	SimpleVertex vertices[] =
 	{
 		{ XMFLOAT3(-1.0f,  1.0f, -1.0f), XMFLOAT4(0.0f, 0.0f, 1.0f, 1.0f) },
-		{ XMFLOAT3(1.0f,  1.0f, -1.0f), XMFLOAT4(0.0f, 1.0f, 0.0f, 1.0f) },
-		{ XMFLOAT3(1.0f,  1.0f,  1.0f), XMFLOAT4(0.0f, 1.0f, 1.0f, 1.0f) },
+		{ XMFLOAT3( 1.0f,  1.0f, -1.0f), XMFLOAT4(0.0f, 1.0f, 0.0f, 1.0f) },
+		{ XMFLOAT3( 1.0f,  1.0f,  1.0f), XMFLOAT4(0.0f, 1.0f, 1.0f, 1.0f) },
 		{ XMFLOAT3(-1.0f,  1.0f,  1.0f), XMFLOAT4(1.0f, 0.0f, 0.0f, 1.0f) },
 		{ XMFLOAT3(-1.0f, -1.0f, -1.0f), XMFLOAT4(1.0f, 0.0f, 1.0f, 1.0f) },
-		{ XMFLOAT3(1.0f, -1.0f, -1.0f), XMFLOAT4(1.0f, 1.0f, 0.0f, 1.0f) },
-		{ XMFLOAT3(1.0f, -1.0f,  1.0f), XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f) },
+		{ XMFLOAT3( 1.0f, -1.0f, -1.0f), XMFLOAT4(1.0f, 1.0f, 0.0f, 1.0f) },
+		{ XMFLOAT3( 1.0f, -1.0f,  1.0f), XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f) },
 		{ XMFLOAT3(-1.0f, -1.0f,  1.0f), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f) },
 	};
+
 	D3D11_BUFFER_DESC bd;
 	ZeroMemory(&bd, sizeof(bd));
 	bd.Usage = D3D11_USAGE_DEFAULT;
