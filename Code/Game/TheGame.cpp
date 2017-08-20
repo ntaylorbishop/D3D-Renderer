@@ -132,10 +132,10 @@ TheGame::TheGame(HINSTANCE applicationInstanceHandle, int nCmdShow)
 	m_World = XMMatrixIdentity();
 
 	// Initialize the view matrix
-	XMVECTOR Eye = XMVectorSet(0.0f, 1.0f, -5.0f, 0.0f);
-	XMVECTOR At = XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
-	XMVECTOR Up = XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
-	m_View = XMMatrixLookAtLH(Eye, At, Up);
+	XMVECTOR Eye	= XMVectorSet(0.0f, 1.0f, -5.0f, 0.0f);
+	XMVECTOR At		= XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
+	XMVECTOR Up		= XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
+	m_View			= XMMatrixLookAtLH(Eye, At, Up);
 
 	// Initialize the projection matrix
 	m_Projection = XMMatrixPerspectiveFovLH(XM_PIDIV2, width / (FLOAT)height, 0.01f, 100.0f);
