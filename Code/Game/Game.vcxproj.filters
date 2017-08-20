@@ -86,6 +86,9 @@
     <ClCompile Include="RHI\Vertex.cpp">
       <Filter>Source\D3D11\Vertex</Filter>
     </ClCompile>
+    <ClCompile Include="RHI\D3D11InputLayout.cpp">
+      <Filter>Source\D3D11</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="TheApp.hpp">
@@ -129,6 +132,9 @@
     </ClInclude>
     <ClInclude Include="RHI\Vertex.hpp">
       <Filter>Source\D3D11\Vertex</Filter>
+    </ClInclude>
+    <ClInclude Include="RHI\D3D11InputLayout.hpp">
+      <Filter>Source\D3D11</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

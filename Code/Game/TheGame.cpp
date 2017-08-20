@@ -90,26 +90,7 @@ TheGame::TheGame(HINSTANCE applicationInstanceHandle, int nCmdShow)
 	m_pVertexShader = new D3D11VertexShader("Data/Shaders/SimpleTriangle.hlsl", D3D11SHADERTYPE_VERTEX);
 	m_pPixelShader = new D3D11PixelShader("Data/Shaders/SimpleTriangle.hlsl", D3D11SHADERTYPE_FRAGMENT);
 
-
-	// Define the input layout
-	D3D11_INPUT_ELEMENT_DESC layout[] =
-	{
-		{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
-		{ "COLOR", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0 },
-	};
-	UINT numElements = ARRAYSIZE(layout);
-
-	// Create the input layout
-	hr = RHIDeviceWindow::Get()->m_pd3dDevice->CreateInputLayout(layout, numElements, 
-		m_pVertexShader->GetCompiledBlob()->GetBufferPointer(),
-		m_pVertexShader->GetCompiledBlob()->GetBufferSize(), &m_pVertexLayout);
-
-	m_pVertexShader->GetCompiledBlob()->Release();
-	if (FAILED(hr))
-		ERROR_AND_DIE("HR FAILED");
-
-	// Set the input layout
-	RHIDeviceWindow::Get()->m_pImmediateContext->IASetInputLayout(m_pVertexLayout);
+	m_pVertexShader->BindVertexLayoutToDeviceWindow(VERTEX_TYPE_PC);
 
 	// Create vertex buffer
 	D3D11Mesh newMesh(VERTEX_TYPE_PC, 8);
@@ -123,78 +104,27 @@ TheGame::TheGame(HINSTANCE applicationInstanceHandle, int nCmdShow)
 	newMesh.AddVertex(Vector3( 1.0f, -1.0f,  1.0f), RGBA(1.0f, 1.0f, 1.0f, 1.0f));
 	newMesh.AddVertex(Vector3(-1.0f, -1.0f,  1.0f), RGBA(0.0f, 0.0f, 0.0f, 1.0f));
 
-	SimpleVertex vertices[] =
-	{
-		{ XMFLOAT3(-1.0f,  1.0f, -1.0f), XMFLOAT4(0.0f, 0.0f, 1.0f, 1.0f) },
-		{ XMFLOAT3( 1.0f,  1.0f, -1.0f), XMFLOAT4(0.0f, 1.0f, 0.0f, 1.0f) },
-		{ XMFLOAT3( 1.0f,  1.0f,  1.0f), XMFLOAT4(0.0f, 1.0f, 1.0f, 1.0f) },
-		{ XMFLOAT3(-1.0f,  1.0f,  1.0f), XMFLOAT4(1.0f, 0.0f, 0.0f, 1.0f) },
-		{ XMFLOAT3(-1.0f, -1.0f, -1.0f), XMFLOAT4(1.0f, 0.0f, 1.0f, 1.0f) },
-		{ XMFLOAT3( 1.0f, -1.0f, -1.0f), XMFLOAT4(1.0f, 1.0f, 0.0f, 1.0f) },
-		{ XMFLOAT3( 1.0f, -1.0f,  1.0f), XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f) },
-		{ XMFLOAT3(-1.0f, -1.0f,  1.0f), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f) },
-	};
-
-	D3D11_BUFFER_DESC bd;
-	ZeroMemory(&bd, sizeof(bd));
-	bd.Usage = D3D11_USAGE_DEFAULT;
-	bd.ByteWidth = sizeof(SimpleVertex) * 8;
-	bd.BindFlags = D3D11_BIND_VERTEX_BUFFER;
-	bd.CPUAccessFlags = 0;
-	D3D11_SUBRESOURCE_DATA InitData;
-	ZeroMemory(&InitData, sizeof(InitData));
-	InitData.pSysMem = vertices;
-	hr = RHIDeviceWindow::Get()->m_pd3dDevice->CreateBuffer(&bd, &InitData, &m_pVertexBuffer);
-	if (FAILED(hr))
-		ERROR_AND_DIE("HR FAILED");
-
-	// Set vertex buffer
-	UINT stride = sizeof(SimpleVertex);
-	UINT offset = 0;
-	RHIDeviceWindow::Get()->m_pImmediateContext->IASetVertexBuffers(0, 1, &m_pVertexBuffer, &stride, &offset);
+	newMesh.CreateVertexBufferOnDevice();
+	newMesh.BindVertBufferToDeviceWindow();
 
 	// Create index buffer
-	WORD indices[] =
-	{
-		3,1,0,
-		2,1,3,
+	uint32_t  indices[] = { 3,1,0, 2,1,3, 0,5,4, 1,5,0, 3,4,7, 0,4,3, 1,6,5, 2,6,1, 2,7,6, 3,7,2, 6,4,5, 7,4,6 };
+	newMesh.SetIndexBuffer(indices, ARRAYSIZE(indices) * sizeof(uint32_t), 36);
+	newMesh.CreateIndexBufferOnDevice();
+	newMesh.BindIndBufferToDeviceWindow();
 
-		0,5,4,
-		1,5,0,
-
-		3,4,7,
-		0,4,3,
-
-		1,6,5,
-		2,6,1,
-
-		2,7,6,
-		3,7,2,
-
-		6,4,5,
-		7,4,6,
-	};
-	bd.Usage = D3D11_USAGE_DEFAULT;
-	bd.ByteWidth = sizeof(WORD) * 36;        // 36 vertices needed for 12 triangles in a triangle list
-	bd.BindFlags = D3D11_BIND_INDEX_BUFFER;
-	bd.CPUAccessFlags = 0;
-	InitData.pSysMem = indices;
-	hr = RHIDeviceWindow::Get()->m_pd3dDevice->CreateBuffer(&bd, &InitData, &m_pIndexBuffer);
-	if (FAILED(hr))
-		ERROR_AND_DIE("HR FAILED");
-
-	// Set index buffer
-	RHIDeviceWindow::Get()->m_pImmediateContext->IASetIndexBuffer(m_pIndexBuffer, DXGI_FORMAT_R16_UINT, 0);
 
 	// Set primitive topology
 	RHIDeviceWindow::Get()->m_pImmediateContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
 	// Create the constant buffer
-	bd.Usage = D3D11_USAGE_DEFAULT;
-	bd.ByteWidth = sizeof(ConstantBuffer);
-	bd.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
-	bd.CPUAccessFlags = 0;
-	hr = RHIDeviceWindow::Get()->m_pd3dDevice->CreateBuffer(&bd, nullptr, &m_pConstantBuffer);
+	//D3D11_BUFFER_DESC bd;
+	//ZeroMemory(&bd, sizeof(bd));
+	newMesh.m_bufferDesc.Usage = D3D11_USAGE_DEFAULT;
+	newMesh.m_bufferDesc.ByteWidth = sizeof(ConstantBuffer);
+	newMesh.m_bufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+	newMesh.m_bufferDesc.CPUAccessFlags = 0;
+	hr = RHIDeviceWindow::Get()->m_pd3dDevice->CreateBuffer(&newMesh.m_bufferDesc, nullptr, &m_pConstantBuffer);
 	if (FAILED(hr))
 		ERROR_AND_DIE("HR FAILED");
 
