@@ -4,6 +4,7 @@
 #include "Game/RHI/D3D11VertexShader.hpp"
 #include "Game/RHI/D3D11PixelShader.hpp"
 #include "Game/RHI/D3D11Mesh.hpp"
+#include "Game/RHI/D3D11ConstantBuffer.hpp"
 #include <d3dcompiler.h>
 
 TheGame* TheGame::s_theGame = nullptr;
@@ -74,6 +75,7 @@ ID3D11Buffer*       m_pConstantBuffer	= nullptr;
 XMMATRIX            m_World;
 XMMATRIX            m_View;
 XMMATRIX            m_Projection;
+D3D11ConstantBuffer m_cBuffer;
 
 
 
@@ -113,32 +115,28 @@ TheGame::TheGame(HINSTANCE applicationInstanceHandle, int nCmdShow)
 	newMesh.CreateIndexBufferOnDevice();
 	newMesh.BindIndBufferToDeviceWindow();
 
-
 	// Set primitive topology
 	RHIDeviceWindow::Get()->m_pImmediateContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
-	// Create the constant buffer
-	//D3D11_BUFFER_DESC bd;
-	//ZeroMemory(&bd, sizeof(bd));
-	newMesh.m_bufferDesc.Usage = D3D11_USAGE_DEFAULT;
-	newMesh.m_bufferDesc.ByteWidth = sizeof(ConstantBuffer);
-	newMesh.m_bufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
-	newMesh.m_bufferDesc.CPUAccessFlags = 0;
-	hr = RHIDeviceWindow::Get()->m_pd3dDevice->CreateBuffer(&newMesh.m_bufferDesc, nullptr, &m_pConstantBuffer);
-	if (FAILED(hr))
-		ERROR_AND_DIE("HR FAILED");
-
-	// Initialize the world matrix
+	//Initialize MATs	
 	m_World = XMMatrixIdentity();
 
-	// Initialize the view matrix
 	XMVECTOR Eye	= XMVectorSet(0.0f, 1.0f, -5.0f, 0.0f);
 	XMVECTOR At		= XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
 	XMVECTOR Up		= XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
 	m_View			= XMMatrixLookAtLH(Eye, At, Up);
 
-	// Initialize the projection matrix
 	m_Projection = XMMatrixPerspectiveFovLH(XM_PIDIV2, width / (FLOAT)height, 0.01f, 100.0f);
+
+	// Create the constant buffer
+	m_cBuffer.CreateBufferOnDevice();
+
+	Uniform modelUni	= new Uniform("Model", UNIFORM_MAT4, 0, 0, &m_World);
+	Uniform viewUni		= new Uniform("View", UNIFORM_MAT4, 0, 0, &m_View);
+	Uniform projUni		= new Uniform("Proj", UNIFORM_MAT4, 0, 0, &m_Projection);
+	m_cBuffer.AddUniform(modelUni);
+	m_cBuffer.AddUniform(viewUni);
+	m_cBuffer.AddUniform(projUni);
 }
 
 
