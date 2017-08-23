@@ -209,3 +209,95 @@ STATIC void TheGame::Render() {
 	RHIDeviceWindow::Get()->m_pSwapChain->Present(0, 0);
 }
 
+
+
+
+/*
+        case D3D11_RESOURCE_DIMENSION_TEXTURE2D:
+            {
+                D3D11_TEXTURE2D_DESC desc;
+                desc.Width = static_cast<UINT>( width );
+                desc.Height = static_cast<UINT>( height );
+                desc.MipLevels = static_cast<UINT>( mipCount );
+                desc.ArraySize = static_cast<UINT>( arraySize );
+                desc.Format = format;
+                desc.SampleDesc.Count = 1;
+                desc.SampleDesc.Quality = 0;
+                desc.Usage = usage;
+                desc.BindFlags = bindFlags;
+                desc.CPUAccessFlags = cpuAccessFlags;
+                if ( isCubeMap )
+                {
+                    desc.MiscFlags = miscFlags | D3D11_RESOURCE_MISC_TEXTURECUBE;
+                }
+                else
+                {
+                    desc.MiscFlags = miscFlags & ~D3D11_RESOURCE_MISC_TEXTURECUBE;
+                }
+
+                ID3D11Texture2D* tex = nullptr;
+                hr = d3dDevice->CreateTexture2D( &desc,
+                                                 initData,
+                                                 &tex
+                                               );
+                if (SUCCEEDED( hr ) && tex != 0)
+                {
+                    if (textureView != 0)
+                    {
+                        D3D11_SHADER_RESOURCE_VIEW_DESC SRVDesc;
+                        memset( &SRVDesc, 0, sizeof( SRVDesc ) );
+                        SRVDesc.Format = format;
+
+                        if ( isCubeMap )
+                        {
+                            if (arraySize > 6)
+                            {
+                                SRVDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURECUBEARRAY;
+                                SRVDesc.TextureCubeArray.MipLevels = (!mipCount) ? -1 : desc.MipLevels;
+
+                                // Earlier we set arraySize to (NumCubes * 6)
+                                SRVDesc.TextureCubeArray.NumCubes = static_cast<UINT>( arraySize / 6 );
+                            }
+                            else
+                            {
+                                SRVDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURECUBE;
+                                SRVDesc.TextureCube.MipLevels = (!mipCount) ? -1 : desc.MipLevels;
+                            }
+                        }
+                        else if (arraySize > 1)
+                        {
+                            SRVDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2DARRAY;
+                            SRVDesc.Texture2DArray.MipLevels = (!mipCount) ? -1 : desc.MipLevels;
+                            SRVDesc.Texture2DArray.ArraySize = static_cast<UINT>( arraySize );
+                        }
+                        else
+                        {
+                            SRVDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
+                            SRVDesc.Texture2D.MipLevels = (!mipCount) ? -1 : desc.MipLevels;
+                        }
+
+                        hr = d3dDevice->CreateShaderResourceView( tex,
+                                                                  &SRVDesc,
+                                                                  textureView
+                                                                );
+                        if ( FAILED(hr) )
+                        {
+                            tex->Release();
+                            return hr;
+                        }
+                    }
+
+                    if (texture != 0)
+                    {
+                        *texture = tex;
+                    }
+                    else
+                    {
+                        SetDebugObjectName(tex, "DDSTextureLoader");
+                        tex->Release();
+                    }
+                }
+            }
+            break;
+
+*/
