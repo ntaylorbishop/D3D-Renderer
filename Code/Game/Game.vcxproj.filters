@@ -39,6 +39,12 @@
     <Filter Include="Source\D3D11\Vertex">
       <UniqueIdentifier>{19a157f8-58ac-49ba-85a2-6d20e0916db4}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source\D3D11\Texture">
+      <UniqueIdentifier>{c02df646-a424-46fc-b8de-ae8000df5d1d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\D3D11\Resources">
+      <UniqueIdentifier>{50902252-4d50-408a-9a5a-c20500291a8a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="TheApp.cpp">
@@ -92,6 +98,16 @@
     <ClCompile Include="RHI\D3D11ConstantBuffer.cpp">
       <Filter>Source\D3D11</Filter>
     </ClCompile>
+    <ClCompile Include="RHI\Uniform.cpp" />
+    <ClCompile Include="RHI\Texture.cpp">
+      <Filter>Source\D3D11\Texture</Filter>
+    </ClCompile>
+    <ClCompile Include="RHI\Texture2D.cpp">
+      <Filter>Source\D3D11\Texture</Filter>
+    </ClCompile>
+    <ClCompile Include="RHI\D3D11Resource.cpp">
+      <Filter>Source\D3D11\Resources</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="TheApp.hpp">
@@ -141,6 +157,16 @@
     </ClInclude>
     <ClInclude Include="RHI\D3D11ConstantBuffer.hpp">
       <Filter>Source\D3D11</Filter>
+    </ClInclude>
+    <ClInclude Include="RHI\Uniform.hpp" />
+    <ClInclude Include="RHI\Texture.hpp">
+      <Filter>Source\D3D11\Texture</Filter>
+    </ClInclude>
+    <ClInclude Include="RHI\Texture2D.hpp">
+      <Filter>Source\D3D11\Texture</Filter>
+    </ClInclude>
+    <ClInclude Include="RHI\D3D11Resource.hpp">
+      <Filter>Source\D3D11\Resources</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
