@@ -12,7 +12,8 @@ enum eResourceType {
 
 class D3D11Resource {
 public:
-	D3D11Resource(eResourceType resourceType);
+	D3D11Resource() { }
+	D3D11Resource(ID3D11Resource* pResource, eResourceType resourceType);
 
 	ID3D11DepthStencilView*		AsDepthStencilView();
 	ID3D11RenderTargetView*		AsRenderTargetView();
@@ -20,6 +21,7 @@ public:
 	ID3D11UnorderedAccessView*	AsUnorderedAccessView();
 
 private:
+	ID3D11Resource* m_pResource		= nullptr;
 	eResourceType	m_resourceType	= RESOURCE_TYPE_NUM_VIEWS;
 	ID3D11View*		m_view			= nullptr;
 };

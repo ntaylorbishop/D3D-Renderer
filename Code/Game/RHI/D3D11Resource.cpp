@@ -2,70 +2,57 @@
 
 
 //---------------------------------------------------------------------------------------------------------------------------
-D3D11Resource(eResourceType resourceType) 
-	: m_resourceType(resourceType)
+D3D11Resource::D3D11Resource(ID3D11Resource* pResource, eResourceType resourceType)
+	: m_pResource(pResource)
+	, m_resourceType(resourceType)
 {
-
-	we are here
-
 	switch (m_resourceType) {
 	case RESOURCE_TYPE_DEPTH_STENCIL_VIEW: {
-		D3D11_DEPTH_STENCIL_VIEW_DESC dsv_desc;
-		MemZero(&dsv_desc);
 
-		ASSERT(format == IMAGE_D24S8);
-		dsv_desc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
+		D3D11_DEPTH_STENCIL_VIEW_DESC descDSV;
+		ZeroMemory(&descDSV, sizeof(D3D11_DEPTH_STENCIL_VIEW_DESC));
 
-		dsv_desc.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
+		descDSV.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
+		descDSV.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
 
-		dd->CreateDepthStencilView(dx_resource, &dsv_desc, &dx_dsv);
+		HRESULT result = GetDevice()->CreateDepthStencilView(m_pResource, &descDSV, (ID3D11DepthStencilView**)&m_view);
+		ASSERT_OR_DIE(SUCCEEDED(result), "Could not create depth stencil view.");
 		break;
 	}
 	case RESOURCE_TYPE_RENDER_TARGET_VIEW: {
-		dd->CreateRenderTargetView(dx_resource, nullptr, &dx_rtv);
+
+		HRESULT result = GetDevice()->CreateRenderTargetView(m_pResource, nullptr, (ID3D11RenderTargetView**)&m_view);
+		ASSERT_OR_DIE(SUCCEEDED(result), "Could not create render target view.");
 		break;
 	}
 	case RESOURCE_TYPE_SHADER_RESOURCE_VIEW: {
+
 		D3D11_SHADER_RESOURCE_VIEW_DESC srv_desc;
-		MemZero(&srv_desc);
+		ZeroMemory(&srv_desc, sizeof(D3D11_SHADER_RESOURCE_VIEW_DESC));
 
 		srv_desc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
 		srv_desc.Texture2D.MostDetailedMip = 0;
-		srv_desc.Texture2D.MipLevels = (UINT)-1;
+		srv_desc.Texture2D.MipLevels = (UINT) - 1;
+		srv_desc.Format = DXGI_FORMAT_R8G8B8A8_UNORM; //NOTE: Only supporting 4-channel 8bit textures for now
 
-		// NOTE:  Depth Stencil Buffers need to have a different view
-		// then their normal 
-		srv_desc.Format = DXFormatFromImageFormat(format);
-		if (format == IMAGE_D24S8) {
-			srv_desc.Format = DXGI_FORMAT_R24_UNORM_X8_TYPELESS;
-		}
-
-		HRESULT result = dd->CreateShaderResourceView(dx_resource, &srv_desc, &dx_srv);
-		ASSERT(SUCCEEDED(result));
+		HRESULT result = GetDevice()->CreateShaderResourceView(m_pResource, &srv_desc, (ID3D11ShaderResourceView**)&m_view);
+		ASSERT_OR_DIE(SUCCEEDED(result), "Could not create shader resource view.");
 		break;
 	}
 	case RESOURCE_TYPE_UNORDERED_ACCESS_VIEW: {
+
 		D3D11_UNORDERED_ACCESS_VIEW_DESC desc;
-		MemZero(&desc);
+		ZeroMemory(&desc, sizeof(D3D11_UNORDERED_ACCESS_VIEW_DESC));
 
 		desc.ViewDimension = D3D11_UAV_DIMENSION_TEXTURE2D;;
 		desc.Texture2D.MipSlice = 0;
+		desc.Format = DXGI_FORMAT_R8G8B8A8_UNORM; //NOTE: Only supporting 4-channel 8bit textures for now
 
-		// NOTE:  Depth Stencil Buffers need to have a different view
-		// then their normal 
-		desc.Format = DXFormatFromImageFormat(format);
-		if (format == IMAGE_D24S8) {
-			desc.Format = DXGI_FORMAT_R24_UNORM_X8_TYPELESS;
-		}
-
-		HRESULT result = dd->CreateUnorderedAccessView(dx_resource, &desc, &dx_uav);
-		ASSERT(SUCCEEDED(result));
+		HRESULT result = GetDevice()->CreateUnorderedAccessView(m_pResource, &desc, (ID3D11UnorderedAccessView**)&m_view);
+		ASSERT_OR_DIE(SUCCEEDED(result), "Could not create unordered access view.");
 		break;
 	}
 	}
-
-	}
-
 }
 
 

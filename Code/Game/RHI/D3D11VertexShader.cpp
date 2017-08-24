@@ -17,5 +17,5 @@ void D3D11VertexShader::BindVertexLayoutToDeviceWindow(eVertexType vertType) {
 		ERROR_AND_DIE("HR FAILED");
 
 	// Set the input layout
-	RHIDeviceWindow::Get()->m_pImmediateContext->IASetInputLayout(m_pVertLayout);
+	RHIDeviceWindow::Get()->m_pDeviceContext->IASetInputLayout(m_pVertLayout);
 }

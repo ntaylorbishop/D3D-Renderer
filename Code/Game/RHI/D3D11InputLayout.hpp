@@ -30,4 +30,4 @@ if (FAILED(hr))
 ERROR_AND_DIE("HR FAILED");
 
 // Set the input layout
-RHIDeviceWindow::Get()->m_pImmediateContext->IASetInputLayout(m_pVertexLayout);
+RHIDeviceWindow::Get()->m_pDeviceContext->IASetInputLayout(m_pVertexLayout);

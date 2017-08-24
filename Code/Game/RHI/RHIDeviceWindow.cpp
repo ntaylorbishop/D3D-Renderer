@@ -50,7 +50,7 @@ RHIDeviceWindow::~RHIDeviceWindow() {
 void RHIDeviceWindow::ClearAndPresent() {
 
 	float col[] = { 1.f, 0.f, 0.f, 1.f };
-	s_deviceWindow->m_pImmediateContext->ClearRenderTargetView(s_deviceWindow->m_pRenderTargetView, col);
+	s_deviceWindow->m_pDeviceContext->ClearRenderTargetView(s_deviceWindow->m_pRenderTargetView, col);
 	s_deviceWindow->m_pSwapChain->Present(0, 0);
 }
 
@@ -127,13 +127,13 @@ void RHIDeviceWindow::CreateDevice() {
 	{
 		m_driverType = driverTypes[driverTypeIndex];
 		hr = D3D11CreateDevice(nullptr, m_driverType, nullptr, createDeviceFlags, featureLevels, numFeatureLevels,
-			D3D11_SDK_VERSION, &m_pd3dDevice, &m_featureLevel, &m_pImmediateContext);
+			D3D11_SDK_VERSION, &m_pd3dDevice, &m_featureLevel, &m_pDeviceContext);
 
 		if (hr == E_INVALIDARG)
 		{
 			// DirectX 11.0 platforms will not recognize D3D_FEATURE_LEVEL_11_1 so we need to retry without it
 			hr = D3D11CreateDevice(nullptr, m_driverType, nullptr, createDeviceFlags, &featureLevels[1], numFeatureLevels - 1,
-				D3D11_SDK_VERSION, &m_pd3dDevice, &m_featureLevel, &m_pImmediateContext);
+				D3D11_SDK_VERSION, &m_pd3dDevice, &m_featureLevel, &m_pDeviceContext);
 		}
 
 		if (SUCCEEDED(hr))
@@ -167,7 +167,7 @@ void RHIDeviceWindow::CreateDevice() {
 		hr = m_pd3dDevice->QueryInterface(__uuidof(ID3D11Device1), reinterpret_cast<void**>(&m_pd3dDevice1));
 		if (SUCCEEDED(hr))
 		{
-			(void)m_pImmediateContext->QueryInterface(__uuidof(ID3D11DeviceContext1), reinterpret_cast<void**>(&m_pImmediateContext1));
+			(void)m_pDeviceContext->QueryInterface(__uuidof(ID3D11DeviceContext1), reinterpret_cast<void**>(&m_pImmediateContext1));
 		}
 
 		DXGI_SWAP_CHAIN_DESC1 sd;
@@ -221,7 +221,7 @@ void RHIDeviceWindow::CreateDevice() {
 	hr = m_pd3dDevice->CreateRenderTargetView(pBackBuffer, nullptr, &m_pRenderTargetView);
 	pBackBuffer->Release();
 
-	m_pImmediateContext->OMSetRenderTargets(1, &m_pRenderTargetView, nullptr);
+	m_pDeviceContext->OMSetRenderTargets(1, &m_pRenderTargetView, nullptr);
 
 	// Setup the viewport
 	D3D11_VIEWPORT vp;
@@ -231,15 +231,15 @@ void RHIDeviceWindow::CreateDevice() {
 	vp.MaxDepth = 1.0f;
 	vp.TopLeftX = 0;
 	vp.TopLeftY = 0;
-	m_pImmediateContext->RSSetViewports(1, &vp);
+	m_pDeviceContext->RSSetViewports(1, &vp);
 }
 
 
 //---------------------------------------------------------------------------------------------------------------------------
 void RHIDeviceWindow::CleanupDeviceAndWindow() {
 
-	if (m_pImmediateContext) {
-		m_pImmediateContext->ClearState();
+	if (m_pDeviceContext) {
+		m_pDeviceContext->ClearState();
 	}
 	if (m_pVertexBuffer) {
 		m_pVertexBuffer->Release();
@@ -265,8 +265,8 @@ void RHIDeviceWindow::CleanupDeviceAndWindow() {
 	if (m_pImmediateContext1) {
 		m_pImmediateContext1->Release();
 	}
-	if (m_pImmediateContext) {
-		m_pImmediateContext->Release();
+	if (m_pDeviceContext) {
+		m_pDeviceContext->Release();
 	}
 	if (m_pd3dDevice1) {
 		m_pd3dDevice1->Release();

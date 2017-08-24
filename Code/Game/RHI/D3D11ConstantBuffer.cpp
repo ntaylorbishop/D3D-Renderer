@@ -49,6 +49,6 @@ void D3D11ConstantBuffer::UpdateBufferOnDevice() {
 	}
 
 
-	RHIDeviceWindow::Get()->m_pImmediateContext->UpdateSubresource(m_pConstantBuffer, 0, nullptr, &cb, 0, 0);
+	RHIDeviceWindow::Get()->m_pDeviceContext->UpdateSubresource(m_pConstantBuffer, 0, nullptr, &cb, 0, 0);
 
 }

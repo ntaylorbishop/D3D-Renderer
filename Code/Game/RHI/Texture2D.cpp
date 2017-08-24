@@ -7,95 +7,79 @@
 #pragma warning(pop)
 
 //---------------------------------------------------------------------------------------------------------------------------
-Texture2D::Texture2D(const char* imageFilePath) {
+Texture2D::Texture2D(const char* imageFilePath, bool generateMips, eTextureBindFlags bindFlags, eTextureCPUAccessFlags accessFlags) {
+
+	m_resourceViews.resize(RESOURCE_TYPE_NUM_VIEWS);
 
 	int numComponents = 0;
 	int numComponentsRequested = 0;
 
-	unsigned char* imageData = stbi_load(imageFilePath.c_str(), &m_textureSize.x, &m_textureSize.y, &numComponents, numComponentsRequested);
+	unsigned char* imageData = stbi_load(imageFilePath, &m_textureSize.x, &m_textureSize.y, &numComponents, numComponentsRequested);
 
-
-
+	UINT miscFlags;
+	if (generateMips) {
+		miscFlags = D3D11_RESOURCE_MISC_GENERATE_MIPS;
+	}
+	else {
+		miscFlags = 0;
+	}
 
 	D3D11_TEXTURE2D_DESC desc;
+	ZeroMemory(&desc, sizeof(D3D11_TEXTURE2D_DESC));
 	desc.Width = static_cast<UINT>(m_textureSize.x);
 	desc.Height = static_cast<UINT>(m_textureSize.y);
-	desc.MipLevels = static_cast<UINT>(mipCount);
+	desc.MipLevels = static_cast<UINT>(0);
 	desc.ArraySize = static_cast<UINT>(1);
-	desc.Format = format;
+	desc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
 	desc.SampleDesc.Count = 1;
 	desc.SampleDesc.Quality = 0;
-	desc.Usage = usage;
+	desc.Usage = D3D11_USAGE_DEFAULT; //Default for now, may optimize later
 	desc.BindFlags = bindFlags;
-	desc.CPUAccessFlags = cpuAccessFlags;
-	desc.MiscFlags = miscFlags & ~D3D11_RESOURCE_MISC_TEXTURECUBE;
+	desc.CPUAccessFlags = accessFlags;
+	desc.MiscFlags = miscFlags;
 
 	ID3D11Texture2D* tex = nullptr;
-	HRESULT hr = RHIDeviceWindow::Get()->m_pImmediateContext->CreateTexture2D(&desc, imageData, &tex );
 
-	if (SUCCEEDED(hr) && tex != 0)
-	{
-		if (textureView != 0)
-		{
-			D3D11_SHADER_RESOURCE_VIEW_DESC SRVDesc;
-			memset(&SRVDesc, 0, sizeof(SRVDesc));
-			SRVDesc.Format = format;
+	we are here
 
-			if (isCubeMap)
-			{
-				if (arraySize > 6)
-				{
-					SRVDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURECUBEARRAY;
-					SRVDesc.TextureCubeArray.MipLevels = (!mipCount) ? -1 : desc.MipLevels;
+	HRESULT hr = GetDevice()->CreateTexture2D(&desc, imageData, &tex );
 
-					// Earlier we set arraySize to (NumCubes * 6)
-					SRVDesc.TextureCubeArray.NumCubes = static_cast<UINT>(arraySize / 6);
-				}
-				else
-				{
-					SRVDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURECUBE;
-					SRVDesc.TextureCube.MipLevels = (!mipCount) ? -1 : desc.MipLevels;
-				}
-			}
-			else if (arraySize > 1)
-			{
-				SRVDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2DARRAY;
-				SRVDesc.Texture2DArray.MipLevels = (!mipCount) ? -1 : desc.MipLevels;
-				SRVDesc.Texture2DArray.ArraySize = static_cast<UINT>(arraySize);
-			}
-			else
-			{
-				SRVDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
-				SRVDesc.Texture2D.MipLevels = (!mipCount) ? -1 : desc.MipLevels;
-			}
-
-			hr = d3dDevice->CreateShaderResourceView(tex,
-				&SRVDesc,
-				textureView
-			);
-			if (FAILED(hr))
-			{
-				tex->Release();
-				return hr;
-			}
-		}
-
-		if (texture != 0)
-		{
-			*texture = tex;
-		}
-		else
-		{
-			SetDebugObjectName(tex, "DDSTextureLoader");
-			tex->Release();
-		}
+	if (generateMips) {
+		UseAsShaderResourceView();
+		GetDeviceContext()->GenerateMips(GetSRV());
 	}
-}
-break;
 }
 
 
 //---------------------------------------------------------------------------------------------------------------------------
 Texture2D::~Texture2D() {
 
+}
+
+
+//---------------------------------------------------------------------------------------------------------------------------
+void Texture2D::UseAsDepthStencilView() {
+
+	m_resourceViews[RESOURCE_TYPE_DEPTH_STENCIL_VIEW] = new D3D11Resource(m_textureHandle, RESOURCE_TYPE_DEPTH_STENCIL_VIEW);
+}
+
+
+//---------------------------------------------------------------------------------------------------------------------------
+void Texture2D::UseAsRenderTargetView() {
+
+	m_resourceViews[RESOURCE_TYPE_RENDER_TARGET_VIEW] = new D3D11Resource(m_textureHandle, RESOURCE_TYPE_RENDER_TARGET_VIEW);
+}
+
+
+//---------------------------------------------------------------------------------------------------------------------------
+void Texture2D::UseAsShaderResourceView() {
+
+	m_resourceViews[RESOURCE_TYPE_SHADER_RESOURCE_VIEW] = new D3D11Resource(m_textureHandle, RESOURCE_TYPE_SHADER_RESOURCE_VIEW);
+}
+
+
+//---------------------------------------------------------------------------------------------------------------------------
+void Texture2D::UseAsUnorderedAccessView() {
+
+	m_resourceViews[RESOURCE_TYPE_UNORDERED_ACCESS_VIEW] = new D3D11Resource(m_textureHandle, RESOURCE_TYPE_UNORDERED_ACCESS_VIEW);
 }

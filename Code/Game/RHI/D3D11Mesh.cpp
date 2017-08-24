@@ -83,14 +83,14 @@ void D3D11Mesh::BindVertBufferToDeviceWindow() {
 
 	UINT stride = m_vertByteSize;
 	UINT offset = 0;
-	RHIDeviceWindow::Get()->m_pImmediateContext->IASetVertexBuffers(0, 1, &m_pVertBuffer, &stride, &offset);
+	RHIDeviceWindow::Get()->m_pDeviceContext->IASetVertexBuffers(0, 1, &m_pVertBuffer, &stride, &offset);
 }
 
 
 //---------------------------------------------------------------------------------------------------------------------------
 void D3D11Mesh::BindIndBufferToDeviceWindow() {
 
-	RHIDeviceWindow::Get()->m_pImmediateContext->IASetIndexBuffer(m_pIndBuffer, DXGI_FORMAT_R32_UINT, 0);
+	RHIDeviceWindow::Get()->m_pDeviceContext->IASetIndexBuffer(m_pIndBuffer, DXGI_FORMAT_R32_UINT, 0);
 }
 
 

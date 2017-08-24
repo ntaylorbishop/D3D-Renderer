@@ -98,7 +98,6 @@
     <ClCompile Include="RHI\D3D11ConstantBuffer.cpp">
       <Filter>Source\D3D11</Filter>
     </ClCompile>
-    <ClCompile Include="RHI\Uniform.cpp" />
     <ClCompile Include="RHI\Texture.cpp">
       <Filter>Source\D3D11\Texture</Filter>
     </ClCompile>
@@ -107,6 +106,9 @@
     </ClCompile>
     <ClCompile Include="RHI\D3D11Resource.cpp">
       <Filter>Source\D3D11\Resources</Filter>
+    </ClCompile>
+    <ClCompile Include="RHI\Uniform.cpp">
+      <Filter>Source\D3D11</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -158,7 +160,6 @@
     <ClInclude Include="RHI\D3D11ConstantBuffer.hpp">
       <Filter>Source\D3D11</Filter>
     </ClInclude>
-    <ClInclude Include="RHI\Uniform.hpp" />
     <ClInclude Include="RHI\Texture.hpp">
       <Filter>Source\D3D11\Texture</Filter>
     </ClInclude>
@@ -167,6 +168,9 @@
     </ClInclude>
     <ClInclude Include="RHI\D3D11Resource.hpp">
       <Filter>Source\D3D11\Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="RHI\Uniform.hpp">
+      <Filter>Source\D3D11</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

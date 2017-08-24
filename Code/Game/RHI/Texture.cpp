@@ -6,15 +6,13 @@ STATIC TextureDatabase* TextureDatabase::s_texDB = nullptr;
 //---------------------------------------------------------------------------------------------------------------------------
 STATIC Texture* TextureDatabase::CreateOrGetTexture(const String& filePath) {
 
-	TextureMapIterator texIt = m_textures.find(filePath);
+	std::map<String, Texture*>::iterator texIt = s_texDB->m_textures.find(filePath);
 
-	if (texIt != m_textures.end()) {
+	if (texIt != s_texDB->m_textures.end()) {
 		return texIt->second;
 	}
 	else {
-		Texture* newTex = new Texture2D(filePath);
-		m_textures.insert(TextureMapPair(filePath, newTex));
-		return newTex;
+		return nullptr;
 	}
 }
 
@@ -28,9 +26,9 @@ TextureDatabase::TextureDatabase() {
 //---------------------------------------------------------------------------------------------------------------------------
 TextureDatabase::~TextureDatabase() {
 
-	TextureMapIterator texIt = m_textures.begin();
+	std::map<String, Texture*>::iterator texIt = s_texDB->m_textures.begin();
 
-	for (texIt; texIt != m_textures.end(); ++texIt) {
+	for (texIt; texIt != s_texDB->m_textures.end(); ++texIt) {
 
 		Texture* texToDelete = texIt->second;
 		delete texToDelete;

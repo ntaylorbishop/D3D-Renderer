@@ -3,6 +3,7 @@
 #include "Engine/General/Core/EngineCommon.hpp"
 #include "Game/RHI/RHIDeviceWindow.hpp"
 #include "Engine/EventSystem/NamedProperties.hpp"
+#include "Game/RHI/Uniform.hpp"
 
 class D3D11ConstantBuffer {
 public:

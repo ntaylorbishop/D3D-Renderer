@@ -116,7 +116,7 @@ TheGame::TheGame(HINSTANCE applicationInstanceHandle, int nCmdShow)
 	newMesh.BindIndBufferToDeviceWindow();
 
 	// Set primitive topology
-	RHIDeviceWindow::Get()->m_pImmediateContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+	RHIDeviceWindow::Get()->m_pDeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
 	//Initialize MATs	
 	m_World = XMMatrixIdentity();
@@ -184,7 +184,7 @@ STATIC void TheGame::Render() {
 	//
 	// Clear the back buffer
 	//
-	RHIDeviceWindow::Get()->m_pImmediateContext->ClearRenderTargetView(RHIDeviceWindow::Get()->m_pRenderTargetView, Colors::MidnightBlue);
+	RHIDeviceWindow::Get()->m_pDeviceContext->ClearRenderTargetView(RHIDeviceWindow::Get()->m_pRenderTargetView, Colors::MidnightBlue);
 
 	//
 	// Update variables
@@ -193,15 +193,15 @@ STATIC void TheGame::Render() {
 	cb.mWorld = XMMatrixTranspose(m_World);
 	cb.mView = XMMatrixTranspose(m_View);
 	cb.mProjection = XMMatrixTranspose(m_Projection);
-	RHIDeviceWindow::Get()->m_pImmediateContext->UpdateSubresource(m_pConstantBuffer, 0, nullptr, &cb, 0, 0);
+	RHIDeviceWindow::Get()->m_pDeviceContext->UpdateSubresource(m_pConstantBuffer, 0, nullptr, &cb, 0, 0);
 
 	//
 	// Renders a triangle
 	//
-	RHIDeviceWindow::Get()->m_pImmediateContext->VSSetShader(m_pVertexShader->GetShaderHandle(), nullptr, 0);
-	RHIDeviceWindow::Get()->m_pImmediateContext->VSSetConstantBuffers(0, 1, &m_pConstantBuffer);
-	RHIDeviceWindow::Get()->m_pImmediateContext->PSSetShader(m_pPixelShader->GetShaderHandle(), nullptr, 0);
-	RHIDeviceWindow::Get()->m_pImmediateContext->DrawIndexed(36, 0, 0);        // 36 vertices needed for 12 triangles in a triangle list
+	RHIDeviceWindow::Get()->m_pDeviceContext->VSSetShader(m_pVertexShader->GetShaderHandle(), nullptr, 0);
+	RHIDeviceWindow::Get()->m_pDeviceContext->VSSetConstantBuffers(0, 1, &m_pConstantBuffer);
+	RHIDeviceWindow::Get()->m_pDeviceContext->PSSetShader(m_pPixelShader->GetShaderHandle(), nullptr, 0);
+	RHIDeviceWindow::Get()->m_pDeviceContext->DrawIndexed(36, 0, 0);        // 36 vertices needed for 12 triangles in a triangle list
 
 													   //
 													   // Present our back buffer to our front buffer
