@@ -75,7 +75,11 @@ ID3D11Buffer*       m_pConstantBuffer	= nullptr;
 XMMATRIX            m_World;
 XMMATRIX            m_View;
 XMMATRIX            m_Projection;
-D3D11ConstantBuffer m_cBuffer;
+
+XMMATRIX            m_localWorld;
+XMMATRIX            m_localView;
+XMMATRIX            m_localProjection;
+D3D11ConstantBuffer* m_cBuffer;
 
 
 
@@ -119,24 +123,25 @@ TheGame::TheGame(HINSTANCE applicationInstanceHandle, int nCmdShow)
 	RHIDeviceWindow::Get()->m_pDeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
 	//Initialize MATs	
-	m_World = XMMatrixIdentity();
+	m_localWorld = XMMatrixIdentity();
 
 	XMVECTOR Eye	= XMVectorSet(0.0f, 1.0f, -5.0f, 0.0f);
 	XMVECTOR At		= XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
 	XMVECTOR Up		= XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
-	m_View			= XMMatrixLookAtLH(Eye, At, Up);
+	m_localView = XMMatrixLookAtLH(Eye, At, Up);
 
-	m_Projection = XMMatrixPerspectiveFovLH(XM_PIDIV2, width / (FLOAT)height, 0.01f, 100.0f);
+	m_localProjection = XMMatrixPerspectiveFovLH(XM_PIDIV2, width / (FLOAT)height, 0.01f, 100.0f);
 
 	// Create the constant buffer
-	m_cBuffer.CreateBufferOnDevice();
+	m_cBuffer = new D3D11ConstantBuffer(sizeof(Matrix4) * 3);
+	m_cBuffer->CreateBufferOnDevice();
 
-	Uniform modelUni	= new Uniform("Model", UNIFORM_MAT4, 0, 0, &m_World);
-	Uniform viewUni		= new Uniform("View", UNIFORM_MAT4, 0, 0, &m_View);
-	Uniform projUni		= new Uniform("Proj", UNIFORM_MAT4, 0, 0, &m_Projection);
-	m_cBuffer.AddUniform(modelUni);
-	m_cBuffer.AddUniform(viewUni);
-	m_cBuffer.AddUniform(projUni);
+	D3D11Uniform* modelUni		= new D3D11Uniform("Model", UNIFORM_MAT4, 0, 0, &m_World);
+	D3D11Uniform* viewUni		= new D3D11Uniform("View", UNIFORM_MAT4, 0, 0, &m_View);
+	D3D11Uniform* projUni		= new D3D11Uniform("Proj", UNIFORM_MAT4, 0, 0, &m_Projection);
+	m_cBuffer->AddUniform(modelUni);
+	m_cBuffer->AddUniform(viewUni);
+	m_cBuffer->AddUniform(projUni);
 }
 
 
@@ -175,37 +180,22 @@ STATIC void TheGame::Render() {
 	if (timeStart == 0)
 		timeStart = timeCur;
 	t = (timeCur - timeStart) / 1000.0f;
+	m_localWorld = XMMatrixRotationY(t);
 
-	//
-	// Animate the cube
-	//
-	m_World = XMMatrixRotationY(t);
 
-	//
-	// Clear the back buffer
-	//
 	RHIDeviceWindow::Get()->m_pDeviceContext->ClearRenderTargetView(RHIDeviceWindow::Get()->m_pRenderTargetView, Colors::MidnightBlue);
 
-	//
-	// Update variables
-	//
-	ConstantBuffer cb;
-	cb.mWorld = XMMatrixTranspose(m_World);
-	cb.mView = XMMatrixTranspose(m_View);
-	cb.mProjection = XMMatrixTranspose(m_Projection);
-	RHIDeviceWindow::Get()->m_pDeviceContext->UpdateSubresource(m_pConstantBuffer, 0, nullptr, &cb, 0, 0);
+	m_World			= XMMatrixTranspose(m_localWorld);
+	m_View			= XMMatrixTranspose(m_localView);
+	m_Projection	= XMMatrixTranspose(m_localProjection);
 
-	//
-	// Renders a triangle
-	//
+	m_cBuffer->UpdateBufferOnDevice();
+
+	ID3D11Buffer* pConstBufferHandle = m_cBuffer->GetDeviceBufferHandle();
 	RHIDeviceWindow::Get()->m_pDeviceContext->VSSetShader(m_pVertexShader->GetShaderHandle(), nullptr, 0);
-	RHIDeviceWindow::Get()->m_pDeviceContext->VSSetConstantBuffers(0, 1, &m_pConstantBuffer);
+	RHIDeviceWindow::Get()->m_pDeviceContext->VSSetConstantBuffers(0, 1, &pConstBufferHandle);
 	RHIDeviceWindow::Get()->m_pDeviceContext->PSSetShader(m_pPixelShader->GetShaderHandle(), nullptr, 0);
 	RHIDeviceWindow::Get()->m_pDeviceContext->DrawIndexed(36, 0, 0);        // 36 vertices needed for 12 triangles in a triangle list
-
-													   //
-													   // Present our back buffer to our front buffer
-													   //
 	RHIDeviceWindow::Get()->m_pSwapChain->Present(0, 0);
 }
 

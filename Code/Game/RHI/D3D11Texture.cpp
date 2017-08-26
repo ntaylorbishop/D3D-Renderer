@@ -1,12 +1,12 @@
-#include "Game/RHI/Texture.hpp"
+#include "Game/RHI/D3D11Texture.hpp"
 
 STATIC TextureDatabase* TextureDatabase::s_texDB = nullptr;
 
 
 //---------------------------------------------------------------------------------------------------------------------------
-STATIC Texture* TextureDatabase::CreateOrGetTexture(const String& filePath) {
+STATIC D3D11Texture* TextureDatabase::CreateOrGetTexture(const String& filePath) {
 
-	std::map<String, Texture*>::iterator texIt = s_texDB->m_textures.find(filePath);
+	std::map<String, D3D11Texture*>::iterator texIt = s_texDB->m_textures.find(filePath);
 
 	if (texIt != s_texDB->m_textures.end()) {
 		return texIt->second;
@@ -26,11 +26,11 @@ TextureDatabase::TextureDatabase() {
 //---------------------------------------------------------------------------------------------------------------------------
 TextureDatabase::~TextureDatabase() {
 
-	std::map<String, Texture*>::iterator texIt = s_texDB->m_textures.begin();
+	std::map<String, D3D11Texture*>::iterator texIt = s_texDB->m_textures.begin();
 
 	for (texIt; texIt != s_texDB->m_textures.end(); ++texIt) {
 
-		Texture* texToDelete = texIt->second;
+		D3D11Texture* texToDelete = texIt->second;
 		delete texToDelete;
 	}
 }

@@ -1,51 +1,38 @@
-#include "Engine/Renderer/Shaders/Uniform.hpp"
-#include "Engine/Renderer/Renderer/BeirusRenderer.hpp"
-#include "Engine/Renderer/General/Texture.hpp"
-#include "Engine/Renderer/General/TextureBuffer.hpp"
-#include "Engine/Renderer/General/TextureCubemap.hpp"
+#include "Game/RHI/D3D11Uniform.hpp"
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //BINDING
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 //---------------------------------------------------------------------------------------------------------------------------
-void BindTextureToShader(int locInShader, void* data, uint currBindPoint) {
+void D3D11Uniform::BindTextureToShader(int locInShader, void* data, uint currBindPoint) {
 
 	if (data == nullptr) {
 		return;
 	}
-
-	Texture* textureToBind = (Texture*)data;
-	textureToBind->BindToShaderProgram(locInShader, currBindPoint);
 }
 
 
 //---------------------------------------------------------------------------------------------------------------------------
-void BindTextureBufferToShader(int locInShader, void* data, uint currBindPoint) {
+void D3D11Uniform::BindTextureBufferToShader(int locInShader, void* data, uint currBindPoint) {
 
 	if (data == nullptr) {
 		return;
 	}
-
-	TextureBuffer* textureToBind = (TextureBuffer*)data;
-	textureToBind->BindToShaderProgram(locInShader, currBindPoint);
 }
 
 
 //---------------------------------------------------------------------------------------------------------------------------
-void BindTextureCubemapToShader(int locInShader, void* data, uint currBindPoint) {
+void D3D11Uniform::BindTextureCubemapToShader(int locInShader, void* data, uint currBindPoint) {
 
 	if (data == nullptr) {
 		return;
 	}
-
-	TextureCubemap* textureToBind = (TextureCubemap*)data;
-	textureToBind->BindToShaderProgram(locInShader, currBindPoint);
 }
 
 
 //---------------------------------------------------------------------------------------------------------------------------
-void Uniform::Bind() const {
+void D3D11Uniform::Bind() const {
 
 	if (!m_isDirty) {
 		//return;
@@ -57,61 +44,43 @@ void Uniform::Bind() const {
 
 	switch (m_type) {
 	case UNIFORM_FLOAT: {
-		GL_CHECK(glUniform1fv((GLuint)m_locInShader, (GLsizei)m_count, (GLfloat*)m_data));
 		break;
 	}
 	case UNIFORM_VECTOR3: {
-		GL_CHECK(glUniform3fv((GLuint)m_locInShader, (GLsizei)m_count, (GLfloat*)m_data));
 		break;
 	}
 	case UNIFORM_VECTOR2: {
-		GL_CHECK(glUniform2fv((GLuint)m_locInShader, (GLsizei)m_count, (GLfloat*)m_data));
 		break;
 	}
 	case UNIFORM_VECTOR4: {
-		GL_CHECK(glUniform4fv((GLuint)m_locInShader, (GLsizei)m_count, (GLfloat*)m_data));
 		break;
 	}
 	case UNIFORM_MAT4: {
-		GL_CHECK(glUniformMatrix4fv((GLuint)m_locInShader, (GLsizei)m_count, GL_TRUE, (GLfloat*)m_data));
 		break;
 	}
 	case UNIFORM_INT: {
-		GL_CHECK(glUniform1iv((GLuint)m_locInShader, (GLsizei)m_count, (GLint*)m_data));
 		break;
 	}
 	case UNIFORM_UINT: {
-		GL_CHECK(glUniform1uiv((GLuint)m_locInShader, (GLsizei)m_count, (GLuint*)m_data));
 		break;
 	}
 	case UNIFORM_RGBA: {
-		GL_CHECK(glUniform4fv((GLuint)m_locInShader, (GLsizei)m_count, (GLfloat*)m_data));
 		break;
 	}
 	case UNIFORM_BOOL: {
 
-		bool* valPtr = (bool*)m_data;
-		bool val = *valPtr;
-		GLuint valCorrect = (GLuint)val;
-
-		GL_CHECK(glUniform1ui((GLuint)m_locInShader, valCorrect));
 		break;
 	}
 	case UNIFORM_TEXTURE2D: {
-		BindTextureToShader(m_locInShader, m_data, m_bindPoint);
 		break;
 	}
 	case UNIFORM_TEXTUREBUFFER2D: {
-		BindTextureBufferToShader(m_locInShader, m_data, m_bindPoint);
 		break;
 	}
 	case UNIFORM_CUBEMAP: {
-		BindTextureCubemapToShader(m_locInShader, m_data, m_bindPoint);
 		break;
 	}
 	}
-
-	m_isDirty = false;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -119,7 +88,7 @@ void Uniform::Bind() const {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 //---------------------------------------------------------------------------------------------------------------------------
-STATIC INLINE size_t Uniform::GetSizeOfType(eUniformType uniType) {
+STATIC INLINE size_t D3D11Uniform::GetSizeOfType(eUniformType uniType) {
 
 	switch (uniType) {
 	case UNIFORM_FLOAT:				return sizeof(float);
@@ -132,7 +101,7 @@ STATIC INLINE size_t Uniform::GetSizeOfType(eUniformType uniType) {
 	case UNIFORM_UINT:				return sizeof(uint);
 	case UNIFORM_SHORT:				return sizeof(short);
 	case UNIFORM_RGBA:				return sizeof(RGBA);
-	case UNIFORM_TEXTURE2D:			return sizeof(Texture*);
+	case UNIFORM_TEXTURE2D:			return sizeof(D3D11Texture*);
 	case UNIFORM_TEXTUREBUFFER2D:	return sizeof(TextureBuffer*);
 	case UNIFORM_CUBEMAP:			return sizeof(TextureCubemap*);
 	case UNIFORM_BOOL:				return sizeof(bool);
@@ -142,7 +111,7 @@ STATIC INLINE size_t Uniform::GetSizeOfType(eUniformType uniType) {
 
 
 //---------------------------------------------------------------------------------------------------------------------------
-STATIC String Uniform::SerializeType(eUniformType type) {
+STATIC String D3D11Uniform::SerializeType(eUniformType type) {
 
 	switch (type) {
 	case UNIFORM_FLOAT:				return "float";
@@ -165,7 +134,7 @@ STATIC String Uniform::SerializeType(eUniformType type) {
 
 
 //---------------------------------------------------------------------------------------------------------------------------
-STATIC eUniformType Uniform::UnserializeType(const String& typeStr) {
+STATIC eUniformType D3D11Uniform::UnserializeType(const String& typeStr) {
 
 
 	if (typeStr == "mat4") {

@@ -44,11 +44,16 @@ void D3D11ConstantBuffer::ReleaseLocalBuffer() {
 //---------------------------------------------------------------------------------------------------------------------------
 void D3D11ConstantBuffer::UpdateBufferOnDevice() {
 
+	byte* pCurrSpotInBuffer = m_pByteBuffer;
+
 	for (size_t i = 0; i < m_uniforms.size(); i++) {
 
+		D3D11Uniform* currUniform = m_uniforms[i];
+		size_t uniSize = currUniform->GetByteSize();
+
+		memcpy_s(pCurrSpotInBuffer, m_bufferSize, currUniform->GetData(), uniSize);
+		pCurrSpotInBuffer += currUniform->GetByteSize();
 	}
 
-
-	RHIDeviceWindow::Get()->m_pDeviceContext->UpdateSubresource(m_pConstantBuffer, 0, nullptr, &cb, 0, 0);
-
+	RHIDeviceWindow::Get()->m_pDeviceContext->UpdateSubresource(m_pDeviceBuffer, 0, nullptr, m_pByteBuffer, 0, 0);
 }

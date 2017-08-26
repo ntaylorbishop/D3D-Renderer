@@ -393,9 +393,9 @@
     <ClCompile Include="RHI\D3D11VertexShader.cpp" />
     <ClCompile Include="RHI\RHIDeviceWindow.cpp" />
     <ClCompile Include="RHI\RHIShaderUtils.cpp" />
-    <ClCompile Include="RHI\Texture.cpp" />
+    <ClCompile Include="RHI\D3D11Texture.cpp" />
     <ClCompile Include="RHI\Texture2D.cpp" />
-    <ClCompile Include="RHI\Uniform.cpp" />
+    <ClCompile Include="RHI\D3D11Uniform.cpp" />
     <ClCompile Include="RHI\Vertex.cpp" />
     <ClCompile Include="RHI\VertexLayout.cpp" />
     <ClCompile Include="TheApp.cpp" />
@@ -415,9 +415,9 @@
     <ClInclude Include="RHI\D3D11VertexShader.hpp" />
     <ClInclude Include="RHI\RHIDeviceWindow.hpp" />
     <ClInclude Include="RHI\RHIShaderUtils.hpp" />
-    <ClInclude Include="RHI\Texture.hpp" />
+    <ClInclude Include="RHI\D3D11Texture.hpp" />
     <ClInclude Include="RHI\Texture2D.hpp" />
-    <ClInclude Include="RHI\Uniform.hpp" />
+    <ClInclude Include="RHI\D3D11Uniform.hpp" />
     <ClInclude Include="RHI\Vertex.hpp" />
     <ClInclude Include="RHI\VertexLayout.hpp" />
     <ClInclude Include="TheApp.hpp" />

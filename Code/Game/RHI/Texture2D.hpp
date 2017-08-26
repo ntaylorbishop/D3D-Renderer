@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Game/RHI/Texture.hpp"
+#include "Game/RHI/D3D11Texture.hpp"
 #include "Game/RHI/RHIDeviceWindow.hpp"
 #include "Engine/General/Core/EngineCommon.hpp"
 #include "Engine/Math/IntVector2.hpp"
@@ -29,7 +29,7 @@ enum eTextureCPUAccessFlags {
 
 
 //---------------------------------------------------------------------------------------------------------------------------
-class Texture2D : public Texture {
+class Texture2D : public D3D11Texture {
 public:
 	Texture2D(const char* imageFilePath, bool generateMips, eTextureBindFlags bindFlags, eTextureCPUAccessFlags accessFlags);
 	~Texture2D();

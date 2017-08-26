@@ -53,5 +53,5 @@ public:
 	static RHIDeviceWindow* s_deviceWindow;
 };							
 
-ID3D11DeviceContext* GetDeviceContext() { return RHIDeviceWindow::Get()->m_pDeviceContext; }
-ID3D11Device* GetDevice() { return RHIDeviceWindow::Get()->m_pd3dDevice; }
+inline ID3D11DeviceContext* GetDeviceContext()	{ return RHIDeviceWindow::Get()->m_pDeviceContext;	}
+inline ID3D11Device*		GetDevice()			{ return RHIDeviceWindow::Get()->m_pd3dDevice;		}

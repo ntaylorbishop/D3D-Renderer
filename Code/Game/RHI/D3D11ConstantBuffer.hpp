@@ -1,12 +1,13 @@
 #pragma once
 
 #include "Engine/General/Core/EngineCommon.hpp"
-#include "Game/RHI/RHIDeviceWindow.hpp"
 #include "Engine/EventSystem/NamedProperties.hpp"
-#include "Game/RHI/Uniform.hpp"
+#include "Game/RHI/RHIDeviceWindow.hpp"
+#include "Game/RHI/D3D11Uniform.hpp"
 
 class D3D11ConstantBuffer {
 public:
+	D3D11ConstantBuffer() { }
 	D3D11ConstantBuffer(size_t byteSizeOfBuffer);
 	~D3D11ConstantBuffer();
 
@@ -14,20 +15,17 @@ public:
 	void ReleaseLocalBuffer();
 	void UpdateBufferOnDevice();
 
-	void AddUniform(Uniform* uniToAdd) { m_uniforms.push_back(uniToAdd); }
-
-	//template<typename T>
-	//void AddElement(const T elem);
+	void AddUniform(D3D11Uniform* uniToAdd) { m_uniforms.push_back(uniToAdd); }
 
 	byte* GetBuffer() { return m_pByteBuffer; }
+	ID3D11Buffer* GetDeviceBufferHandle() { return m_pDeviceBuffer; }
 
-	NamedProperties	m_bufferData;
 private:
-	std::vector<Uniform*>	m_uniforms;
-	byte*					m_pByteBuffer		= nullptr;
-	size_t					m_currSizeOfBuffer	= 0;
-	size_t					m_bufferSize		= 0;
-	ID3D11Buffer*			m_pDeviceBuffer		= nullptr;
+	std::vector<D3D11Uniform*>	m_uniforms;
+	byte*						m_pByteBuffer		= nullptr;
+	size_t						m_currSizeOfBuffer	= 0;
+	size_t						m_bufferSize		= 0;
+	ID3D11Buffer*				m_pDeviceBuffer		= nullptr;
 };
 
 

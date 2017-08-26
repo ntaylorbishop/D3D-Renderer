@@ -37,12 +37,18 @@ Texture2D::Texture2D(const char* imageFilePath, bool generateMips, eTextureBindF
 	desc.BindFlags = bindFlags;
 	desc.CPUAccessFlags = accessFlags;
 	desc.MiscFlags = miscFlags;
-
 	ID3D11Texture2D* tex = nullptr;
 
-	we are here
 
-	HRESULT hr = GetDevice()->CreateTexture2D(&desc, imageData, &tex );
+	D3D11_SUBRESOURCE_DATA data;
+	D3D11_SUBRESOURCE_DATA* pTexData = nullptr;
+	ZeroMemory(&data, sizeof(data));
+
+	data.pSysMem = imageData;
+	data.SysMemPitch = 4; //WARNING: Assuming RGBA8
+	pTexData = &data;
+
+	HRESULT hr = GetDevice()->CreateTexture2D(&desc, pTexData, &tex );
 
 	if (generateMips) {
 		UseAsShaderResourceView();
