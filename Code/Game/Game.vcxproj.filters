@@ -45,6 +45,9 @@
     <Filter Include="Source\D3D11\Resources">
       <UniqueIdentifier>{50902252-4d50-408a-9a5a-c20500291a8a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source\D3D11\Math">
+      <UniqueIdentifier>{3b7c2b6e-e3d9-4153-937b-a05d39c3088e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="TheApp.cpp">
@@ -110,6 +113,12 @@
     <ClCompile Include="RHI\D3D11Texture.cpp">
       <Filter>Source\D3D11\Texture</Filter>
     </ClCompile>
+    <ClCompile Include="Matrix44.cpp">
+      <Filter>Source\D3D11\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="Camera3D.cpp">
+      <Filter>Source\D3D11\Math</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="TheApp.hpp">
@@ -171,6 +180,12 @@
     </ClInclude>
     <ClInclude Include="RHI\D3D11Texture.hpp">
       <Filter>Source\D3D11\Texture</Filter>
+    </ClInclude>
+    <ClInclude Include="Matrix44.hpp">
+      <Filter>Source\D3D11\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera3D.hpp">
+      <Filter>Source\D3D11\Math</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
