@@ -44,8 +44,8 @@ inline Camera3D::Camera3D(const Vector3& position, float roll, float pitch, floa
 
 
 //---------------------------------------------------------------------------------------------------------------------------
-inline void Camera3D::SetPerspectiveProjection(float fov, float aspect, float nearPlane, float farPlane) {
-	m_proj.SetAsPerspectiveProjection(fov, aspect, nearPlane, farPlane);
+inline void Camera3D::SetPerspectiveProjection(float fovDegrees, float aspect, float nearPlane, float farPlane) {
+	m_proj.SetAsPerspectiveProjection(ToRadians(fovDegrees), aspect, nearPlane, farPlane);
 	m_proj.Transpose();
 }
 

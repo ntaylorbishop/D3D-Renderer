@@ -16,9 +16,13 @@ Texture2D::Texture2D(const char* imageFilePath, bool generateMips, eTextureBindF
 
 	unsigned char* imageData = stbi_load(imageFilePath, &m_textureSize.x, &m_textureSize.y, &numComponents, numComponentsRequested);
 
+	ASSERT_OR_DIE(imageData != nullptr, "ERROR: Could not find texture");
+
 	UINT miscFlags;
+	UINT bindFlagsDesc;
 	if (generateMips) {
 		miscFlags = D3D11_RESOURCE_MISC_GENERATE_MIPS;
+		bindFlagsDesc = D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE;
 	}
 	else {
 		miscFlags = 0;
@@ -28,31 +32,29 @@ Texture2D::Texture2D(const char* imageFilePath, bool generateMips, eTextureBindF
 	ZeroMemory(&desc, sizeof(D3D11_TEXTURE2D_DESC));
 	desc.Width = static_cast<UINT>(m_textureSize.x);
 	desc.Height = static_cast<UINT>(m_textureSize.y);
-	desc.MipLevels = static_cast<UINT>(0);
+	desc.MipLevels = static_cast<UINT>(1);
 	desc.ArraySize = static_cast<UINT>(1);
 	desc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
 	desc.SampleDesc.Count = 1;
 	desc.SampleDesc.Quality = 0;
 	desc.Usage = D3D11_USAGE_DEFAULT; //Default for now, may optimize later
-	desc.BindFlags = bindFlags;
-	desc.CPUAccessFlags = accessFlags;
-	desc.MiscFlags = miscFlags;
-	ID3D11Texture2D* tex = nullptr;
-
+	desc.BindFlags = D3D11_BIND_SHADER_RESOURCE;
+	desc.CPUAccessFlags = 0;
+	desc.MiscFlags = 0;
 
 	D3D11_SUBRESOURCE_DATA data;
 	D3D11_SUBRESOURCE_DATA* pTexData = nullptr;
 	ZeroMemory(&data, sizeof(data));
 
 	data.pSysMem = imageData;
-	data.SysMemPitch = 4; //WARNING: Assuming RGBA8
+	data.SysMemPitch = m_textureSize.x * 3; //WARNING: Assuming RGBA8
 	pTexData = &data;
 
-	HRESULT hr = GetDevice()->CreateTexture2D(&desc, pTexData, &tex );
+	HRESULT hr = GetDevice()->CreateTexture2D(&desc, &data, &m_textureHandle);
 
 	if (generateMips) {
 		UseAsShaderResourceView();
-		GetDeviceContext()->GenerateMips(GetSRV());
+		//GetDeviceContext()->GenerateMips(GetSRV());
 	}
 }
 

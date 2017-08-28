@@ -4,6 +4,10 @@
 STATIC RHIDeviceWindow* RHIDeviceWindow::s_deviceWindow = nullptr;
 
 
+UINT SCREENSIZE_X = 3840;
+UINT SCREENSIZE_Y = 2160;
+
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //STATIC INIT DESTROY
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -63,6 +67,8 @@ void RHIDeviceWindow::ClearAndPresent() {
 //---------------------------------------------------------------------------------------------------------------------------
 void RHIDeviceWindow::InitWindow(HINSTANCE applicationInstanceHandle, int nCmdShow) {
 
+	SetProcessDPIAware();
+
 	WNDCLASSEX wcex;
 	wcex.cbSize = sizeof(WNDCLASSEX);
 	wcex.style = CS_HREDRAW | CS_VREDRAW;
@@ -72,20 +78,25 @@ void RHIDeviceWindow::InitWindow(HINSTANCE applicationInstanceHandle, int nCmdSh
 	wcex.hInstance = applicationInstanceHandle;
 	wcex.hIcon = NULL;
 	wcex.hCursor = LoadCursor(nullptr, IDC_ARROW);
-	wcex.hbrBackground = (HBRUSH)(COLOR_WINDOW + 1);
+	wcex.hbrBackground = (HBRUSH)(COLOR_BACKGROUND);
 	wcex.lpszMenuName = nullptr;
-	wcex.lpszClassName = L"TutorialWindowClass";
+	wcex.lpszClassName = L"D3D Renderer";
 	wcex.hIconSm = NULL;
 	RegisterClassEx(&wcex);
 
 	// Create window
 	m_hInst = applicationInstanceHandle;
-	RECT rc = { 0, 0, 800, 600 };
-	AdjustWindowRect(&rc, WS_OVERLAPPEDWINDOW, FALSE);
-	m_hWnd = CreateWindow(L"TutorialWindowClass", L"Direct3D 11 Tutorial 1: Direct3D 11 Basics",
-		WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU | WS_MINIMIZEBOX,
+	RECT rc = { 0, 0, SCREENSIZE_X, SCREENSIZE_Y };
+	AdjustWindowRect(&rc, WS_VISIBLE, FALSE);
+	//m_hWnd = CreateWindow(L"TutorialWindowClass", L"Direct3D 11 Tutorial 1: Direct3D 11 Basics",
+	//	WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU | WS_MINIMIZEBOX,
+	//	CW_USEDEFAULT, CW_USEDEFAULT, rc.right - rc.left, rc.bottom - rc.top, nullptr, nullptr, applicationInstanceHandle,
+	//	nullptr);
+	m_hWnd = CreateWindow(L"D3D Renderer", L"D3D Renderer",
+		WS_OVERLAPPED,
 		CW_USEDEFAULT, CW_USEDEFAULT, rc.right - rc.left, rc.bottom - rc.top, nullptr, nullptr, applicationInstanceHandle,
 		nullptr);
+	SetWindowLong(m_hWnd, GWL_STYLE, 0);
 
 	ShowWindow(m_hWnd, nCmdShow);
 }
@@ -94,7 +105,7 @@ void RHIDeviceWindow::InitWindow(HINSTANCE applicationInstanceHandle, int nCmdSh
 //---------------------------------------------------------------------------------------------------------------------------
 void RHIDeviceWindow::CreateDevice() {
 
-	RECT rc = { 0, 0, 800, 600 };
+	RECT rc = { 0, 0, SCREENSIZE_X, SCREENSIZE_Y };
 	HRESULT hr = S_OK;
 
 	GetClientRect(m_hWnd, &rc);
