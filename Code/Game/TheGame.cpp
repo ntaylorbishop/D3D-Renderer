@@ -1,4 +1,4 @@
-#include "Game/TheGame.hpp"
+﻿#include "Game/TheGame.hpp"
 #include "Game/TheApp.hpp"
 #include "Game/RHI/RHIDeviceWindow.hpp"
 #include "Game/RHI/D3D11VertexShader.hpp"
@@ -67,21 +67,22 @@ struct ConstantBuffer
 };
 
 
-D3D11VertexShader*	m_pVertexShader		= nullptr;
-D3D11PixelShader*	m_pPixelShader		= nullptr;
-ID3D11InputLayout*	m_pVertexLayout		= nullptr;
-ID3D11Buffer*       m_pVertexBuffer		= nullptr;
-ID3D11Buffer*       m_pIndexBuffer		= nullptr;
-ID3D11Buffer*       m_pConstantBuffer	= nullptr;
-XMMATRIX            m_World;
-XMMATRIX            m_View;
-XMMATRIX            m_Projection;
+D3D11VertexShader*		m_pVertexShader		= nullptr;
+D3D11PixelShader*		m_pPixelShader		= nullptr;
+ID3D11InputLayout*		m_pVertexLayout		= nullptr;
+ID3D11Buffer*			m_pVertexBuffer		= nullptr;
+ID3D11Buffer*			m_pIndexBuffer		= nullptr;
+ID3D11Buffer*			m_pConstantBuffer	= nullptr;
+XMMATRIX				m_World;
+XMMATRIX				m_View;
+XMMATRIX				m_Projection;
 
-XMMATRIX            m_localModel;
-XMMATRIX            m_localView;
-XMMATRIX            m_localProjection;
-D3D11ConstantBuffer* m_cBuffer;
-ID3D11SamplerState*  g_pSamplerLinear = nullptr;
+XMMATRIX				m_localModel;
+XMMATRIX				m_localView;
+XMMATRIX				m_localProjection;
+D3D11ConstantBuffer*	m_cBuffer;
+ID3D11SamplerState*		g_pSamplerLinear	= nullptr;
+ID3D11Debug*			g_debugDevice		= nullptr;
 
 
 Texture2D* m_texDiffuse = nullptr;
@@ -98,7 +99,7 @@ TheGame::TheGame(HINSTANCE applicationInstanceHandle, int nCmdShow)
 {
     RHIDeviceWindow::Initialize(applicationInstanceHandle, nCmdShow);
 
-    HRESULT hr;
+	HRESULT hr = GetDevice()->QueryInterface(__uuidof(ID3D11Debug), reinterpret_cast<void**>(&g_debugDevice));
 
     UINT width = SCREEN_SIZE_X;
     UINT height = SCREEN_SIZE_Y;
@@ -138,7 +139,7 @@ TheGame::TheGame(HINSTANCE applicationInstanceHandle, int nCmdShow)
     //Initialize MATs	
     m_localModel = XMMatrixIdentity();
 
-	m_texDiffuse = new Texture2D("Data/Textures/Brick.png", true, TEXTURE_BIND_SHADER_RESOURCE, (eTextureCPUAccessFlags)0);
+	m_texDiffuse = new Texture2D("Data/Textures/Brick2.png", true, TEXTURE_BIND_SHADER_RESOURCE, (eTextureCPUAccessFlags)0);
 
 	// Create the sample state
 	D3D11_SAMPLER_DESC sampDesc;
@@ -257,6 +258,14 @@ void TheGame::Render() {
     m_cBuffer->UpdateBufferOnDevice();
 
 	ID3D11ShaderResourceView* texID = m_texDiffuse->GetSRV();
+
+
+
+
+	g_debugDevice->ReportLiveDeviceObjects(D3D11_RLDO_DETAIL);
+
+
+
 
     ID3D11Buffer* pConstBufferHandle = m_cBuffer->GetDeviceBufferHandle();
     RHIDeviceWindow::Get()->m_pDeviceContext->VSSetShader(m_pVertexShader->GetShaderHandle(), nullptr, 0);

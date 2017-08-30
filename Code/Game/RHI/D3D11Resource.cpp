@@ -35,7 +35,7 @@ D3D11Resource::D3D11Resource(ID3D11Resource* pResource, eResourceType resourceTy
 		srv_desc.Texture2D.MipLevels = (UINT) - 1;
 		srv_desc.Format = DXGI_FORMAT_R8G8B8A8_UNORM; //NOTE: Only supporting 4-channel 8bit textures for now
 
-		HRESULT result = GetDevice()->CreateShaderResourceView(m_pResource, &srv_desc, (ID3D11ShaderResourceView**)&m_view);
+		HRESULT result = GetDevice()->CreateShaderResourceView(m_pResource, &srv_desc, &m_view);
 		ASSERT_OR_DIE(SUCCEEDED(result), "Could not create shader resource view.");
 		break;
 	}

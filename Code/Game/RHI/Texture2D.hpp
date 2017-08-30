@@ -39,10 +39,10 @@ public:
 	void UseAsShaderResourceView();
 	void UseAsUnorderedAccessView();
 
-	ID3D11DepthStencilView*		GetDSV() { return (ID3D11DepthStencilView*)m_resourceViews[RESOURCE_TYPE_DEPTH_STENCIL_VIEW];	}
-	ID3D11RenderTargetView*		GetRTV() { return (ID3D11RenderTargetView*)m_resourceViews[RESOURCE_TYPE_RENDER_TARGET_VIEW];	}
-	ID3D11ShaderResourceView*	GetSRV() { return (ID3D11ShaderResourceView*)m_resourceViews[RESOURCE_TYPE_SHADER_RESOURCE_VIEW];	}
-	ID3D11UnorderedAccessView*	GetUAV() { return (ID3D11UnorderedAccessView*)m_resourceViews[RESOURCE_TYPE_UNORDERED_ACCESS_VIEW]; }
+	ID3D11DepthStencilView*		GetDSV() { return (ID3D11DepthStencilView*)m_resourceViews[RESOURCE_TYPE_DEPTH_STENCIL_VIEW]->AsDepthStencilView();			}
+	ID3D11RenderTargetView*		GetRTV() { return (ID3D11RenderTargetView*)m_resourceViews[RESOURCE_TYPE_RENDER_TARGET_VIEW]->AsRenderTargetView();			}
+	ID3D11ShaderResourceView*	GetSRV() { return (ID3D11ShaderResourceView*)m_resourceViews[RESOURCE_TYPE_SHADER_RESOURCE_VIEW]->AsShaderResourceView();	}
+	ID3D11UnorderedAccessView*	GetUAV() { return (ID3D11UnorderedAccessView*)m_resourceViews[RESOURCE_TYPE_UNORDERED_ACCESS_VIEW]->AsUnorderedAccessView();}
 
 private:
 	

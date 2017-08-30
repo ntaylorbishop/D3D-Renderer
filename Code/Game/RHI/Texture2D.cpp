@@ -38,17 +38,15 @@ Texture2D::Texture2D(const char* imageFilePath, bool generateMips, eTextureBindF
 	desc.SampleDesc.Count = 1;
 	desc.SampleDesc.Quality = 0;
 	desc.Usage = D3D11_USAGE_DEFAULT; //Default for now, may optimize later
-	desc.BindFlags = D3D11_BIND_SHADER_RESOURCE;
+	desc.BindFlags = D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE;
 	desc.CPUAccessFlags = 0;
 	desc.MiscFlags = 0;
 
 	D3D11_SUBRESOURCE_DATA data;
-	D3D11_SUBRESOURCE_DATA* pTexData = nullptr;
 	ZeroMemory(&data, sizeof(data));
 
 	data.pSysMem = imageData;
-	data.SysMemPitch = m_textureSize.x * 3; //WARNING: Assuming RGBA8
-	pTexData = &data;
+	data.SysMemPitch = m_textureSize.x * numComponents; //WARNING: Assuming RGBA8
 
 	HRESULT hr = GetDevice()->CreateTexture2D(&desc, &data, &m_textureHandle);
 

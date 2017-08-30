@@ -23,6 +23,6 @@ public:
 private:
 	ID3D11Resource* m_pResource		= nullptr;
 	eResourceType	m_resourceType	= RESOURCE_TYPE_NUM_VIEWS;
-	ID3D11View*		m_view			= nullptr;
+	ID3D11ShaderResourceView*		m_view			= nullptr;
 };
 
