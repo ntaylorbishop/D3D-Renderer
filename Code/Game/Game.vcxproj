@@ -383,6 +383,7 @@
     <ClCompile Include="GameCommon.cpp" />
     <ClCompile Include="Main_Win32.cpp" />
     <ClCompile Include="Matrix44.cpp" />
+    <ClCompile Include="RHI.cpp" />
     <ClCompile Include="RHI\D3D11ConstantBuffer.cpp" />
     <ClCompile Include="RHI\D3D11InputLayout.cpp" />
     <ClCompile Include="RHI\D3D11Mesh.cpp" />
@@ -407,6 +408,7 @@
     <ClInclude Include="Camera3D.hpp" />
     <ClInclude Include="GameCommon.hpp" />
     <ClInclude Include="Matrix44.hpp" />
+    <ClInclude Include="RHI.hpp" />
     <ClInclude Include="RHI\D3D11ConstantBuffer.hpp" />
     <ClInclude Include="RHI\D3D11InputLayout.hpp" />
     <ClInclude Include="RHI\D3D11Mesh.hpp" />

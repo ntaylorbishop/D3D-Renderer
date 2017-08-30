@@ -6,6 +6,7 @@
 #include "Game/RHI/D3D11Mesh.hpp"
 #include "Game/RHI/D3D11ConstantBuffer.hpp"
 #include "Game/RHI/Texture2D.hpp"
+#include "Game/RHI.hpp"
 #include <d3dcompiler.h>
 
 TheGame* TheGame::s_theGame = nullptr;
@@ -113,22 +114,49 @@ TheGame::TheGame(HINSTANCE applicationInstanceHandle, int nCmdShow)
     m_pVertexShader->BindVertexLayoutToDeviceWindow(VERTEX_TYPE_PCT);
 
     // Create vertex buffer
-    D3D11Mesh newMesh(VERTEX_TYPE_PCT, 8);
+    D3D11Mesh newMesh(VERTEX_TYPE_PCT, 24);
 
-    newMesh.AddVertex(Vector3(-1.0f,  1.0f, -1.0f), RGBA(0.0f, 0.0f, 1.0f, 1.0f), Vector2(0.f, 0.f));
-    newMesh.AddVertex(Vector3( 1.0f,  1.0f, -1.0f), RGBA(0.0f, 1.0f, 0.0f, 1.0f), Vector2(0.f, 1.f));
-    newMesh.AddVertex(Vector3( 1.0f,  1.0f,  1.0f), RGBA(0.0f, 1.0f, 1.0f, 1.0f), Vector2(1.f, 0.f));
-    newMesh.AddVertex(Vector3(-1.0f,  1.0f,  1.0f), RGBA(1.0f, 0.0f, 0.0f, 1.0f), Vector2(1.f, 1.f));
-    newMesh.AddVertex(Vector3(-1.0f, -1.0f, -1.0f), RGBA(1.0f, 0.0f, 1.0f, 1.0f), Vector2(0.f, 0.f));
-    newMesh.AddVertex(Vector3( 1.0f, -1.0f, -1.0f), RGBA(1.0f, 1.0f, 0.0f, 1.0f), Vector2(0.f, 1.f));
-    newMesh.AddVertex(Vector3( 1.0f, -1.0f,  1.0f), RGBA(1.0f, 1.0f, 1.0f, 1.0f), Vector2(1.f, 0.f));
-    newMesh.AddVertex(Vector3(-1.0f, -1.0f,  1.0f), RGBA(0.0f, 0.0f, 0.0f, 1.0f), Vector2(1.f, 1.f));
+	//FRONT FACE
+    newMesh.AddVertex(Vector3(-1.f, 1.f,  1.f), RGBA(0.0f, 0.0f, 1.0f, 1.0f), Vector2(1.f, 0.f));
+	newMesh.AddVertex(Vector3(-1.f, 1.f, -1.f), RGBA(0.0f, 1.0f, 0.0f, 1.0f), Vector2(1.f, 1.f));
+	newMesh.AddVertex(Vector3( 1.f, 1.f, -1.f), RGBA(0.0f, 1.0f, 1.0f, 1.0f), Vector2(0.f, 1.f));
+	newMesh.AddVertex(Vector3( 1.f, 1.f,  1.f), RGBA(1.0f, 0.0f, 0.0f, 1.0f), Vector2(0.f, 0.f));
+
+	//BACK FACE
+    newMesh.AddVertex(Vector3(-1.f, -1.f,  1.f), RGBA(1.0f, 1.0f, 1.0f, 1.0f), Vector2(0.f, 0.f));
+	newMesh.AddVertex(Vector3(-1.f, -1.f, -1.f), RGBA(1.0f, 1.0f, 0.0f, 1.0f), Vector2(0.f, 1.f));
+	newMesh.AddVertex(Vector3( 1.f, -1.f, -1.f), RGBA(1.0f, 1.0f, 1.0f, 1.0f), Vector2(1.f, 1.f));
+	newMesh.AddVertex(Vector3( 1.f, -1.f,  1.f), RGBA(0.0f, 0.0f, 0.0f, 1.0f), Vector2(1.f, 0.f));
+
+	//BOTTOM FACE
+	newMesh.AddVertex(Vector3(-1.f,  1.f, -1.f), RGBA(1.0f, 0.0f, 1.0f, 1.0f), Vector2(0.f, 1.f));
+	newMesh.AddVertex(Vector3( 1.f,  1.f, -1.f), RGBA(1.0f, 1.0f, 0.0f, 1.0f), Vector2(1.f, 1.f));
+	newMesh.AddVertex(Vector3( 1.f, -1.f, -1.f), RGBA(1.0f, 1.0f, 1.0f, 1.0f), Vector2(1.f, 0.f));
+	newMesh.AddVertex(Vector3(-1.f, -1.f, -1.f), RGBA(0.0f, 0.0f, 0.0f, 1.0f), Vector2(0.f, 0.f));
+
+	//TOP FACE																					
+	newMesh.AddVertex(Vector3(-1.f,  1.f,  1.f), RGBA(1.0f, 0.0f, 1.0f, 1.0f), Vector2(0.f, 0.f));
+	newMesh.AddVertex(Vector3(-1.f, -1.f,  1.f), RGBA(1.0f, 1.0f, 0.0f, 1.0f), Vector2(0.f, 1.f));
+	newMesh.AddVertex(Vector3( 1.f, -1.f,  1.f), RGBA(1.0f, 1.0f, 1.0f, 1.0f), Vector2(1.f, 1.f));
+	newMesh.AddVertex(Vector3( 1.f,  1.f,  1.f), RGBA(0.0f, 0.0f, 0.0f, 1.0f), Vector2(1.f, 0.f));
+
+	//RIGHT FACE																					
+	newMesh.AddVertex(Vector3( 1.f,  1.f, -1.f), RGBA(1.0f, 0.0f, 1.0f, 1.0f), Vector2(1.f, 1.f));
+	newMesh.AddVertex(Vector3( 1.f,  1.f,  1.f), RGBA(1.0f, 1.0f, 0.0f, 1.0f), Vector2(1.f, 0.f));
+	newMesh.AddVertex(Vector3( 1.f, -1.f,  1.f), RGBA(1.0f, 1.0f, 1.0f, 1.0f), Vector2(0.f, 0.f));
+	newMesh.AddVertex(Vector3( 1.f, -1.f, -1.f), RGBA(0.0f, 0.0f, 0.0f, 1.0f), Vector2(0.f, 1.f));
+
+	//LEFT FACE																					
+	newMesh.AddVertex(Vector3(-1.f,  1.f, -1.f), RGBA(1.0f, 0.0f, 1.0f, 1.0f), Vector2(0.f, 1.f));
+	newMesh.AddVertex(Vector3(-1.f, -1.f, -1.f), RGBA(1.0f, 1.0f, 0.0f, 1.0f), Vector2(1.f, 1.f));
+	newMesh.AddVertex(Vector3(-1.f, -1.f,  1.f), RGBA(1.0f, 1.0f, 1.0f, 1.0f), Vector2(1.f, 0.f));
+	newMesh.AddVertex(Vector3(-1.f,  1.f,  1.f), RGBA(0.0f, 0.0f, 0.0f, 1.0f), Vector2(0.f, 0.f));
 
     newMesh.CreateVertexBufferOnDevice();
     newMesh.BindVertBufferToDeviceWindow();
 
     // Create index buffer
-    uint32_t  indices[] = { 3,1,0, 2,1,3, 0,5,4, 1,5,0, 3,4,7, 0,4,3, 1,6,5, 2,6,1, 2,7,6, 3,7,2, 6,4,5, 7,4,6 };
+    uint32_t  indices[] = { 2,1,0, 3,2,0, 4,5,6, 4,6,7, 8,9,10, 8,10,11, 12,13,14, 12,14,15, 16,17,18, 16,18,19, 20,21,22, 20,22,23 };
     newMesh.SetIndexBuffer(indices, ARRAYSIZE(indices) * sizeof(uint32_t), 36);
     newMesh.CreateIndexBufferOnDevice();
     newMesh.BindIndBufferToDeviceWindow();
@@ -239,34 +267,11 @@ void TheGame::Update(float deltaSeconds) {
 //---------------------------------------------------------------------------------------------------------------------------
 void TheGame::Render() {
 
-    // Update our time
-    static float t = 0.0f;
-    static ULONGLONG timeStart = 0;
-    ULONGLONG timeCur = GetTickCount64();
-    if (timeStart == 0)
-        timeStart = timeCur;
-    t = (timeCur - timeStart) / 1000.0f;
-    m_localModel = XMMatrixRotationY(t);
-
-	float col[4] = { 0.1f, 0.1f, 0.1f, 1.f };
-	RHIDeviceWindow::Get()->m_pDeviceContext->ClearRenderTargetView(RHIDeviceWindow::Get()->m_pRenderTargetView, col);
-
-    m_World			= XMMatrixTranspose(m_localModel);
-    m_View			= XMMatrixTranspose(m_localView);
-    m_Projection	= XMMatrixTranspose(m_localProjection);
+	RHI::ClearRenderTarget(RGBA(0.1f, 0.1f, 0.1f, 0.1f));
 
     m_cBuffer->UpdateBufferOnDevice();
 
 	ID3D11ShaderResourceView* texID = m_texDiffuse->GetSRV();
-
-
-
-
-	g_debugDevice->ReportLiveDeviceObjects(D3D11_RLDO_DETAIL);
-
-
-
-
     ID3D11Buffer* pConstBufferHandle = m_cBuffer->GetDeviceBufferHandle();
     RHIDeviceWindow::Get()->m_pDeviceContext->VSSetShader(m_pVertexShader->GetShaderHandle(), nullptr, 0);
     RHIDeviceWindow::Get()->m_pDeviceContext->VSSetConstantBuffers(0, 1, &pConstBufferHandle);
