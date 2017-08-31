@@ -76,10 +76,10 @@ uint16_t GetVertexByteSize(eVertexType vertType) {
 		return sizeof(Vector3) + sizeof(RGBA);
 	}
 	case VERTEX_TYPE_PCT: {
-		return sizeof(Vector3) + sizeof(RGBA);
+		return sizeof(Vector3) + sizeof(RGBA) + sizeof(Vector2);
 	}
 	case VERTEX_TYPE_PCTN: {
-		return sizeof(Vector3) + sizeof(RGBA);
+		return sizeof(Vector3) + sizeof(RGBA) + sizeof(Vector2) + sizeof(Vector3);
 	}
 	case VERTEX_TYPE_PCTTBN: {
 		return sizeof(Vector3) + sizeof(RGBA);
@@ -109,7 +109,7 @@ void SetInputLayout(eVertexType vertType, D3D11_INPUT_ELEMENT_DESC*& layout, UIN
 		layout = new D3D11_INPUT_ELEMENT_DESC[3];
 		layout[0] = { "POSITION",	0, DXGI_FORMAT_R32G32B32_FLOAT,		0, 0,	D3D11_INPUT_PER_VERTEX_DATA, 0 };
 		layout[1] = { "COLOR",		0, DXGI_FORMAT_R32G32B32A32_FLOAT,	0, 12,	D3D11_INPUT_PER_VERTEX_DATA, 0 };
-		layout[2] = { "TEXCOORD",	0, DXGI_FORMAT_R32G32_FLOAT,		0, 16,	D3D11_INPUT_PER_VERTEX_DATA, 0 };
+		layout[2] = { "TEXCOORD",	0, DXGI_FORMAT_R32G32_FLOAT,		0, 28,	D3D11_INPUT_PER_VERTEX_DATA, 0 };
 		numElements = 3;
 		break;
 	}
