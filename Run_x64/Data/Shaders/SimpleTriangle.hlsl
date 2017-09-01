@@ -5,7 +5,9 @@
 //--------------------------------------------------------------------------------------
 
 
-Texture2D txDiffuse : register(t0);
+Texture2D txDiffuse : register(t0); 
+Texture2D txNormal : register(t1);
+
 SamplerState samLinear : register(s0);
 
 //--------------------------------------------------------------------------------------
@@ -43,5 +45,5 @@ VS_OUTPUT VS(float4 Pos : POSITION, float4 Color : COLOR, float2 Tex : TEXCOORD)
 // Pixel Shader
 //--------------------------------------------------------------------------------------
 float4 PS(VS_OUTPUT input) : SV_Target {
-	return txDiffuse.Sample(samLinear, input.Tex);
+	return txNormal.Sample(samLinear, input.Tex);
 }

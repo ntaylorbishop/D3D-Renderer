@@ -7,6 +7,7 @@
 #include "Game/RHI/D3D11ConstantBuffer.hpp"
 #include "Game/RHI/Texture2D.hpp"
 #include "Game/RHI/D3D11SamplerState.hpp"
+#include "Game/RHI.hpp"
 #include <d3dcompiler.h>
 
 TheGame* TheGame::s_theGame = nullptr;
@@ -297,14 +298,14 @@ void TheGame::Render() {
 
 	m_localModel.r[3] = XMVectorSet(pos.x, pos.y, pos.z, 1.f);
 
-	float col[4] = { 0.1f, 0.1f, 0.1f, 1.f };
-	RHIDeviceWindow::Get()->m_pDeviceContext->ClearRenderTargetView(RHIDeviceWindow::Get()->m_pRenderTargetView, col);
+	RHI::ClearRenderTarget(RGBA(0.1f, 0.1f, 0.1f, 1.f));
 
 	m_World = XMMatrixTranspose(m_localModel);
 
 	m_cBuffer->UpdateBufferOnDevice();
 
 	ID3D11ShaderResourceView* texID = m_texDiffuse->GetSRV();
+	ID3D11ShaderResourceView* normID = m_texNormal->GetSRV();
 
 
 
@@ -321,6 +322,7 @@ void TheGame::Render() {
 	RHIDeviceWindow::Get()->m_pDeviceContext->VSSetConstantBuffers(0, 1, &pConstBufferHandle);
 	RHIDeviceWindow::Get()->m_pDeviceContext->PSSetShader(m_pPixelShader->GetShaderHandle(), nullptr, 0);
 	RHIDeviceWindow::Get()->m_pDeviceContext->PSSetShaderResources(0, 1, &texID);
+	RHIDeviceWindow::Get()->m_pDeviceContext->PSSetShaderResources(1, 1, &normID);
 	RHIDeviceWindow::Get()->m_pDeviceContext->PSSetSamplers(0, 1, &pSamplerStateHandle);
 
 
