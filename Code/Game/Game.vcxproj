@@ -390,6 +390,7 @@
     <ClCompile Include="RHI\D3D11PixelShader.cpp" />
     <ClCompile Include="RHI\D3D11Renderer.cpp" />
     <ClCompile Include="RHI\D3D11Resource.cpp" />
+    <ClCompile Include="RHI\D3D11SamplerState.cpp" />
     <ClCompile Include="RHI\D3D11Shader.cpp" />
     <ClCompile Include="RHI\D3D11ShaderProgram.cpp" />
     <ClCompile Include="RHI\D3D11VertexDefinition.cpp" />
@@ -415,6 +416,7 @@
     <ClInclude Include="RHI\D3D11PixelShader.hpp" />
     <ClInclude Include="RHI\D3D11Renderer.hpp" />
     <ClInclude Include="RHI\D3D11Resource.hpp" />
+    <ClInclude Include="RHI\D3D11SamplerState.hpp" />
     <ClInclude Include="RHI\D3D11Shader.hpp" />
     <ClInclude Include="RHI\D3D11ShaderProgram.hpp" />
     <ClInclude Include="RHI\D3D11VertexDefinition.hpp" />

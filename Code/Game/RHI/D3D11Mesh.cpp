@@ -33,8 +33,8 @@ void D3D11Mesh::AddVertex(const Vector3& pos, const RGBA& col, const Vector2& te
 
 
 //---------------------------------------------------------------------------------------------------------------------------
-void D3D11Mesh::AddVertex(const Vector3& pos, const RGBA& col, const Vector2& tex, const Vector3& tangent, const Vector3& bitangent) {
-	CreateVertex(m_pVertData + m_numVerts * m_vertByteSize, m_bufferSize, pos, col, tex, tangent, bitangent);
+void D3D11Mesh::AddVertex(const Vector3& pos, const RGBA& col, const Vector2& tex, const Vector3& tangent, const Vector3& bitangent, const Vector3& normal) {
+	CreateVertex(m_pVertData + m_numVerts * m_vertByteSize, m_bufferSize, pos, col, tex, tangent, bitangent, normal);
 	m_numVerts++;
 }
 

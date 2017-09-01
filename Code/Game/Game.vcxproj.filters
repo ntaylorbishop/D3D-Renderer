@@ -125,6 +125,9 @@
     <ClCompile Include="RHI.cpp">
       <Filter>Source\D3D11\RHI</Filter>
     </ClCompile>
+    <ClCompile Include="RHI\D3D11SamplerState.cpp">
+      <Filter>Source\D3D11\Texture</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="TheApp.hpp">
@@ -195,6 +198,9 @@
     </ClInclude>
     <ClInclude Include="RHI.hpp">
       <Filter>Source\D3D11\RHI</Filter>
+    </ClInclude>
+    <ClInclude Include="RHI\D3D11SamplerState.hpp">
+      <Filter>Source\D3D11\Texture</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
