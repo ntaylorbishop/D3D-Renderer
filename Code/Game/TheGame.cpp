@@ -8,6 +8,7 @@
 #include "Game/RHI/Texture2D.hpp"
 #include "Game/RHI/D3D11SamplerState.hpp"
 #include "Game/RHI.hpp"
+#include "Engine/Renderer/Lights/Light3D.hpp"
 #include <d3dcompiler.h>
 
 TheGame* TheGame::s_theGame = nullptr;
@@ -83,9 +84,11 @@ XMMATRIX				m_localModel;
 XMMATRIX				m_localView;
 XMMATRIX				m_localProjection;
 D3D11ConstantBuffer*	m_cBuffer;
+D3D11ConstantBuffer*	m_lightBuffer;
 ID3D11SamplerState*		g_pSamplerLinear = nullptr;
 ID3D11Debug*			g_debugDevice = nullptr;
 D3D11SamplerState		g_samplerState;
+Light3D m_light;
 
 
 Texture2D* m_texDiffuse = nullptr;
@@ -214,12 +217,40 @@ TheGame::TheGame(HINSTANCE applicationInstanceHandle, int nCmdShow)
 	m_cBuffer = new D3D11ConstantBuffer(sizeof(Matrix4) * 3);
 	m_cBuffer->CreateBufferOnDevice();
 
-	D3D11Uniform* modelUni = new D3D11Uniform("Model", UNIFORM_MAT4, 0, 0, &m_World);
-	D3D11Uniform* viewUni = new D3D11Uniform("View", UNIFORM_MAT4, 0, 0, &m_playerCamera.m_view);
-	D3D11Uniform* projUni = new D3D11Uniform("Proj", UNIFORM_MAT4, 0, 0, &m_playerCamera.m_proj);
+	D3D11Uniform* modelUni	= new D3D11Uniform("Model", UNIFORM_MAT4, 0, 0, &m_World);
+	D3D11Uniform* viewUni	= new D3D11Uniform("View",	UNIFORM_MAT4, 0, 0, &m_playerCamera.m_view);
+	D3D11Uniform* projUni	= new D3D11Uniform("Proj",	UNIFORM_MAT4, 0, 0, &m_playerCamera.m_proj);
 	m_cBuffer->AddUniform(modelUni);
 	m_cBuffer->AddUniform(viewUni);
 	m_cBuffer->AddUniform(projUni);
+
+	//Create the light constant buffer
+
+	size_t byteSize = sizeof(Vector3) + sizeof(RGBA) + sizeof(float) + sizeof(float) + sizeof(float) + sizeof(float);
+	m_lightBuffer = new D3D11ConstantBuffer(48);
+	m_lightBuffer->CreateBufferOnDevice();
+
+	D3D11Uniform* colUni		= new D3D11Uniform("LightColor",	UNIFORM_RGBA,		0, 0, &m_light.m_color);
+	D3D11Uniform* minLightDist	= new D3D11Uniform("MinLightDist",	UNIFORM_FLOAT,		0, 0, &m_light.m_minLightDistance);
+	D3D11Uniform* maxLightdist	= new D3D11Uniform("MaxLightDist",	UNIFORM_FLOAT,		0, 0, &m_light.m_maxLightDistance);
+	D3D11Uniform* minPower		= new D3D11Uniform("MinPower",		UNIFORM_FLOAT,		0, 0, &m_light.m_powerAtMin);
+	D3D11Uniform* maxPower		= new D3D11Uniform("MaxPower",		UNIFORM_FLOAT,		0, 0, &m_light.m_powerAtMax);
+	D3D11Uniform* posUni		= new D3D11Uniform("LightPosition", UNIFORM_VECTOR3,	0, 0, &m_light.m_position);
+
+
+	m_light.m_position = Vector3(0.f, 5.f, 0.f);
+	m_light.m_color = RGBA::GREEN;
+	m_light.m_minLightDistance = 0.f;
+	m_light.m_maxLightDistance = 10.f;
+	m_light.m_powerAtMin = 1.f;
+	m_light.m_powerAtMax = 0.f;
+
+	m_lightBuffer->AddUniform(colUni);
+	m_lightBuffer->AddUniform(minLightDist);
+	m_lightBuffer->AddUniform(maxLightdist);
+	m_lightBuffer->AddUniform(minPower);
+	m_lightBuffer->AddUniform(maxPower);
+	m_lightBuffer->AddUniform(posUni);
 }
 
 
@@ -295,7 +326,6 @@ Vector3 pos = Vector3(0.f, 0.f, 0.f);
 //---------------------------------------------------------------------------------------------------------------------------
 void TheGame::Render() {
 
-
 	m_localModel.r[3] = XMVectorSet(pos.x, pos.y, pos.z, 1.f);
 
 	RHI::ClearRenderTarget(RGBA(0.1f, 0.1f, 0.1f, 1.f));
@@ -303,129 +333,24 @@ void TheGame::Render() {
 	m_World = XMMatrixTranspose(m_localModel);
 
 	m_cBuffer->UpdateBufferOnDevice();
+	m_lightBuffer->UpdateBufferOnDevice();
 
 	ID3D11ShaderResourceView* texID = m_texDiffuse->GetSRV();
 	ID3D11ShaderResourceView* normID = m_texNormal->GetSRV();
 
-
-
-
-	g_debugDevice->ReportLiveDeviceObjects(D3D11_RLDO_DETAIL);
-
-
-
-
 	ID3D11Buffer* pConstBufferHandle = m_cBuffer->GetDeviceBufferHandle();
+	ID3D11Buffer* pLightBufferHandle = m_lightBuffer->GetDeviceBufferHandle();
 	ID3D11SamplerState* pSamplerStateHandle = g_samplerState.GetSamplerHandle();
 
-	RHIDeviceWindow::Get()->m_pDeviceContext->VSSetShader(m_pVertexShader->GetShaderHandle(), nullptr, 0);
-	RHIDeviceWindow::Get()->m_pDeviceContext->VSSetConstantBuffers(0, 1, &pConstBufferHandle);
-	RHIDeviceWindow::Get()->m_pDeviceContext->PSSetShader(m_pPixelShader->GetShaderHandle(), nullptr, 0);
-	RHIDeviceWindow::Get()->m_pDeviceContext->PSSetShaderResources(0, 1, &texID);
-	RHIDeviceWindow::Get()->m_pDeviceContext->PSSetShaderResources(1, 1, &normID);
-	RHIDeviceWindow::Get()->m_pDeviceContext->PSSetSamplers(0, 1, &pSamplerStateHandle);
+	GetDeviceContext()->VSSetShader(m_pVertexShader->GetShaderHandle(), nullptr, 0);
+	GetDeviceContext()->VSSetConstantBuffers(0, 1, &pConstBufferHandle);
+	GetDeviceContext()->PSSetShader(m_pPixelShader->GetShaderHandle(), nullptr, 0);
+	GetDeviceContext()->PSSetShaderResources(0, 1, &texID);
+	GetDeviceContext()->PSSetShaderResources(1, 1, &normID);
+	GetDeviceContext()->PSSetConstantBuffers(1, 1, &pLightBufferHandle);
+	GetDeviceContext()->PSSetSamplers(0, 1, &pSamplerStateHandle);
 
 
 	RHIDeviceWindow::Get()->m_pDeviceContext->DrawIndexed(36, 0, 0);        // 6 vertices needed for 12 triangles in a triangle list
 	RHIDeviceWindow::Get()->m_pSwapChain->Present(0, 0);
 }
-
-
-
-
-
-
-
-
-
-
-
-/*
-case D3D11_RESOURCE_DIMENSION_TEXTURE2D:
-{
-D3D11_TEXTURE2D_DESC desc;
-desc.Width = static_cast<UINT>( width );
-desc.Height = static_cast<UINT>( height );
-desc.MipLevels = static_cast<UINT>( mipCount );
-desc.ArraySize = static_cast<UINT>( arraySize );
-desc.Format = format;
-desc.SampleDesc.Count = 1;
-desc.SampleDesc.Quality = 0;
-desc.Usage = usage;
-desc.BindFlags = bindFlags;
-desc.CPUAccessFlags = cpuAccessFlags;
-if ( isCubeMap )
-{
-desc.MiscFlags = miscFlags | D3D11_RESOURCE_MISC_TEXTURECUBE;
-}
-else
-{
-desc.MiscFlags = miscFlags & ~D3D11_RESOURCE_MISC_TEXTURECUBE;
-}
-
-ID3D11Texture2D* tex = nullptr;
-hr = d3dDevice->CreateTexture2D( &desc,
-initData,
-&tex
-);
-if (SUCCEEDED( hr ) && tex != 0)
-{
-if (textureView != 0)
-{
-D3D11_SHADER_RESOURCE_VIEW_DESC SRVDesc;
-memset( &SRVDesc, 0, sizeof( SRVDesc ) );
-SRVDesc.Format = format;
-
-if ( isCubeMap )
-{
-if (arraySize > 6)
-{
-SRVDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURECUBEARRAY;
-SRVDesc.TextureCubeArray.MipLevels = (!mipCount) ? -1 : desc.MipLevels;
-
-// Earlier we set arraySize to (NumCubes * 6)
-SRVDesc.TextureCubeArray.NumCubes = static_cast<UINT>( arraySize / 6 );
-}
-else
-{
-SRVDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURECUBE;
-SRVDesc.TextureCube.MipLevels = (!mipCount) ? -1 : desc.MipLevels;
-}
-}
-else if (arraySize > 1)
-{
-SRVDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2DARRAY;
-SRVDesc.Texture2DArray.MipLevels = (!mipCount) ? -1 : desc.MipLevels;
-SRVDesc.Texture2DArray.ArraySize = static_cast<UINT>( arraySize );
-}
-else
-{
-SRVDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
-SRVDesc.Texture2D.MipLevels = (!mipCount) ? -1 : desc.MipLevels;
-}
-
-hr = d3dDevice->CreateShaderResourceView( tex,
-&SRVDesc,
-textureView
-);
-if ( FAILED(hr) )
-{
-tex->Release();
-return hr;
-}
-}
-
-if (texture != 0)
-{
-*texture = tex;
-}
-else
-{
-SetDebugObjectName(tex, "DDSTextureLoader");
-tex->Release();
-}
-}
-}
-break;
-
-*/
