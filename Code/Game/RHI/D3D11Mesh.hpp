@@ -8,9 +8,9 @@ public:
 
 	void AddVertex(const Vector3& pos, const RGBA& col);
 	void AddVertex(const Vector3& pos, const RGBA& col, const Vector2& tex);
-	void AddVertex(const Vector3& pos, const RGBA& col, const Vector2& tex, const Vector3& normal);
-	void AddVertex(const Vector3& pos, const RGBA& col, const Vector2& tex, const Vector3& tangent, const Vector3& bitangent, const Vector3& normal);
-	void AddVertex(const Vector3& pos, const RGBA& col, const Vector2& tex, const Vector3& tangent, const Vector3& bitangent, const Vector3& normal, const Vector4& boneWeights, const IntVector4& boneInds);
+	void AddVertex(const Vector3& pos, const RGBA& col, const Vector2& tex, const Vector4& normal);
+	void AddVertex(const Vector3& pos, const RGBA& col, const Vector2& tex, const Vector4& tangent, const Vector4& bitangent, const Vector4& normal);
+	void AddVertex(const Vector3& pos, const RGBA& col, const Vector2& tex, const Vector4& tangent, const Vector4& bitangent, const Vector4& normal, const Vector4& boneWeights, const IntVector4& boneInds);
 	void CreateVertexBufferOnDevice();
 	void CreateIndexBufferOnDevice();
 	void BindVertBufferToDeviceWindow();
