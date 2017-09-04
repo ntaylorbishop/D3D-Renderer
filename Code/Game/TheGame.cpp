@@ -227,7 +227,7 @@ TheGame::TheGame(HINSTANCE applicationInstanceHandle, int nCmdShow)
 	//Create the light constant buffer
 
 	size_t byteSize = sizeof(Vector3) + sizeof(RGBA) + sizeof(float) + sizeof(float) + sizeof(float) + sizeof(float);
-	m_lightBuffer = new D3D11ConstantBuffer(48);
+	m_lightBuffer = new D3D11ConstantBuffer(64);
 	m_lightBuffer->CreateBufferOnDevice();
 
 	D3D11Uniform* colUni		= new D3D11Uniform("LightColor",	UNIFORM_RGBA,		0, 0, &m_light.m_color);
@@ -236,13 +236,13 @@ TheGame::TheGame(HINSTANCE applicationInstanceHandle, int nCmdShow)
 	D3D11Uniform* minPower		= new D3D11Uniform("MinPower",		UNIFORM_FLOAT,		0, 0, &m_light.m_powerAtMin);
 	D3D11Uniform* maxPower		= new D3D11Uniform("MaxPower",		UNIFORM_FLOAT,		0, 0, &m_light.m_powerAtMax);
 	D3D11Uniform* posUni		= new D3D11Uniform("LightPosition", UNIFORM_VECTOR3,	0, 0, &m_light.m_position);
+	D3D11Uniform* camPosUni		= new D3D11Uniform("CameraPos",		UNIFORM_VECTOR3,	0, 0, &m_playerCamera.m_position);
 
-
-	m_light.m_position = Vector3(0.f, 5.f, 0.f);
+	m_light.m_position = Vector3(0.f, 10.f, 0.f);
 	m_light.m_color = RGBA::GREEN;
-	m_light.m_minLightDistance = 0.f;
-	m_light.m_maxLightDistance = 10.f;
-	m_light.m_powerAtMin = 1.f;
+	m_light.m_minLightDistance = 9.f;
+	m_light.m_maxLightDistance = 11.f;
+	m_light.m_powerAtMin = 5.f;
 	m_light.m_powerAtMax = 0.f;
 
 	m_lightBuffer->AddUniform(colUni);
@@ -251,6 +251,7 @@ TheGame::TheGame(HINSTANCE applicationInstanceHandle, int nCmdShow)
 	m_lightBuffer->AddUniform(minPower);
 	m_lightBuffer->AddUniform(maxPower);
 	m_lightBuffer->AddUniform(posUni);
+	m_lightBuffer->AddUniform(camPosUni);
 }
 
 
