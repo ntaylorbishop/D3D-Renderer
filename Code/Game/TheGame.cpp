@@ -239,10 +239,10 @@ TheGame::TheGame(HINSTANCE applicationInstanceHandle, int nCmdShow)
 	D3D11Uniform* camPosUni		= new D3D11Uniform("CameraPos",		UNIFORM_VECTOR3,	0, 0, &m_playerCamera.m_position);
 
 	m_light.m_position = Vector3(0.f, 10.f, 0.f);
-	m_light.m_color = RGBA::GREEN;
+	m_light.m_color = RGBA::WHITE;
 	m_light.m_minLightDistance = 9.f;
 	m_light.m_maxLightDistance = 11.f;
-	m_light.m_powerAtMin = 5.f;
+	m_light.m_powerAtMin = 1.f;
 	m_light.m_powerAtMax = 0.f;
 
 	m_lightBuffer->AddUniform(colUni);

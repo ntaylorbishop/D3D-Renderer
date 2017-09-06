@@ -53,15 +53,15 @@ cbuffer LightConstBuffer : register(b1) {
 //---------------------------------------------------------------------------------------------------------------------------
 float3 GetSurfaceNormal(float3 passTan, float3 passBitan, float3 passNormal, float4 txNormal) {
 
-	float3 tan = float3(passTan.x, passTan.y, passTan.z);
-	float3 bitan = float3(passBitan.x, passBitan.y, passBitan.z);
-	float3x3 tbn = float3x3(tan, bitan, float3(passNormal.x, passNormal.y, passNormal.z));
+	float3x3 tbn = float3x3(passTan, passBitan, passNormal);
 	tbn = transpose(tbn);
 
 	float3 normal = float3(txNormal.x, txNormal.y, txNormal.z);
 	normal = normal * float3(2.f, 2.f, 1.f) - float3(1.f, 1.f, 0.f);
+	//normal = (passNormal + float3(1.f, 1.f, 1.f)) / float3(2.f, 2.f, 2.f);
 
-	return mul(normal, tbn);
+	//return normal;
+	return mul(tbn, normal);
 }
 
 
@@ -110,7 +110,7 @@ float4 CalculateLight(float3 passPosition, float3 passTan, float3 passBitan, flo
 	float4 surface4 = float4(surfaceLight.r, surfaceLight.g, surfaceLight.b, 0.f);
 	float4 spec4 = float4(specColor.r, specColor.g, specColor.b, 0.f);
 
-	//return float4(attenuation, attenuation, attenuation, 0.f);
+	//return float4(normal.x, normal.y, normal.z, 0.f);
 	return txDiffuse * (ambient4 + surface4) + spec4;
 }
 
