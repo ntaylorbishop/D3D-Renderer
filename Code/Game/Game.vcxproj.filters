@@ -51,6 +51,9 @@
     <Filter Include="Source\D3D11\RHI">
       <UniqueIdentifier>{e6bad7ce-e56f-4271-a526-6b8864297b7c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Data_x64\ShaderDefinitions">
+      <UniqueIdentifier>{3cb37548-7eeb-4b9e-a9d8-dd90d78c0b11}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="TheApp.cpp">
@@ -204,15 +207,6 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <Xml Include="..\..\Run_x64\Data\Shaders\ShaderPrograms.xml">
-      <Filter>Data_x64\Materials</Filter>
-    </Xml>
-    <Xml Include="..\..\Run_x64\Data\Models\Sponza\SponzaMaterials.xml">
-      <Filter>Data_x64\Materials</Filter>
-    </Xml>
-    <Xml Include="..\..\Run_x64\Data\Models\Sponza\TutorialBoxPBR.xml">
-      <Filter>Data_x64\Materials</Filter>
-    </Xml>
     <Xml Include="..\..\Run_x64\Data\Particle\SmokeParticle.xml">
       <Filter>Data_x64\Particle</Filter>
     </Xml>
@@ -227,6 +221,9 @@
     </Xml>
     <Xml Include="..\..\Run_x64\Data\Particle\SmokeParticle_NoOIT.xml">
       <Filter>Data_x64\Particle</Filter>
+    </Xml>
+    <Xml Include="..\..\Run_x64\Data\Materials\ShaderDefinitions\BlinnPhong.xml">
+      <Filter>Data_x64\ShaderDefinitions</Filter>
     </Xml>
   </ItemGroup>
   <ItemGroup>
