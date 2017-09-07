@@ -83,9 +83,6 @@
     <ClCompile Include="RHI\D3D11PixelShader.cpp">
       <Filter>Source\D3D11\Shaders</Filter>
     </ClCompile>
-    <ClCompile Include="RHI\D3D11ShaderProgram.cpp">
-      <Filter>Source\D3D11\Shaders</Filter>
-    </ClCompile>
     <ClCompile Include="RHI\D3D11Mesh.cpp">
       <Filter>Source\D3D11\Mesh</Filter>
     </ClCompile>
@@ -131,6 +128,9 @@
     <ClCompile Include="RHI\D3D11SamplerState.cpp">
       <Filter>Source\D3D11\Texture</Filter>
     </ClCompile>
+    <ClCompile Include="D3D11ShaderProgram.cpp">
+      <Filter>Source\D3D11\Shaders</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="TheApp.hpp">
@@ -155,9 +155,6 @@
       <Filter>Source\D3D11\Shaders</Filter>
     </ClInclude>
     <ClInclude Include="RHI\D3D11PixelShader.hpp">
-      <Filter>Source\D3D11\Shaders</Filter>
-    </ClInclude>
-    <ClInclude Include="RHI\D3D11ShaderProgram.hpp">
       <Filter>Source\D3D11\Shaders</Filter>
     </ClInclude>
     <ClInclude Include="RHI\D3D11Mesh.hpp">
@@ -204,6 +201,9 @@
     </ClInclude>
     <ClInclude Include="RHI\D3D11SamplerState.hpp">
       <Filter>Source\D3D11\Texture</Filter>
+    </ClInclude>
+    <ClInclude Include="D3D11ShaderProgram.hpp">
+      <Filter>Source\D3D11\Shaders</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
