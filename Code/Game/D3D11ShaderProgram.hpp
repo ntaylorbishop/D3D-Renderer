@@ -50,6 +50,9 @@ public:
 	void Use();
 
 private:
+	void BindConstantBuffers();
+	void BindResources();
+
 	D3D11VertexShader*	m_pVertexShader	= nullptr;
 	D3D11PixelShader*	m_pPixelShader	= nullptr;
 

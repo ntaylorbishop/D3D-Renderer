@@ -12,9 +12,6 @@ public:
 
 	ID3D11SamplerState* GetSamplerHandle() { return m_pSamplerHandle; }
 
-
 private:
 	ID3D11SamplerState*	m_pSamplerHandle = nullptr;
 };
-
-
