@@ -44,6 +44,11 @@ public:
 	ID3D11ShaderResourceView*	GetSRV() { return (ID3D11ShaderResourceView*)m_resourceViews[RESOURCE_TYPE_SHADER_RESOURCE_VIEW]->AsShaderResourceView();	}
 	ID3D11UnorderedAccessView*	GetUAV() { return (ID3D11UnorderedAccessView*)m_resourceViews[RESOURCE_TYPE_UNORDERED_ACCESS_VIEW]->AsUnorderedAccessView();}
 
+	D3D11Resource*				GetDSVResource() { return m_resourceViews[RESOURCE_TYPE_DEPTH_STENCIL_VIEW];	}
+	D3D11Resource*				GetRTVResource() { return m_resourceViews[RESOURCE_TYPE_RENDER_TARGET_VIEW];	}
+	D3D11Resource*				GetSRVResource() { return m_resourceViews[RESOURCE_TYPE_SHADER_RESOURCE_VIEW];	}
+	D3D11Resource*				GetUAVResource() { return m_resourceViews[RESOURCE_TYPE_UNORDERED_ACCESS_VIEW]; }
+
 private:
 	
 	IntVector2					m_textureSize	= IntVector2::ZERO;

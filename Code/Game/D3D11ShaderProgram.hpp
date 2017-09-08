@@ -45,8 +45,8 @@ struct SamplerBindInfo {
 //---------------------------------------------------------------------------------------------------------------------------
 class D3D11ShaderProgram {
 public:
-	D3D11ShaderProgram();
-	~D3D11ShaderProgram();
+	D3D11ShaderProgram()	{ }
+	~D3D11ShaderProgram()	{ }
 
 	void SetVertexShader(D3D11VertexShader* pVertShader)	{ m_pVertexShader = pVertShader; }
 	void SetPixelShader(D3D11PixelShader* pPixelShader)		{ m_pPixelShader = pPixelShader; }

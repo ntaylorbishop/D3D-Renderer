@@ -55,12 +55,12 @@ void D3D11ShaderProgram::BindConstantBuffers() {
 //---------------------------------------------------------------------------------------------------------------------------
 void D3D11ShaderProgram::BindResources() {
 
-	for (size_t i = 0; i < m_constBuffers.size(); i++) {
+	for (size_t i = 0; i < m_resources.size(); i++) {
 
 		ID3D11ShaderResourceView* pResourceHandle = m_resources[i].m_pResource->AsShaderResourceView();
-		uint bindPoint = m_constBuffers[i].m_bindPoint;
+		uint bindPoint = m_resources[i].m_bindPoint;
 
-		switch (m_constBuffers[i].m_whichShaders) {
+		switch (m_resources[i].m_whichShaders) {
 		case WHICH_SHADER_VERTEX: {
 			GetDeviceContext()->VSSetShaderResources(bindPoint, 1, &pResourceHandle);
 			break;

@@ -26,6 +26,9 @@ private:
 	TheGame(HINSTANCE applicationInstanceHandle, int nCmdShow);
 	~TheGame();
 
+	void CreateShaderProgram();
+	void CreateMesh();
+
 	Camera3D m_playerCamera;
 
 	static TheGame* s_theGame;
