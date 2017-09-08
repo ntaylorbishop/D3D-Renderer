@@ -9,7 +9,7 @@ void D3D11ShaderProgram::Use() {
 
 	BindConstantBuffers();
 	BindResources();
-
+	BindSamplers();
 
 	//ID3D11Buffer* pConstBufferHandle = m_cBuffer->GetDeviceBufferHandle();
 	//ID3D11Buffer* pLightBufferHandle = m_lightBuffer->GetDeviceBufferHandle();
@@ -57,7 +57,7 @@ void D3D11ShaderProgram::BindResources() {
 
 	for (size_t i = 0; i < m_constBuffers.size(); i++) {
 
-		ID3D11Resource* pResourceHandle = m_resources[i].m_pResource->GetResource();
+		ID3D11ShaderResourceView* pResourceHandle = m_resources[i].m_pResource->AsShaderResourceView();
 		uint bindPoint = m_constBuffers[i].m_bindPoint;
 
 		switch (m_constBuffers[i].m_whichShaders) {
@@ -66,12 +66,39 @@ void D3D11ShaderProgram::BindResources() {
 			break;
 		}
 		case WHICH_SHADER_FRAGMENT: {
-			GetDeviceContext()->PSSetConstantBuffers(bindPoint, 1, &pConstBufferHandle);
+			GetDeviceContext()->PSSetShaderResources(bindPoint, 1, &pResourceHandle);
 			break;
 		}
 		case WHICH_SHADER_BOTH: {
-			GetDeviceContext()->VSSetConstantBuffers(bindPoint, 1, &pConstBufferHandle);
-			GetDeviceContext()->PSSetConstantBuffers(bindPoint, 1, &pConstBufferHandle);
+			GetDeviceContext()->VSSetShaderResources(bindPoint, 1, &pResourceHandle);
+			GetDeviceContext()->PSSetShaderResources(bindPoint, 1, &pResourceHandle);
+			break;
+		}
+		}
+	}
+}
+
+
+//---------------------------------------------------------------------------------------------------------------------------
+void D3D11ShaderProgram::BindSamplers() {
+
+	for (size_t i = 0; i < m_samplers.size(); i++) {
+
+		ID3D11SamplerState* pSamplerHandle = m_samplers[i].m_pSamplerState->GetSamplerHandle();
+		uint bindPoint = m_samplers[i].m_bindPoint;
+
+		switch (m_samplers[i].m_whichShaders) {
+		case WHICH_SHADER_VERTEX: {
+			GetDeviceContext()->VSSetSamplers(bindPoint, 1, &pSamplerHandle);
+			break;
+		}
+		case WHICH_SHADER_FRAGMENT: {
+			GetDeviceContext()->PSSetSamplers(bindPoint, 1, &pSamplerHandle);
+			break;
+		}
+		case WHICH_SHADER_BOTH: {
+			GetDeviceContext()->VSSetSamplers(bindPoint, 1, &pSamplerHandle);
+			GetDeviceContext()->PSSetSamplers(bindPoint, 1, &pSamplerHandle);
 			break;
 		}
 		}

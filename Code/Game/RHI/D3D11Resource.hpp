@@ -19,7 +19,8 @@ public:
 	ID3D11RenderTargetView*		AsRenderTargetView();
 	ID3D11ShaderResourceView*	AsShaderResourceView();
 	ID3D11UnorderedAccessView*	AsUnorderedAccessView();
-	ID3D11Resource*				GetResource()				{ return m_pResource; }
+	ID3D11Resource*				GetResource()				{ return m_pResource;		}
+	eResourceType				GetResourceType()			{ return m_resourceType;	}
 
 private:
 	ID3D11Resource* m_pResource		= nullptr;
