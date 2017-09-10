@@ -1,14 +1,15 @@
 ﻿#include "Game/TheGame.hpp"
 #include "Game/TheApp.hpp"
-#include "Game/RHI/RHIDeviceWindow.hpp"
-#include "Game/RHI/D3D11VertexShader.hpp"
-#include "Game/RHI/D3D11PixelShader.hpp"
-#include "Game/RHI/D3D11Mesh.hpp"
-#include "Game/RHI/D3D11ConstantBuffer.hpp"
-#include "Game/RHI/Texture2D.hpp"
-#include "Game/RHI/D3D11SamplerState.hpp"
-#include "Game/RHI.hpp"
-#include "Game/D3D11ShaderProgram.hpp"
+#include "Engine/Renderer/D3D11/General/RHIDeviceWindow.hpp"
+#include "Engine/Renderer/D3D11/Shaders/D3D11VertexShader.hpp"
+#include "Engine/Renderer/D3D11/Shaders/D3D11PixelShader.hpp"
+#include "Engine/Renderer/D3D11/Mesh/D3D11Mesh.hpp"
+#include "Engine/Renderer/D3D11/Resources/D3D11ConstantBuffer.hpp"
+#include "Engine/Renderer/D3D11/Texture/Texture2D.hpp"
+#include "Engine/Renderer/D3D11/Resources/D3D11SamplerState.hpp"
+#include "Engine/Renderer/D3D11/General/RHI.hpp"
+#include "Engine/Renderer/D3D11/Shaders/D3D11ShaderProgram.hpp"
+#include "Engine/Renderer/D3D11/Mesh/D3D11Vertex.hpp"
 #include "Engine/Renderer/Lights/Light3D.hpp"
 #include <d3dcompiler.h>
 
@@ -122,15 +123,8 @@ TheGame::TheGame(HINSTANCE applicationInstanceHandle, int nCmdShow)
 	CreateMesh();
 	CreateShaderProgram();
 
-
-
-
-	
-
 	//Initialize MATs	
 	m_localModel = XMMatrixIdentity();
-
-
 }
 
 

@@ -30,26 +30,8 @@
     <Filter Include="Source\D3D11">
       <UniqueIdentifier>{d3aac8c5-ce9b-46e7-848f-d440f4331dbe}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source\D3D11\Shaders">
-      <UniqueIdentifier>{8e9d8d31-253d-4f89-939e-df27cb2693c8}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source\D3D11\Mesh">
-      <UniqueIdentifier>{b335ca45-1b28-447f-b941-d43f2d50807f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source\D3D11\Vertex">
-      <UniqueIdentifier>{19a157f8-58ac-49ba-85a2-6d20e0916db4}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source\D3D11\Texture">
-      <UniqueIdentifier>{c02df646-a424-46fc-b8de-ae8000df5d1d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source\D3D11\Resources">
-      <UniqueIdentifier>{50902252-4d50-408a-9a5a-c20500291a8a}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source\D3D11\Math">
       <UniqueIdentifier>{3b7c2b6e-e3d9-4153-937b-a05d39c3088e}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source\D3D11\RHI">
-      <UniqueIdentifier>{e6bad7ce-e56f-4271-a526-6b8864297b7c}</UniqueIdentifier>
     </Filter>
     <Filter Include="Data_x64\ShaderDefinitions">
       <UniqueIdentifier>{3cb37548-7eeb-4b9e-a9d8-dd90d78c0b11}</UniqueIdentifier>
@@ -68,68 +50,11 @@
     <ClCompile Include="TheGame.cpp">
       <Filter>Source\GameApp</Filter>
     </ClCompile>
-    <ClCompile Include="RHI\D3D11Renderer.cpp">
-      <Filter>Source\D3D11</Filter>
-    </ClCompile>
-    <ClCompile Include="RHI\D3D11Shader.cpp">
-      <Filter>Source\D3D11\Shaders</Filter>
-    </ClCompile>
-    <ClCompile Include="RHI\RHIShaderUtils.cpp">
-      <Filter>Source\D3D11\Shaders</Filter>
-    </ClCompile>
-    <ClCompile Include="RHI\D3D11VertexShader.cpp">
-      <Filter>Source\D3D11\Shaders</Filter>
-    </ClCompile>
-    <ClCompile Include="RHI\D3D11PixelShader.cpp">
-      <Filter>Source\D3D11\Shaders</Filter>
-    </ClCompile>
-    <ClCompile Include="RHI\D3D11Mesh.cpp">
-      <Filter>Source\D3D11\Mesh</Filter>
-    </ClCompile>
-    <ClCompile Include="RHI\VertexLayout.cpp">
-      <Filter>Source\D3D11\Vertex</Filter>
-    </ClCompile>
-    <ClCompile Include="RHI\D3D11VertexDefinition.cpp">
-      <Filter>Source\D3D11\Vertex</Filter>
-    </ClCompile>
-    <ClCompile Include="RHI\Vertex.cpp">
-      <Filter>Source\D3D11\Vertex</Filter>
-    </ClCompile>
-    <ClCompile Include="RHI\D3D11InputLayout.cpp">
-      <Filter>Source\D3D11</Filter>
-    </ClCompile>
-    <ClCompile Include="RHI\D3D11ConstantBuffer.cpp">
-      <Filter>Source\D3D11</Filter>
-    </ClCompile>
-    <ClCompile Include="RHI\Texture2D.cpp">
-      <Filter>Source\D3D11\Texture</Filter>
-    </ClCompile>
-    <ClCompile Include="RHI\D3D11Resource.cpp">
-      <Filter>Source\D3D11\Resources</Filter>
-    </ClCompile>
-    <ClCompile Include="RHI\D3D11Uniform.cpp">
-      <Filter>Source\D3D11</Filter>
-    </ClCompile>
-    <ClCompile Include="RHI\D3D11Texture.cpp">
-      <Filter>Source\D3D11\Texture</Filter>
-    </ClCompile>
     <ClCompile Include="Matrix44.cpp">
       <Filter>Source\D3D11\Math</Filter>
     </ClCompile>
     <ClCompile Include="Camera3D.cpp">
       <Filter>Source\D3D11\Math</Filter>
-    </ClCompile>
-    <ClCompile Include="RHI\RHIDeviceWindow.cpp">
-      <Filter>Source\D3D11\RHI</Filter>
-    </ClCompile>
-    <ClCompile Include="RHI.cpp">
-      <Filter>Source\D3D11\RHI</Filter>
-    </ClCompile>
-    <ClCompile Include="RHI\D3D11SamplerState.cpp">
-      <Filter>Source\D3D11\Texture</Filter>
-    </ClCompile>
-    <ClCompile Include="D3D11ShaderProgram.cpp">
-      <Filter>Source\D3D11\Shaders</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -142,68 +67,11 @@
     <ClInclude Include="TheGame.hpp">
       <Filter>Source\GameApp</Filter>
     </ClInclude>
-    <ClInclude Include="RHI\D3D11Renderer.hpp">
-      <Filter>Source\D3D11</Filter>
-    </ClInclude>
-    <ClInclude Include="RHI\D3D11Shader.hpp">
-      <Filter>Source\D3D11\Shaders</Filter>
-    </ClInclude>
-    <ClInclude Include="RHI\RHIShaderUtils.hpp">
-      <Filter>Source\D3D11\Shaders</Filter>
-    </ClInclude>
-    <ClInclude Include="RHI\D3D11VertexShader.hpp">
-      <Filter>Source\D3D11\Shaders</Filter>
-    </ClInclude>
-    <ClInclude Include="RHI\D3D11PixelShader.hpp">
-      <Filter>Source\D3D11\Shaders</Filter>
-    </ClInclude>
-    <ClInclude Include="RHI\D3D11Mesh.hpp">
-      <Filter>Source\D3D11\Mesh</Filter>
-    </ClInclude>
-    <ClInclude Include="RHI\VertexLayout.hpp">
-      <Filter>Source\D3D11\Vertex</Filter>
-    </ClInclude>
-    <ClInclude Include="RHI\D3D11VertexDefinition.hpp">
-      <Filter>Source\D3D11\Vertex</Filter>
-    </ClInclude>
-    <ClInclude Include="RHI\Vertex.hpp">
-      <Filter>Source\D3D11\Vertex</Filter>
-    </ClInclude>
-    <ClInclude Include="RHI\D3D11InputLayout.hpp">
-      <Filter>Source\D3D11</Filter>
-    </ClInclude>
-    <ClInclude Include="RHI\D3D11ConstantBuffer.hpp">
-      <Filter>Source\D3D11</Filter>
-    </ClInclude>
-    <ClInclude Include="RHI\Texture2D.hpp">
-      <Filter>Source\D3D11\Texture</Filter>
-    </ClInclude>
-    <ClInclude Include="RHI\D3D11Resource.hpp">
-      <Filter>Source\D3D11\Resources</Filter>
-    </ClInclude>
-    <ClInclude Include="RHI\D3D11Uniform.hpp">
-      <Filter>Source\D3D11</Filter>
-    </ClInclude>
-    <ClInclude Include="RHI\D3D11Texture.hpp">
-      <Filter>Source\D3D11\Texture</Filter>
-    </ClInclude>
     <ClInclude Include="Matrix44.hpp">
       <Filter>Source\D3D11\Math</Filter>
     </ClInclude>
     <ClInclude Include="Camera3D.hpp">
       <Filter>Source\D3D11\Math</Filter>
-    </ClInclude>
-    <ClInclude Include="RHI\RHIDeviceWindow.hpp">
-      <Filter>Source\D3D11\RHI</Filter>
-    </ClInclude>
-    <ClInclude Include="RHI.hpp">
-      <Filter>Source\D3D11\RHI</Filter>
-    </ClInclude>
-    <ClInclude Include="RHI\D3D11SamplerState.hpp">
-      <Filter>Source\D3D11\Texture</Filter>
-    </ClInclude>
-    <ClInclude Include="D3D11ShaderProgram.hpp">
-      <Filter>Source\D3D11\Shaders</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
