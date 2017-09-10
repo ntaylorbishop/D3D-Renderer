@@ -4,7 +4,7 @@
 #include "Engine/General/Core/EngineCommon.hpp"
 #include "Engine/Renderer/SpriteRenderer/TheSpriteRenderer.hpp"
 #include "Engine/Input/InputSystem.hpp"
-#include "Game/Camera3D.hpp"
+#include "Engine/Renderer/Cameras/Camera3D.hpp"
 #include <windows.h>
 
 class TheGame {

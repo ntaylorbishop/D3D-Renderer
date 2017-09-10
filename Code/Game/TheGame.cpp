@@ -113,9 +113,10 @@ TheGame::TheGame(HINSTANCE applicationInstanceHandle, int nCmdShow)
 	InputSystem::HideMouseCursor();
 
 	HRESULT hr = GetDevice()->QueryInterface(__uuidof(ID3D11Debug), reinterpret_cast<void**>(&g_debugDevice));
+	ASSERT_OR_DIE(SUCCEEDED(hr), "ERROR: Could not query d3d11 debug device.");
 
-	UINT width = SCREEN_SIZE_X;
-	UINT height = SCREEN_SIZE_Y;
+	UINT width = (float)SCREEN_SIZE_X;
+	UINT height = (float)SCREEN_SIZE_Y;
 
 	m_playerCamera = Camera3D(Vector3(0.f, 1.f, -5.f), 0.f, 0.f, 0.f);
 	m_playerCamera.SetPerspectiveProjection(90.f, width / height, 0.01f, 1000.f);
@@ -152,8 +153,6 @@ void TheGame::CreateShaderProgram() {
 	m_cBuffer->AddUniform(projUni);
 
 	//Create the light constant buffer
-
-	size_t byteSize = sizeof(Vector3) + sizeof(RGBA) + sizeof(float) + sizeof(float) + sizeof(float) + sizeof(float);
 	m_lightBuffer = new D3D11ConstantBuffer(64);
 	m_lightBuffer->CreateBufferOnDevice();
 

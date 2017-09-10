@@ -27,12 +27,6 @@
     <Filter Include="Data_x64\Textures">
       <UniqueIdentifier>{40255bd6-3840-4270-9d03-231a361af471}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source\D3D11">
-      <UniqueIdentifier>{d3aac8c5-ce9b-46e7-848f-d440f4331dbe}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source\D3D11\Math">
-      <UniqueIdentifier>{3b7c2b6e-e3d9-4153-937b-a05d39c3088e}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Data_x64\ShaderDefinitions">
       <UniqueIdentifier>{3cb37548-7eeb-4b9e-a9d8-dd90d78c0b11}</UniqueIdentifier>
     </Filter>
@@ -50,12 +44,6 @@
     <ClCompile Include="TheGame.cpp">
       <Filter>Source\GameApp</Filter>
     </ClCompile>
-    <ClCompile Include="Matrix44.cpp">
-      <Filter>Source\D3D11\Math</Filter>
-    </ClCompile>
-    <ClCompile Include="Camera3D.cpp">
-      <Filter>Source\D3D11\Math</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="TheApp.hpp">
@@ -66,12 +54,6 @@
     </ClInclude>
     <ClInclude Include="TheGame.hpp">
       <Filter>Source\GameApp</Filter>
-    </ClInclude>
-    <ClInclude Include="Matrix44.hpp">
-      <Filter>Source\D3D11\Math</Filter>
-    </ClInclude>
-    <ClInclude Include="Camera3D.hpp">
-      <Filter>Source\D3D11\Math</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
