@@ -91,7 +91,7 @@ ID3D11SamplerState*		g_pSamplerLinear = nullptr;
 ID3D11Debug*			g_debugDevice = nullptr;
 D3D11SamplerState		g_samplerState;
 
-D3D11ShaderProgram		g_blinnPhongShader;
+D3D11ShaderProgram*		g_blinnPhongShader;
 Light3D m_light;
 
 
@@ -145,9 +145,9 @@ void TheGame::CreateShaderProgram() {
 	m_cBuffer = new D3D11ConstantBuffer(sizeof(Matrix4) * 3);
 	m_cBuffer->CreateBufferOnDevice();
 
-	D3D11Uniform* modelUni = new D3D11Uniform("Model", UNIFORM_MAT4, 0, 0, &m_World);
-	D3D11Uniform* viewUni = new D3D11Uniform("View", UNIFORM_MAT4, 0, 0, &m_playerCamera.m_view);
-	D3D11Uniform* projUni = new D3D11Uniform("Proj", UNIFORM_MAT4, 0, 0, &m_playerCamera.m_proj);
+	D3D11Uniform* modelUni	= new D3D11Uniform("Model", UNIFORM_MAT4, &m_World);
+	D3D11Uniform* viewUni	= new D3D11Uniform("View",	UNIFORM_MAT4, &m_playerCamera.m_view);
+	D3D11Uniform* projUni	= new D3D11Uniform("Proj",	UNIFORM_MAT4, &m_playerCamera.m_proj);
 	m_cBuffer->AddUniform(modelUni);
 	m_cBuffer->AddUniform(viewUni);
 	m_cBuffer->AddUniform(projUni);
@@ -156,13 +156,13 @@ void TheGame::CreateShaderProgram() {
 	m_lightBuffer = new D3D11ConstantBuffer(64);
 	m_lightBuffer->CreateBufferOnDevice();
 
-	D3D11Uniform* colUni		= new D3D11Uniform("LightColor",	UNIFORM_RGBA,		0, 0, &m_light.m_color);
-	D3D11Uniform* minLightDist	= new D3D11Uniform("MinLightDist",	UNIFORM_FLOAT,		0, 0, &m_light.m_minLightDistance);
-	D3D11Uniform* maxLightdist	= new D3D11Uniform("MaxLightDist",	UNIFORM_FLOAT,		0, 0, &m_light.m_maxLightDistance);
-	D3D11Uniform* minPower		= new D3D11Uniform("MinPower",		UNIFORM_FLOAT,		0, 0, &m_light.m_powerAtMin);
-	D3D11Uniform* maxPower		= new D3D11Uniform("MaxPower",		UNIFORM_FLOAT,		0, 0, &m_light.m_powerAtMax);
-	D3D11Uniform* posUni		= new D3D11Uniform("LightPosition", UNIFORM_VECTOR3,	0, 0, &m_light.m_position);
-	D3D11Uniform* camPosUni		= new D3D11Uniform("CameraPos",		UNIFORM_VECTOR3,	0, 0, &m_playerCamera.m_position);
+	D3D11Uniform* colUni		= new D3D11Uniform("LightColor",	UNIFORM_RGBA,		&m_light.m_color);
+	D3D11Uniform* minLightDist	= new D3D11Uniform("MinLightDist",	UNIFORM_FLOAT,		&m_light.m_minLightDistance);
+	D3D11Uniform* maxLightdist	= new D3D11Uniform("MaxLightDist",	UNIFORM_FLOAT,		&m_light.m_maxLightDistance);
+	D3D11Uniform* minPower		= new D3D11Uniform("MinPower",		UNIFORM_FLOAT,		&m_light.m_powerAtMin);
+	D3D11Uniform* maxPower		= new D3D11Uniform("MaxPower",		UNIFORM_FLOAT,		&m_light.m_powerAtMax);
+	D3D11Uniform* posUni		= new D3D11Uniform("LightPosition", UNIFORM_VECTOR3,	&m_light.m_position);
+	D3D11Uniform* camPosUni		= new D3D11Uniform("CameraPos",		UNIFORM_VECTOR3,	&m_playerCamera.m_position);
 
 	m_light.m_position = Vector3(0.f, 10.f, 0.f);
 	m_light.m_color = RGBA::WHITE;
@@ -188,17 +188,19 @@ void TheGame::CreateShaderProgram() {
 	g_samplerState = D3D11SamplerState(D3D11_FILTER_MIN_MAG_MIP_LINEAR, D3D11_TEXTURE_ADDRESS_WRAP, D3D11_TEXTURE_ADDRESS_WRAP,
 		D3D11_TEXTURE_ADDRESS_WRAP, D3D11_COMPARISON_NEVER);
 
-	g_blinnPhongShader.SetVertexShader(m_pVertexShader);
-	g_blinnPhongShader.SetPixelShader(m_pPixelShader);
+	g_blinnPhongShader = D3D11ShaderProgram::CreateOrGetShaderProgram("BlinnPhong");
+
+	g_blinnPhongShader->SetVertexShader(m_pVertexShader);
+	g_blinnPhongShader->SetPixelShader(m_pPixelShader);
 
 	D3D11Resource* texID = m_texDiffuse->GetSRVResource();
 	D3D11Resource* normID = m_texNormal->GetSRVResource();
 
-	g_blinnPhongShader.AddConstantBuffer(0, m_cBuffer, WHICH_SHADER_VERTEX);
-	g_blinnPhongShader.AddConstantBuffer(1, m_lightBuffer, WHICH_SHADER_FRAGMENT);
-	g_blinnPhongShader.AddResource(0, texID, WHICH_SHADER_FRAGMENT);
-	g_blinnPhongShader.AddResource(1, normID, WHICH_SHADER_FRAGMENT);
-	g_blinnPhongShader.AddSampler(0, &g_samplerState, WHICH_SHADER_FRAGMENT);
+	g_blinnPhongShader->AddConstantBuffer(0, m_cBuffer, WHICH_SHADER_VERTEX);
+	g_blinnPhongShader->AddConstantBuffer(1, m_lightBuffer, WHICH_SHADER_FRAGMENT);
+	g_blinnPhongShader->AddResource(0, texID, WHICH_SHADER_FRAGMENT);
+	g_blinnPhongShader->AddResource(1, normID, WHICH_SHADER_FRAGMENT);
+	g_blinnPhongShader->AddSampler(0, &g_samplerState, WHICH_SHADER_FRAGMENT);
 }
 
 
@@ -361,23 +363,7 @@ void TheGame::Render() {
 	m_cBuffer->UpdateBufferOnDevice();
 	m_lightBuffer->UpdateBufferOnDevice();
 
-	g_blinnPhongShader.Use();
-
-	//ID3D11ShaderResourceView* texID = m_texDiffuse->GetSRV();
-	//ID3D11ShaderResourceView* normID = m_texNormal->GetSRV();
-	//
-	//ID3D11Buffer* pConstBufferHandle = m_cBuffer->GetDeviceBufferHandle();
-	//ID3D11Buffer* pLightBufferHandle = m_lightBuffer->GetDeviceBufferHandle();
-	//ID3D11SamplerState* pSamplerStateHandle = g_samplerState.GetSamplerHandle();
-	//
-	//GetDeviceContext()->VSSetShader(m_pVertexShader->GetShaderHandle(), nullptr, 0);
-	//GetDeviceContext()->VSSetConstantBuffers(0, 1, &pConstBufferHandle);
-	//GetDeviceContext()->PSSetShader(m_pPixelShader->GetShaderHandle(), nullptr, 0);
-	//GetDeviceContext()->PSSetShaderResources(0, 1, &texID);
-	//GetDeviceContext()->PSSetShaderResources(1, 1, &normID);
-	//GetDeviceContext()->PSSetConstantBuffers(1, 1, &pLightBufferHandle);
-	//GetDeviceContext()->PSSetSamplers(0, 1, &pSamplerStateHandle);
-
+	g_blinnPhongShader->Use();
 
 	RHIDeviceWindow::Get()->m_pDeviceContext->DrawIndexed(36, 0, 0);        // 6 vertices needed for 12 triangles in a triangle list
 	RHIDeviceWindow::Get()->m_pSwapChain->Present(0, 0);

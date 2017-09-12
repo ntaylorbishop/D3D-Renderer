@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<Shader>
+  <VertexShader>
+    <DefaultConstantBuffers>
+      <ConstantBuffer name="ViewProjection2D" bindPoint="0" />
+    </DefaultConstantBuffers>
+  </VertexShader>
+  <FragmentShader>
+    <DefaultConstantBuffers>
+      <ConstantBuffer name="ViewProjection2D" bindPoint="0" />
+    </DefaultConstantBuffers>
+    <ShaderResourceView                       bindPoint="0"   default="null" />
+    <ShaderResourceView                       bindPoint="1"   default="null" />
+    <Sampler  type="linear" />
+  </FragmentShader>
+</Shader>

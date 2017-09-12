@@ -3,12 +3,14 @@
 <Shader>
   <VertexShader>
     <DefaultConstantBuffers>
-      <ConstantBuffer name="ModelViewProjection"    bindPoint="0" />
+      <ConstantBuffer name="ViewProjection3D"     bindPoint="0" />
+      <ConstantBuffer name="Model3D"              bindPoint="1" />
     </DefaultConstantBuffers>
   </VertexShader>
   <FragmentShader>
     <DefaultConstantBuffers>
-      <ConstantBuffer name="ModelViewProjection"     bindPoint="0" />
+      <ConstantBuffer name="ViewProjection3D"     bindPoint="0" />
+      <ConstantBuffer name="Model3D"              bindPoint="1" />
     </DefaultConstantBuffers>
     <ConstantBuffer name="Light">
       <Uniform name="color"             type="rgba"     default="white" />
