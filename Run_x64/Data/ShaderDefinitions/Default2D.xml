@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<Shader>
+<Shader name="Default2D">
+  <DefaultConstantBuffers>
+    <ConstantBuffer name="ViewProjection2D" bindPoint="0" />
+  </DefaultConstantBuffers>
   <VertexShader>
-    <DefaultConstantBuffers>
-      <ConstantBuffer name="ViewProjection2D" bindPoint="0" />
-    </DefaultConstantBuffers>
   </VertexShader>
   <FragmentShader>
     <DefaultConstantBuffers>

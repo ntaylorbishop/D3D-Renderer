@@ -72,10 +72,10 @@
     <Xml Include="..\..\Run_x64\Data\Particle\SmokeParticle_NoOIT.xml">
       <Filter>Data_x64\Particle</Filter>
     </Xml>
-    <Xml Include="..\..\Run_x64\Data\Materials\ShaderDefinitions\BlinnPhong.xml">
+    <Xml Include="..\..\Run_x64\Data\ShaderDefinitions\Default2D.xml">
       <Filter>Data_x64\ShaderDefinitions</Filter>
     </Xml>
-    <Xml Include="..\..\Run_x64\Data\ShaderDefinitions\Default2D.xml">
+    <Xml Include="..\..\Run_x64\Data\ShaderDefinitions\BlinnPhong.xml">
       <Filter>Data_x64\ShaderDefinitions</Filter>
     </Xml>
   </ItemGroup>

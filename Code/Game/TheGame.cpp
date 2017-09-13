@@ -11,6 +11,7 @@
 #include "Engine/Renderer/D3D11/Shaders/D3D11ShaderProgram.hpp"
 #include "Engine/Renderer/D3D11/Mesh/D3D11Vertex.hpp"
 #include "Engine/Renderer/Lights/Light3D.hpp"
+#include "Engine/Renderer/D3D11/General/D3D11Renderer.hpp"
 #include <d3dcompiler.h>
 
 TheGame* TheGame::s_theGame = nullptr;
@@ -109,6 +110,8 @@ const float PLAYER_MOVE_SPEED = 20.f;
 TheGame::TheGame(HINSTANCE applicationInstanceHandle, int nCmdShow)
 {
 	RHIDeviceWindow::Initialize(applicationInstanceHandle, nCmdShow);
+
+	D3D11Renderer::Get();
 
 	InputSystem::HideMouseCursor();
 
