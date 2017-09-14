@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<DefaultConstantBuffers>
+  <ConstantBuffer name="ViewProjection2D" size="128">
+    <Uniform name="uView"             type="mat4"     default="default" />
+    <Uniform name="uProj"             type="mat4"     default="default" />
+  </ConstantBuffer>
+  <ConstantBuffer name="ViewProjection3D" size="128">
+    <Uniform name="uView"             type="mat4"     default="default" />
+    <Uniform name="uProj"             type="mat4"     default="default" />
+  </ConstantBuffer>
+  <ConstantBuffer name="Model3D" size="64">
+    <Uniform name="uModel"            type="mat4"     default="default" />
+  </ConstantBuffer>
+</DefaultConstantBuffers>

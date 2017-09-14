@@ -78,6 +78,9 @@
     <Xml Include="..\..\Run_x64\Data\ShaderDefinitions\BlinnPhong.xml">
       <Filter>Data_x64\ShaderDefinitions</Filter>
     </Xml>
+    <Xml Include="..\..\Run_x64\Data\ShaderDefinitions\DefaultConstantBuffers.xml">
+      <Filter>Data_x64\ShaderDefinitions</Filter>
+    </Xml>
   </ItemGroup>
   <ItemGroup>
     <Image Include="..\..\Run_x64\Data\Textures\4639143323_c6bb4a75e3_t.jpg">

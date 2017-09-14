@@ -8,14 +8,14 @@
   <VertexShader>
   </VertexShader>
   <FragmentShader>
-    <ConstantBuffer name="Light">
-      <Uniform name="color"             type="rgba"     default="white" />
-      <Uniform name="minLightDistance"  type="float"    default="0.f" />
-      <Uniform name="maxLightDistance"  type="float"    default="0.f" />
-      <Uniform name="powerAtMin"        type="float"    default="0.f" />
-      <Uniform name="powerAtMax"        type="float"    default="0.f" />
-      <Uniform name="position"          type="vec3"     default="(0.0, 0.0, 0.0)" />
-      <Uniform name="CameraPos"         type="vec3"     default="(0.0, 0.0, 0.0)" />
+    <ConstantBuffer name="Light" size="64">
+      <Uniform name="color"             type="rgba"  />
+      <Uniform name="minLightDistance"  type="float" />
+      <Uniform name="maxLightDistance"  type="float" />
+      <Uniform name="powerAtMin"        type="float" />
+      <Uniform name="powerAtMax"        type="float" />
+      <Uniform name="position"          type="vec3"  />
+      <Uniform name="CameraPos"         type="vec3"  />
     </ConstantBuffer>
     <ShaderResourceView   texturePath="Data/Textures/Brick.png"           bindPoint="0"   default="null" />
     <ShaderResourceView   texturePath="Data/Textures/Brick_normal.png"    bindPoint="1"   default="null" />

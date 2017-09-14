@@ -145,7 +145,7 @@ void TheGame::CreateShaderProgram() {
 	m_texNormal = new Texture2D("Data/Textures/Brick_Normal.png", true, TEXTURE_BIND_SHADER_RESOURCE, (eTextureCPUAccessFlags)0);
 
 	// Create the constant buffer
-	m_cBuffer = new D3D11ConstantBuffer(sizeof(Matrix4) * 3);
+	m_cBuffer = D3D11ConstantBuffer::CreateOrGetConstantBuffer("ViewProj", sizeof(Matrix4) * 3);
 	m_cBuffer->CreateBufferOnDevice();
 
 	D3D11Uniform* modelUni	= new D3D11Uniform("Model", UNIFORM_MAT4, &m_World);
@@ -156,7 +156,7 @@ void TheGame::CreateShaderProgram() {
 	m_cBuffer->AddUniform(projUni);
 
 	//Create the light constant buffer
-	m_lightBuffer = new D3D11ConstantBuffer(64);
+	m_lightBuffer = D3D11ConstantBuffer::CreateOrGetConstantBuffer("LightBuffer", 64);
 	m_lightBuffer->CreateBufferOnDevice();
 
 	D3D11Uniform* colUni		= new D3D11Uniform("LightColor",	UNIFORM_RGBA,		&m_light.m_color);
