@@ -2,16 +2,16 @@
 
 <Shader name="Default2D">
   <DefaultConstantBuffers>
-    <ConstantBuffer name="ViewProjection2D" bindPoint="0" />
+    <DefaultConstantBuffer name="ViewProjection2D" bindPoint="0" />
   </DefaultConstantBuffers>
   <VertexShader>
   </VertexShader>
   <FragmentShader>
     <DefaultConstantBuffers>
-      <ConstantBuffer name="ViewProjection2D" bindPoint="0" />
+      <DefaultConstantBuffer name="ViewProjection2D" bindPoint="0" />
     </DefaultConstantBuffers>
     <ShaderResourceView                       bindPoint="0"   default="null" />
     <ShaderResourceView                       bindPoint="1"   default="null" />
-    <Sampler  type="linear" />
+    <Sampler  type="linear" bindPoint="0" />
   </FragmentShader>
 </Shader>
