@@ -12,6 +12,7 @@
 #include "Engine/Renderer/D3D11/Mesh/D3D11Vertex.hpp"
 #include "Engine/Renderer/Lights/Light3D.hpp"
 #include "Engine/Renderer/D3D11/General/D3D11Renderer.hpp"
+#include "Engine/Renderer/D3D11/Material/D3D11Material.hpp"
 #include <d3dcompiler.h>
 
 TheGame* TheGame::s_theGame = nullptr;
@@ -141,11 +142,23 @@ TheGame::~TheGame() {
 //---------------------------------------------------------------------------------------------------------------------------
 void TheGame::CreateShaderProgram() {
 
+	D3D11ShaderProgram* blinnPhongShader = D3D11ShaderProgram::CreateOrGetShaderProgram("BlinnPhong");
+	
+	D3D11Material* brickMat = new D3D11Material("BlinnPhong");
+
+	brickMat->
+
+
+
+
+
+
 	m_texDiffuse = new Texture2D("Data/Textures/Brick2.png", true, TEXTURE_BIND_SHADER_RESOURCE, (eTextureCPUAccessFlags)0);
 	m_texNormal = new Texture2D("Data/Textures/Brick_Normal.png", true, TEXTURE_BIND_SHADER_RESOURCE, (eTextureCPUAccessFlags)0);
 
+
 	// Create the constant buffer
-	m_cBuffer = D3D11ConstantBuffer::CreateOrGetConstantBuffer("ViewProj", sizeof(Matrix4) * 3);
+	m_cBuffer = D3D11ConstantBuffer::CreateOrGetConstantBuffer("ViewProjection3D", sizeof(Matrix4) * 3);
 	m_cBuffer->CreateBufferOnDevice();
 
 	D3D11Uniform* modelUni	= new D3D11Uniform("Model", UNIFORM_MAT4, &m_World);
@@ -363,9 +376,6 @@ void TheGame::Render() {
 	RHI::ClearRenderTarget(RGBA(0.1f, 0.1f, 0.1f, 1.f));
 
 	m_World = XMMatrixTranspose(m_localModel);
-
-	m_cBuffer->UpdateBufferOnDevice();
-	m_lightBuffer->UpdateBufferOnDevice();
 
 	g_blinnPhongShader->Use();
 

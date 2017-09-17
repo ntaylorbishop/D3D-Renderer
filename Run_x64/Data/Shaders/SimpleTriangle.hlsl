@@ -31,10 +31,15 @@ struct VS_OUTPUT {
 
 
 //---------------------------------------------------------------------------------------------------------------------------
-cbuffer ConstangenttBuffer : register(b0) {
-	matrix uModel;
+cbuffer ViewProjection3D : register(b0) {
 	matrix uView;
 	matrix uProjection;
+}
+
+
+//---------------------------------------------------------------------------------------------------------------------------
+cbuffer Model3D : register(b1) {
+	matrix uModel;
 }
 
 
