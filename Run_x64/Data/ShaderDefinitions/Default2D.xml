@@ -1,12 +1,12 @@
-<?xml version="1.0" encoding="utf-8"?>
+<!--<?xml version="1.0" encoding="utf-8"?>
 
-<Shader name="Default2D">
+<Shader name="Default2D" vertType="PCT">
   <DefaultConstantBuffers>
     <DefaultConstantBuffer name="ViewProjection2D" bindPoint="0" />
   </DefaultConstantBuffers>
-  <VertexShader>
+  <VertexShader filePath="Data/Shaders/Default2D.hlsl">
   </VertexShader>
-  <FragmentShader>
+  <FragmentShader filePath="Data/Shaders/Default2D.hlsl">
     <DefaultConstantBuffers>
       <DefaultConstantBuffer name="ViewProjection2D" bindPoint="0" />
     </DefaultConstantBuffers>
@@ -15,3 +15,4 @@
     <Sampler  type="linear" bindPoint="0" />
   </FragmentShader>
 </Shader>
+-->

@@ -1,5 +1,3 @@
-
-
 Texture2D txDiffuse : register(t0);
 Texture2D txNormal : register(t1);
 
@@ -44,7 +42,7 @@ cbuffer Model3D : register(b1) {
 
 
 //---------------------------------------------------------------------------------------------------------------------------
-cbuffer LightConstBuffer : register(b2) {
+cbuffer LightConstBuffer : register(b1) {
 	float4	color;
 	float	minLightDistance;
 	float	maxLightDistance;
@@ -148,4 +146,7 @@ float4 PS(VS_OUTPUT input) : SV_Target {
 	float4 texDiffuse = txDiffuse.Sample(samLinear, input.tex);
 	float3 pos3 = float3(input.passPos.x, input.passPos.y, input.passPos.z);
 	return CalculateLight(pos3, input.tan, input.bitan, input.norm, texNorm, texDiffuse);
+
+	//return float4(surfaceNormal.x, surfaceNormal.y, surfaceNormal.z, 1.f);
+	//return txNormal.Sample(samLinear, input.tex);
 }

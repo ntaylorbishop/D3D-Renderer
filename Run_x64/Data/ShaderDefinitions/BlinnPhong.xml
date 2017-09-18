@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<Shader name="BlinnPhong">
+<Shader name="BlinnPhong" vertType="PCTTBN">
   <DefaultConstantBuffers>
     <DefaultConstantBuffer name="ViewProjection3D"     bindPoint="0" />
     <DefaultConstantBuffer name="Model3D"              bindPoint="1" />
   </DefaultConstantBuffers>
-  <VertexShader>
+  <VertexShader filePath="Data/Shaders/SimpleTriangle.hlsl">
   </VertexShader>
-  <FragmentShader>
+  <FragmentShader filePath="Data/Shaders/SimpleTriangle.hlsl">
     <ConstantBuffer name="Light" size="64" bindPoint="2">
       <Uniform name="color"             type="rgba"  default="default" />
       <Uniform name="minLightDistance"  type="float" default="default" />

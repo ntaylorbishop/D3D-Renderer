@@ -13,6 +13,7 @@
 #include "Engine/Renderer/Lights/Light3D.hpp"
 #include "Engine/Renderer/D3D11/General/D3D11Renderer.hpp"
 #include "Engine/Renderer/D3D11/Material/D3D11Material.hpp"
+#include "Engine/Renderer/D3D11/Mesh/D3D11MeshRenderer.hpp"
 #include <d3dcompiler.h>
 
 TheGame* TheGame::s_theGame = nullptr;
@@ -83,6 +84,10 @@ ID3D11Buffer*			m_pConstantBuffer = nullptr;
 XMMATRIX				m_World;
 XMMATRIX				m_View;
 XMMATRIX				m_Projection;
+D3D11Mesh*				g_mesh;
+D3D11Material*			brickMat;
+
+D3D11MeshRenderer		g_meshRenderer;
 
 XMMATRIX				m_localModel;
 XMMATRIX				m_localView;
@@ -108,8 +113,8 @@ const float PLAYER_MOVE_SPEED = 20.f;
 
 
 //---------------------------------------------------------------------------------------------------------------------------
-TheGame::TheGame(HINSTANCE applicationInstanceHandle, int nCmdShow)
-{
+TheGame::TheGame(HINSTANCE applicationInstanceHandle, int nCmdShow) {
+
 	RHIDeviceWindow::Initialize(applicationInstanceHandle, nCmdShow);
 
 	D3D11Renderer::Get();
@@ -119,11 +124,11 @@ TheGame::TheGame(HINSTANCE applicationInstanceHandle, int nCmdShow)
 	HRESULT hr = GetDevice()->QueryInterface(__uuidof(ID3D11Debug), reinterpret_cast<void**>(&g_debugDevice));
 	ASSERT_OR_DIE(SUCCEEDED(hr), "ERROR: Could not query d3d11 debug device.");
 
-	UINT width = (float)SCREEN_SIZE_X;
-	UINT height = (float)SCREEN_SIZE_Y;
+	UINT width = SCREEN_SIZE_X;
+	UINT height = SCREEN_SIZE_Y;
 
 	m_playerCamera = Camera3D(Vector3(0.f, 1.f, -5.f), 0.f, 0.f, 0.f);
-	m_playerCamera.SetPerspectiveProjection(90.f, width / height, 0.01f, 1000.f);
+	m_playerCamera.SetPerspectiveProjection(90.f, (float)(width / height), 0.01f, 1000.f);
 
 	CreateMesh();
 	CreateShaderProgram();
@@ -141,36 +146,16 @@ TheGame::~TheGame() {
 
 //---------------------------------------------------------------------------------------------------------------------------
 void TheGame::CreateShaderProgram() {
-
-	D3D11ShaderProgram* blinnPhongShader = D3D11ShaderProgram::CreateOrGetShaderProgram("BlinnPhong");
 	
-	D3D11Material* brickMat = new D3D11Material("BlinnPhong");
-
-	brickMat->
-
-
-
-
-
-
-	m_texDiffuse = new Texture2D("Data/Textures/Brick2.png", true, TEXTURE_BIND_SHADER_RESOURCE, (eTextureCPUAccessFlags)0);
-	m_texNormal = new Texture2D("Data/Textures/Brick_Normal.png", true, TEXTURE_BIND_SHADER_RESOURCE, (eTextureCPUAccessFlags)0);
-
-
-	// Create the constant buffer
-	m_cBuffer = D3D11ConstantBuffer::CreateOrGetConstantBuffer("ViewProjection3D", sizeof(Matrix4) * 3);
-	m_cBuffer->CreateBufferOnDevice();
+	brickMat = new D3D11Material("BlinnPhong");
 
 	D3D11Uniform* modelUni	= new D3D11Uniform("Model", UNIFORM_MAT4, &m_World);
 	D3D11Uniform* viewUni	= new D3D11Uniform("View",	UNIFORM_MAT4, &m_playerCamera.m_view);
 	D3D11Uniform* projUni	= new D3D11Uniform("Proj",	UNIFORM_MAT4, &m_playerCamera.m_proj);
-	m_cBuffer->AddUniform(modelUni);
-	m_cBuffer->AddUniform(viewUni);
-	m_cBuffer->AddUniform(projUni);
 
-	//Create the light constant buffer
-	m_lightBuffer = D3D11ConstantBuffer::CreateOrGetConstantBuffer("LightBuffer", 64);
-	m_lightBuffer->CreateBufferOnDevice();
+	brickMat->AddUniform("Model3D", modelUni);
+	brickMat->AddUniform("ViewProjection3D", viewUni);
+	brickMat->AddUniform("ViewProjection3D", projUni);
 
 	D3D11Uniform* colUni		= new D3D11Uniform("LightColor",	UNIFORM_RGBA,		&m_light.m_color);
 	D3D11Uniform* minLightDist	= new D3D11Uniform("MinLightDist",	UNIFORM_FLOAT,		&m_light.m_minLightDistance);
@@ -187,36 +172,24 @@ void TheGame::CreateShaderProgram() {
 	m_light.m_powerAtMin = 1.f;
 	m_light.m_powerAtMax = 0.f;
 
-	m_lightBuffer->AddUniform(colUni);
-	m_lightBuffer->AddUniform(minLightDist);
-	m_lightBuffer->AddUniform(maxLightdist);
-	m_lightBuffer->AddUniform(minPower);
-	m_lightBuffer->AddUniform(maxPower);
-	m_lightBuffer->AddUniform(posUni);
-	m_lightBuffer->AddUniform(camPosUni);
+	brickMat->AddUniform("Light", colUni);
+	brickMat->AddUniform("Light", minLightDist);
+	brickMat->AddUniform("Light", maxLightdist);
+	brickMat->AddUniform("Light", minPower);
+	brickMat->AddUniform("Light", maxPower);
+	brickMat->AddUniform("Light", posUni);
+	brickMat->AddUniform("Light", camPosUni);
 
-	//CREATE SHADER PROGRAM
-	m_pVertexShader = new D3D11VertexShader("Data/Shaders/SimpleTriangle.hlsl", D3D11SHADERTYPE_VERTEX);
-	m_pPixelShader = new D3D11PixelShader("Data/Shaders/SimpleTriangle.hlsl", D3D11SHADERTYPE_FRAGMENT);
-
-	m_pVertexShader->BindVertexLayoutToDeviceWindow(VERTEX_TYPE_PCTTBN);
-
-	g_samplerState = D3D11SamplerState(D3D11_FILTER_MIN_MAG_MIP_LINEAR, D3D11_TEXTURE_ADDRESS_WRAP, D3D11_TEXTURE_ADDRESS_WRAP,
-		D3D11_TEXTURE_ADDRESS_WRAP, D3D11_COMPARISON_NEVER);
-
-	g_blinnPhongShader = D3D11ShaderProgram::CreateOrGetShaderProgram("BlinnPhong");
-
-	g_blinnPhongShader->SetVertexShader(m_pVertexShader);
-	g_blinnPhongShader->SetPixelShader(m_pPixelShader);
-
-	D3D11Resource* texID = m_texDiffuse->GetSRVResource();
-	D3D11Resource* normID = m_texNormal->GetSRVResource();
-
-	g_blinnPhongShader->AddConstantBuffer(0, m_cBuffer, WHICH_SHADER_VERTEX);
-	g_blinnPhongShader->AddConstantBuffer(1, m_lightBuffer, WHICH_SHADER_FRAGMENT);
-	g_blinnPhongShader->AddResource(0, texID, WHICH_SHADER_FRAGMENT);
-	g_blinnPhongShader->AddResource(1, normID, WHICH_SHADER_FRAGMENT);
-	g_blinnPhongShader->AddSampler(0, &g_samplerState, WHICH_SHADER_FRAGMENT);
+	////CREATE SHADER PROGRAM
+	//g_samplerState = D3D11SamplerState(D3D11_FILTER_MIN_MAG_MIP_LINEAR, D3D11_TEXTURE_ADDRESS_WRAP, D3D11_TEXTURE_ADDRESS_WRAP,
+	//	D3D11_TEXTURE_ADDRESS_WRAP, D3D11_COMPARISON_NEVER);
+	//
+	//D3D11Resource* texID = m_texDiffuse->GetSRVResource();
+	//D3D11Resource* normID = m_texNormal->GetSRVResource();
+	//
+	//brickMat->AddResource(0, texID, WHICH_SHADER_FRAGMENT);
+	//brickMat->AddResource(1, normID, WHICH_SHADER_FRAGMENT);
+	//brickMat->AddSampler(0, &g_samplerState, WHICH_SHADER_FRAGMENT);
 }
 
 
@@ -225,83 +198,80 @@ void TheGame::CreateShaderProgram() {
 void TheGame::CreateMesh() {
 
 	// Create vertex buffer
-	D3D11Mesh newMesh(VERTEX_TYPE_PCTTBN, 24);
+	g_mesh = new D3D11Mesh(VERTEX_TYPE_PCTTBN, 24);
 
 	float scale = 1.f;
 
 	//FRONT FACE
-	newMesh.AddVertex(Vector3(-scale, scale, scale), RGBA::WHITE, Vector2(1.f, 0.f),
+	g_mesh->AddVertex(Vector3(-scale, scale, scale), RGBA::WHITE, Vector2(1.f, 0.f),
 		Vector4(-1.f, 0.f, 0.f, 0.f), Vector4(0.f, 0.f, 1.f, 0.f), Vector4(CrossProduct(Vector3(-1.f, 0.f, 0.f), Vector3(0.f, 0.f, 1.f)), 0.f));
-	newMesh.AddVertex(Vector3(-scale, scale, -scale), RGBA::WHITE, Vector2(1.f, 1.f),
+	g_mesh->AddVertex(Vector3(-scale, scale, -scale), RGBA::WHITE, Vector2(1.f, 1.f),
 		Vector4(-1.f, 0.f, 0.f, 0.f), Vector4(0.f, 0.f, 1.f, 0.f), Vector4(CrossProduct(Vector3(-1.f, 0.f, 0.f), Vector3(0.f, 0.f, 1.f)), 0.f));
-	newMesh.AddVertex(Vector3(scale, scale, -scale), RGBA::WHITE, Vector2(0.f, 1.f),
+	g_mesh->AddVertex(Vector3(scale, scale, -scale), RGBA::WHITE, Vector2(0.f, 1.f),
 		Vector4(-1.f, 0.f, 0.f, 0.f), Vector4(0.f, 0.f, 1.f, 0.f), Vector4(CrossProduct(Vector3(-1.f, 0.f, 0.f), Vector3(0.f, 0.f, 1.f)), 0.f));
-	newMesh.AddVertex(Vector3(scale, scale, scale), RGBA::WHITE, Vector2(0.f, 0.f),
+	g_mesh->AddVertex(Vector3(scale, scale, scale), RGBA::WHITE, Vector2(0.f, 0.f),
 		Vector4(-1.f, 0.f, 0.f, 0.f), Vector4(0.f, 0.f, 1.f, 0.f), Vector4(CrossProduct(Vector3(-1.f, 0.f, 0.f), Vector3(0.f, 0.f, 1.f)), 0.f));
 
 	//BACK FACE
-	newMesh.AddVertex(Vector3(-scale, -scale, scale), RGBA::WHITE, Vector2(0.f, 0.f),
+	g_mesh->AddVertex(Vector3(-scale, -scale, scale), RGBA::WHITE, Vector2(0.f, 0.f),
 		Vector4(1.f, 0.f, 0.f, 0.f), Vector4(0.f, 0.f, 1.f, 0.f), Vector4(CrossProduct(Vector3(1.f, 0.f, 0.f), Vector3(0.f, 0.f, 1.f)), 0.f));
-	newMesh.AddVertex(Vector3(-scale, -scale, -scale), RGBA::WHITE, Vector2(0.f, 1.f),
+	g_mesh->AddVertex(Vector3(-scale, -scale, -scale), RGBA::WHITE, Vector2(0.f, 1.f),
 		Vector4(1.f, 0.f, 0.f, 0.f), Vector4(0.f, 0.f, 1.f, 0.f), Vector4(CrossProduct(Vector3(1.f, 0.f, 0.f), Vector3(0.f, 0.f, 1.f)), 0.f));
-	newMesh.AddVertex(Vector3(scale, -scale, -scale), RGBA::WHITE, Vector2(1.f, 1.f),
+	g_mesh->AddVertex(Vector3(scale, -scale, -scale), RGBA::WHITE, Vector2(1.f, 1.f),
 		Vector4(1.f, 0.f, 0.f, 0.f), Vector4(0.f, 0.f, 1.f, 0.f), Vector4(CrossProduct(Vector3(1.f, 0.f, 0.f), Vector3(0.f, 0.f, 1.f)), 0.f));
-	newMesh.AddVertex(Vector3(scale, -scale, scale), RGBA::WHITE, Vector2(1.f, 0.f),
+	g_mesh->AddVertex(Vector3(scale, -scale, scale), RGBA::WHITE, Vector2(1.f, 0.f),
 		Vector4(1.f, 0.f, 0.f, 0.f), Vector4(0.f, 0.f, 1.f, 0.f), Vector4(CrossProduct(Vector3(1.f, 0.f, 0.f), Vector3(0.f, 0.f, 1.f)), 0.f));
 
 	//BOTTOM FACE																					
-	newMesh.AddVertex(Vector3(-scale, scale, -scale), RGBA::WHITE, Vector2(0.f, 1.f),
+	g_mesh->AddVertex(Vector3(-scale, scale, -scale), RGBA::WHITE, Vector2(0.f, 1.f),
 		Vector4(1.f, 0.f, 0.f, 0.f), Vector4(0.f, -1.f, 0.f, 0.f), Vector4(CrossProduct(Vector3(1.f, 0.f, 0.f), Vector3(0.f, -1.f, 0.f)), 0.f));
-	newMesh.AddVertex(Vector3(scale, scale, -scale), RGBA::WHITE, Vector2(1.f, 1.f),
+	g_mesh->AddVertex(Vector3(scale, scale, -scale), RGBA::WHITE, Vector2(1.f, 1.f),
 		Vector4(1.f, 0.f, 0.f, 0.f), Vector4(0.f, -1.f, 0.f, 0.f), Vector4(CrossProduct(Vector3(1.f, 0.f, 0.f), Vector3(0.f, -1.f, 0.f)), 0.f));
-	newMesh.AddVertex(Vector3(scale, -scale, -scale), RGBA::WHITE, Vector2(1.f, 0.f),
+	g_mesh->AddVertex(Vector3(scale, -scale, -scale), RGBA::WHITE, Vector2(1.f, 0.f),
 		Vector4(1.f, 0.f, 0.f, 0.f), Vector4(0.f, -1.f, 0.f, 0.f), Vector4(CrossProduct(Vector3(1.f, 0.f, 0.f), Vector3(0.f, -1.f, 0.f)), 0.f));
-	newMesh.AddVertex(Vector3(-scale, -scale, -scale), RGBA::WHITE, Vector2(0.f, 0.f),
+	g_mesh->AddVertex(Vector3(-scale, -scale, -scale), RGBA::WHITE, Vector2(0.f, 0.f),
 		Vector4(1.f, 0.f, 0.f, 0.f), Vector4(0.f, -1.f, 0.f, 0.f), Vector4(CrossProduct(Vector3(1.f, 0.f, 0.f), Vector3(0.f, -1.f, 0.f)), 0.f));
 
 	//TOP FACE																						
-	newMesh.AddVertex(Vector3(-scale, scale, scale), RGBA::WHITE, Vector2(0.f, 0.f),
+	g_mesh->AddVertex(Vector3(-scale, scale, scale), RGBA::WHITE, Vector2(0.f, 0.f),
 		Vector4(1.f, 0.f, 0.f, 0.f), Vector4(0.f, 1.f, 0.f, 0.f), Vector4(CrossProduct(Vector3(1.f, 0.f, 0.f), Vector3(0.f, 1.f, 0.f)), 0.f));
-	newMesh.AddVertex(Vector3(-scale, -scale, scale), RGBA::WHITE, Vector2(0.f, 1.f),
+	g_mesh->AddVertex(Vector3(-scale, -scale, scale), RGBA::WHITE, Vector2(0.f, 1.f),
 		Vector4(1.f, 0.f, 0.f, 0.f), Vector4(0.f, 1.f, 0.f, 0.f), Vector4(CrossProduct(Vector3(1.f, 0.f, 0.f), Vector3(0.f, 1.f, 0.f)), 0.f));
-	newMesh.AddVertex(Vector3(scale, -scale, scale), RGBA::WHITE, Vector2(1.f, 1.f),
+	g_mesh->AddVertex(Vector3(scale, -scale, scale), RGBA::WHITE, Vector2(1.f, 1.f),
 		Vector4(1.f, 0.f, 0.f, 0.f), Vector4(0.f, 1.f, 0.f, 0.f), Vector4(CrossProduct(Vector3(1.f, 0.f, 0.f), Vector3(0.f, 1.f, 0.f)), 0.f));
-	newMesh.AddVertex(Vector3(scale, scale, scale), RGBA::WHITE, Vector2(1.f, 0.f),
+	g_mesh->AddVertex(Vector3(scale, scale, scale), RGBA::WHITE, Vector2(1.f, 0.f),
 		Vector4(1.f, 0.f, 0.f, 0.f), Vector4(0.f, 1.f, 0.f, 0.f), Vector4(CrossProduct(Vector3(1.f, 0.f, 0.f), Vector3(0.f, 1.f, 0.f)), 0.f));
 
 	//RIGHT FACE																					
-	newMesh.AddVertex(Vector3(scale, scale, -scale), RGBA::WHITE, Vector2(1.f, 1.f),
+	g_mesh->AddVertex(Vector3(scale, scale, -scale), RGBA::WHITE, Vector2(1.f, 1.f),
 		Vector4(0.f, 1.f, 0.f, 0.f), Vector4(0.f, 0.f, 1.f, 0.f), Vector4(CrossProduct(Vector3(0.f, 1.f, 0.f), Vector3(0.f, 0.f, 1.f)), 0.f));
-	newMesh.AddVertex(Vector3(scale, scale, scale), RGBA::WHITE, Vector2(1.f, 0.f),
+	g_mesh->AddVertex(Vector3(scale, scale, scale), RGBA::WHITE, Vector2(1.f, 0.f),
 		Vector4(0.f, 1.f, 0.f, 0.f), Vector4(0.f, 0.f, 1.f, 0.f), Vector4(CrossProduct(Vector3(0.f, 1.f, 0.f), Vector3(0.f, 0.f, 1.f)), 0.f));
-	newMesh.AddVertex(Vector3(scale, -scale, scale), RGBA::WHITE, Vector2(0.f, 0.f),
+	g_mesh->AddVertex(Vector3(scale, -scale, scale), RGBA::WHITE, Vector2(0.f, 0.f),
 		Vector4(0.f, 1.f, 0.f, 0.f), Vector4(0.f, 0.f, 1.f, 0.f), Vector4(CrossProduct(Vector3(0.f, 1.f, 0.f), Vector3(0.f, 0.f, 1.f)), 0.f));
-	newMesh.AddVertex(Vector3(scale, -scale, -scale), RGBA::WHITE, Vector2(0.f, 1.f),
+	g_mesh->AddVertex(Vector3(scale, -scale, -scale), RGBA::WHITE, Vector2(0.f, 1.f),
 		Vector4(0.f, 1.f, 0.f, 0.f), Vector4(0.f, 0.f, 1.f, 0.f), Vector4(CrossProduct(Vector3(0.f, 1.f, 0.f), Vector3(0.f, 0.f, 1.f)), 0.f));
 
 	//LEFT FACE																						
-	newMesh.AddVertex(Vector3(-scale, scale, -scale), RGBA::WHITE, Vector2(0.f, 1.f),
+	g_mesh->AddVertex(Vector3(-scale, scale, -scale), RGBA::WHITE, Vector2(0.f, 1.f),
 		Vector4(0.f, -1.f, 0.f, 0.f), Vector4(0.f, 0.f, 1.f, 0.f), Vector4(CrossProduct(Vector3(0.f, -1.f, 0.f), Vector3(0.f, 0.f, 1.f)), 0.f));
-	newMesh.AddVertex(Vector3(-scale, -scale, -scale), RGBA::WHITE, Vector2(1.f, 1.f),
+	g_mesh->AddVertex(Vector3(-scale, -scale, -scale), RGBA::WHITE, Vector2(1.f, 1.f),
 		Vector4(0.f, -1.f, 0.f, 0.f), Vector4(0.f, 0.f, 1.f, 0.f), Vector4(CrossProduct(Vector3(0.f, -1.f, 0.f), Vector3(0.f, 0.f, 1.f)), 0.f));
-	newMesh.AddVertex(Vector3(-scale, -scale, scale), RGBA::WHITE, Vector2(1.f, 0.f),
+	g_mesh->AddVertex(Vector3(-scale, -scale, scale), RGBA::WHITE, Vector2(1.f, 0.f),
 		Vector4(0.f, -1.f, 0.f, 0.f), Vector4(0.f, 0.f, 1.f, 0.f), Vector4(CrossProduct(Vector3(0.f, -1.f, 0.f), Vector3(0.f, 0.f, 1.f)), 0.f));
-	newMesh.AddVertex(Vector3(-scale, scale, scale), RGBA::WHITE, Vector2(0.f, 0.f),
+	g_mesh->AddVertex(Vector3(-scale, scale, scale), RGBA::WHITE, Vector2(0.f, 0.f),
 		Vector4(0.f, -1.f, 0.f, 0.f), Vector4(0.f, 0.f, 1.f, 0.f), Vector4(CrossProduct(Vector3(0.f, -1.f, 0.f), Vector3(0.f, 0.f, 1.f)), 0.f));
 
 	uint32_t indices[] = { 2,1,0, 3,2,0, 4,5,6, 4,6,7, 8,9,10, 8,10,11, 12,13,14, 12,14,15, 16,17,18, 16,18,19, 20,21,22, 20,22,23 };
 
 
-	newMesh.CreateVertexBufferOnDevice();
-	newMesh.BindVertBufferToDeviceWindow();
+	g_mesh->CreateVertexBufferOnDevice();
+	g_mesh->BindVertBufferToDeviceWindow();
 
 	// Create index buffer
-	newMesh.SetIndexBuffer(indices, ARRAYSIZE(indices) * sizeof(uint32_t), 36);
-	newMesh.CreateIndexBufferOnDevice();
-	newMesh.BindIndBufferToDeviceWindow();
-
-	// Set primitive topology
-	RHIDeviceWindow::Get()->m_pDeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+	g_mesh->SetIndexBuffer(indices, ARRAYSIZE(indices) * sizeof(uint32_t), 36);
+	g_mesh->CreateIndexBufferOnDevice();
+	g_mesh->BindIndBufferToDeviceWindow();
 }
 
 
@@ -372,13 +342,7 @@ Vector3 pos = Vector3(0.f, 0.f, 0.f);
 void TheGame::Render() {
 
 	m_localModel.r[3] = XMVectorSet(pos.x, pos.y, pos.z, 1.f);
-
-	RHI::ClearRenderTarget(RGBA(0.1f, 0.1f, 0.1f, 1.f));
-
 	m_World = XMMatrixTranspose(m_localModel);
 
-	g_blinnPhongShader->Use();
-
-	RHIDeviceWindow::Get()->m_pDeviceContext->DrawIndexed(36, 0, 0);        // 6 vertices needed for 12 triangles in a triangle list
-	RHIDeviceWindow::Get()->m_pSwapChain->Present(0, 0);
+	g_meshRenderer.RenderMeshWithMaterial(g_mesh, brickMat);
 }
