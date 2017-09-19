@@ -142,5 +142,8 @@
     <FxCompile Include="..\..\Run_x64\Data\Shaders\SimpleTriangle.hlsl">
       <Filter>Data_x64\Shaders</Filter>
     </FxCompile>
+    <FxCompile Include="..\..\Run_x64\Data\Shaders\Default2D.hlsl">
+      <Filter>Data_x64\Shaders</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>

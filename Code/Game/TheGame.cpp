@@ -180,16 +180,14 @@ void TheGame::CreateShaderProgram() {
 	brickMat->AddUniform("Light", posUni);
 	brickMat->AddUniform("Light", camPosUni);
 
-	////CREATE SHADER PROGRAM
-	//g_samplerState = D3D11SamplerState(D3D11_FILTER_MIN_MAG_MIP_LINEAR, D3D11_TEXTURE_ADDRESS_WRAP, D3D11_TEXTURE_ADDRESS_WRAP,
-	//	D3D11_TEXTURE_ADDRESS_WRAP, D3D11_COMPARISON_NEVER);
-	//
-	//D3D11Resource* texID = m_texDiffuse->GetSRVResource();
-	//D3D11Resource* normID = m_texNormal->GetSRVResource();
-	//
-	//brickMat->AddResource(0, texID, WHICH_SHADER_FRAGMENT);
-	//brickMat->AddResource(1, normID, WHICH_SHADER_FRAGMENT);
-	//brickMat->AddSampler(0, &g_samplerState, WHICH_SHADER_FRAGMENT);
+	Texture2D* defaultDiffuse = Texture2D::GetTexture("Data/Textures/Brick2.png");
+	Texture2D* defaultNormal = Texture2D::GetTexture("Data/Textures/Brick_Normal.png");
+
+	D3D11Resource* texID = defaultDiffuse->GetSRVResource();
+	D3D11Resource* normID = defaultNormal->GetSRVResource();
+
+	brickMat->AddResource(0, texID, WHICH_SHADER_FRAGMENT);
+	brickMat->AddResource(1, normID, WHICH_SHADER_FRAGMENT);
 }
 
 

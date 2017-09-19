@@ -516,6 +516,10 @@
     <Image Include="..\..\Run_x64\Data\Textures\WaterNormal2.jpg" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\..\Run_x64\Data\Shaders\Default2D.hlsl">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Tools Debug Game|x64'">true</ExcludedFromBuild>
+      <FileType>Document</FileType>
+    </None>
     <FxCompile Include="..\..\Run_x64\Data\Shaders\SimpleTriangle.hlsl">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugInline|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Tools Debug Game|x64'">true</ExcludedFromBuild>

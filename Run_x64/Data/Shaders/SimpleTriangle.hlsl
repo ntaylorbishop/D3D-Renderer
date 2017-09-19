@@ -102,7 +102,7 @@ float4 CalculateLight(float3 passPosition, float3 passTan, float3 passBitan, flo
 	surfaceLight += lightColor * amountBasedOnNormalFromLightAngle * attenuation;
 
 	//SPECULAR
-	float specular_intensity = 1.f;
+	float specular_intensity = 10.f;
 	float3 vec_to_eye = normalize(CameraPos - passPosition);
 	float3 half_vector = vec_to_light + vec_to_eye;
 	half_vector = normalize(half_vector);
@@ -126,15 +126,15 @@ VS_OUTPUT VS(float3 pos : POSITION, float4 color : COLOR, float2 tex : TEXCOORD,
 
 	output.pos		= mul(float4(pos.x, pos.y, pos.z, 1.f), uModel);
 	output.passPos	= mul(float4(pos.x, pos.y, pos.z, 1.f), uModel);
-	output.pos = mul(output.pos, uView);
-	output.pos = mul(output.pos, uProjection);
+	output.pos		= mul(output.pos, uView);
+	output.pos		= mul(output.pos, uProjection);
 
 	output.color = color;
 	output.tex = tex;
 
-	output.tan = float3(tan.x, tan.y, tan.z);
-	output.bitan = float3(bitan.x, bitan.y, bitan.z);
-	output.norm = float3(norm.x, norm.y, norm.z);
+	output.tan		= float3(tan.x, tan.y, tan.z);
+	output.bitan	= float3(bitan.x, bitan.y, bitan.z);
+	output.norm		= float3(norm.x, norm.y, norm.z);
 
 
 	return output;
@@ -147,5 +147,6 @@ float4 PS(VS_OUTPUT input) : SV_Target {
 	float4 texNorm = txNormal.Sample(samLinear, input.tex);
 	float4 texDiffuse = txDiffuse.Sample(samLinear, input.tex);
 	float3 pos3 = float3(input.passPos.x, input.passPos.y, input.passPos.z);
+
 	return CalculateLight(pos3, input.tan, input.bitan, input.norm, texNorm, texDiffuse);
 }
