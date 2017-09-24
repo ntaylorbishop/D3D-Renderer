@@ -2,7 +2,8 @@
 
 <Shader name="Default2D" vertType="PCT">
   <DefaultConstantBuffers>
-    <DefaultConstantBuffer name="ViewProjection2D" bindPoint="0" />
+    <DefaultConstantBuffer name="ViewProjection2D"  bindPoint="0" />
+    <DefaultConstantBuffer name="Model2D"           bindPoint="1" />
   </DefaultConstantBuffers>
   <VertexShader filePath="Data/Shaders/Default2D.hlsl">
   </VertexShader>

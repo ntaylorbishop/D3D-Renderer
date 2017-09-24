@@ -40,8 +40,11 @@ STATIC void TheApp::RunFrame() {
 	s_theApp->m_timer.m_start = Time::GetCurrentTimeSeconds();
 
 	s_theApp->RunMessagePump();
-	s_theApp->Update();
-	s_theApp->Render();
+
+	if (InputSystem::GetHasFocus()) {
+		s_theApp->Update();
+		s_theApp->Render();
+	}
 }
 
 

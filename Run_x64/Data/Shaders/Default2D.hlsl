@@ -15,13 +15,17 @@ cbuffer ViewProjection2D : register(b0) {
 	matrix uOrtho;
 }
 
+cbuffer Model2D : register(b1) {
+	matrix uModel;
+}
+
 
 //---------------------------------------------------------------------------------------------------------------------------
 VS_OUTPUT VS(float3 pos : POSITION, float4 color : COLOR, float2 tex : TEXCOORD) {
 
 	VS_OUTPUT output = (VS_OUTPUT)0;
 
-	output.pos		= float4(pos.x, pos.y, pos.z, 1.f);
+	output.pos		= mul(float4(pos.x, pos.y, pos.z, 1.f), uModel);
 	output.pos		= mul(output.pos, uOrtho);
 	output.color	= color;
 	output.tex		= tex;
@@ -34,5 +38,5 @@ VS_OUTPUT VS(float3 pos : POSITION, float4 color : COLOR, float2 tex : TEXCOORD)
 float4 PS(VS_OUTPUT input) : SV_Target {
 
 	float4 texDiffuse = txDiffuse.Sample(samLinear, input.tex);
-	return texDiffuse * input.color;
+	return float4(1.f, 1.f, 1.f, 1.f);
 }

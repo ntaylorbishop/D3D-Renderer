@@ -4,6 +4,9 @@
   <ConstantBuffer name="ViewProjection2D" size="64">
     <Uniform name="uOrtho"             type="mat4"     default="defaultProjUI" />
   </ConstantBuffer>
+  <ConstantBuffer name="Model2D" size="64">
+    <Uniform name="uModel"             type="mat4"     default="default" />
+  </ConstantBuffer>
   <ConstantBuffer name="ViewProjection3D" size="128">
     <Uniform name="uView"             type="mat4"     default="default" />
     <Uniform name="uProj"             type="mat4"     default="default" />

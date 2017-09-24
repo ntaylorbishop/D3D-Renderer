@@ -14,6 +14,7 @@
 #include "Engine/Renderer/D3D11/General/D3D11Renderer.hpp"
 #include "Engine/Renderer/D3D11/Material/D3D11Material.hpp"
 #include "Engine/Renderer/D3D11/Mesh/D3D11MeshRenderer.hpp"
+#include "Engine/UI/UIRenderer.hpp"
 #include <d3dcompiler.h>
 
 TheGame* TheGame::s_theGame = nullptr;
@@ -82,10 +83,13 @@ ID3D11Buffer*			m_pVertexBuffer = nullptr;
 ID3D11Buffer*			m_pIndexBuffer = nullptr;
 ID3D11Buffer*			m_pConstantBuffer = nullptr;
 XMMATRIX				m_World;
+XMMATRIX				m_World2;
+XMMATRIX				m_localModel2;
 XMMATRIX				m_View;
 XMMATRIX				m_Projection;
 D3D11Mesh*				g_mesh;
 D3D11Material*			brickMat;
+D3D11Material*			brickMat2;
 
 D3D11MeshRenderer		g_meshRenderer;
 
@@ -121,8 +125,8 @@ TheGame::TheGame(HINSTANCE applicationInstanceHandle, int nCmdShow) {
 
 	InputSystem::HideMouseCursor();
 
-	HRESULT hr = GetDevice()->QueryInterface(__uuidof(ID3D11Debug), reinterpret_cast<void**>(&g_debugDevice));
-	ASSERT_OR_DIE(SUCCEEDED(hr), "ERROR: Could not query d3d11 debug device.");
+	//HRESULT hr = GetDevice()->QueryInterface(__uuidof(ID3D11Debug), reinterpret_cast<void**>(&g_debugDevice));
+	//ASSERT_OR_DIE(SUCCEEDED(hr), "ERROR: Could not query d3d11 debug device.");
 
 	UINT width = SCREEN_SIZE_X;
 	UINT height = SCREEN_SIZE_Y;
@@ -135,6 +139,7 @@ TheGame::TheGame(HINSTANCE applicationInstanceHandle, int nCmdShow) {
 
 	//Initialize MATs	
 	m_localModel = XMMatrixIdentity();
+	m_localModel2 = XMMatrixIdentity();
 }
 
 
@@ -188,6 +193,28 @@ void TheGame::CreateShaderProgram() {
 
 	brickMat->AddResource(0, texID, WHICH_SHADER_FRAGMENT);
 	brickMat->AddResource(1, normID, WHICH_SHADER_FRAGMENT);
+
+
+
+
+	brickMat2 = new D3D11Material("BlinnPhong");
+
+	D3D11Uniform* modelUni2 = new D3D11Uniform("Model", UNIFORM_MAT4, &m_World2);
+
+	brickMat2->AddUniform("Model3D", modelUni2);
+	brickMat2->AddUniform("ViewProjection3D", viewUni);
+	brickMat2->AddUniform("ViewProjection3D", projUni);
+
+	brickMat2->AddUniform("Light", colUni);
+	brickMat2->AddUniform("Light", minLightDist);
+	brickMat2->AddUniform("Light", maxLightdist);
+	brickMat2->AddUniform("Light", minPower);
+	brickMat2->AddUniform("Light", maxPower);
+	brickMat2->AddUniform("Light", posUni);
+	brickMat2->AddUniform("Light", camPosUni);
+
+	brickMat2->AddResource(0, texID, WHICH_SHADER_FRAGMENT);
+	brickMat2->AddResource(1, normID, WHICH_SHADER_FRAGMENT);
 }
 
 
@@ -266,8 +293,10 @@ void TheGame::CreateMesh() {
 	g_mesh->CreateVertexBufferOnDevice();
 	g_mesh->BindVertBufferToDeviceWindow();
 
+
 	// Create index buffer
-	g_mesh->SetIndexBuffer(indices, ARRAYSIZE(indices) * sizeof(uint32_t), 36);
+	uint numInds = ARRAYSIZE(indices);
+	g_mesh->SetIndexBuffer(indices, numInds * sizeof(uint32_t), numInds);
 	g_mesh->CreateIndexBufferOnDevice();
 	g_mesh->BindIndBufferToDeviceWindow();
 }
@@ -335,12 +364,36 @@ void TheGame::Update(float deltaSeconds) {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 Vector3 pos = Vector3(0.f, 0.f, 0.f);
+Vector3 pos2 = Vector3(10.f, 0.f, 0.f);
 
 //---------------------------------------------------------------------------------------------------------------------------
 void TheGame::Render() {
 
+	ID3D11RenderTargetView* rt = RHIDeviceWindow::Get()->GetDefaultRenderTarget();
+
+	GetDeviceContext()->OMSetRenderTargets(1, &rt, nullptr);
+
+	// Setup the viewport
+	D3D11_VIEWPORT vp;
+	vp.Width = (FLOAT)3814;
+	vp.Height = (FLOAT)2089;
+	vp.MinDepth = 0.0f;
+	vp.MaxDepth = 1.0f;
+	vp.TopLeftX = 0;
+	vp.TopLeftY = 0;
+	GetDeviceContext()->RSSetViewports(1, &vp);
+
+	RHI::ClearRenderTarget(RGBA(0.1f, 0.1f, 0.1f, 1.f));
+
 	m_localModel.r[3] = XMVectorSet(pos.x, pos.y, pos.z, 1.f);
 	m_World = XMMatrixTranspose(m_localModel);
 
+	m_localModel2.r[3] = XMVectorSet(pos2.x, pos2.y, pos2.z, 1.f);
+	m_World2 = XMMatrixTranspose(m_localModel2);
+
 	g_meshRenderer.RenderMeshWithMaterial(g_mesh, brickMat);
+
+	UIRenderer::Get()->DrawAABB2(Vector2(0.f, 0.f), Vector2(3840.f, 2160.f), RGBA::WHITE, 1.f);
+
+	RHIDeviceWindow::Get()->m_pSwapChain->Present(0, 0);
 }
