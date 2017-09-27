@@ -488,9 +488,15 @@
   <ItemGroup>
     <Xml Include="..\..\Run_x64\Data\Particle\SmokeParticle.xml" />
     <Xml Include="..\..\Run_x64\Data\Particle\SmokeParticle_NoOIT.xml" />
-    <Xml Include="..\..\Run_x64\Data\ShaderDefinitions\BlinnPhong.xml" />
-    <Xml Include="..\..\Run_x64\Data\ShaderDefinitions\Default2D.xml" />
-    <Xml Include="..\..\Run_x64\Data\ShaderDefinitions\DefaultConstantBuffers.xml" />
+    <Xml Include="..\..\Run_x64\Data\ShaderDefinitions\BlinnPhong.xml">
+      <SubType>Designer</SubType>
+    </Xml>
+    <Xml Include="..\..\Run_x64\Data\ShaderDefinitions\Default2D.xml">
+      <SubType>Designer</SubType>
+    </Xml>
+    <Xml Include="..\..\Run_x64\Data\ShaderDefinitions\DefaultConstantBuffers.xml">
+      <SubType>Designer</SubType>
+    </Xml>
     <Xml Include="..\..\Run_x64\Data\UI\Skins.xml" />
     <Xml Include="..\..\Run_x64\Data\UI\WidgetAnimations.xml" />
     <Xml Include="..\..\Run_x64\Data\UI\Widgets.xml" />
@@ -516,10 +522,14 @@
     <Image Include="..\..\Run_x64\Data\Textures\WaterNormal2.jpg" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\..\Run_x64\Data\Shaders\Default2D.hlsl">
+    <Text Include="..\..\Run_x64\Data\Shaders\Default2D.hlsl">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Tools Debug Game|x64'">true</ExcludedFromBuild>
       <FileType>Document</FileType>
-    </None>
+    </Text>
+    <Text Include="..\..\Run_x64\Data\Shaders\SimpleTriangle.hlsl">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Tools Debug Game|x64'">true</ExcludedFromBuild>
+      <FileType>Document</FileType>
+    </Text>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

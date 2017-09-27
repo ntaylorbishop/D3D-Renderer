@@ -218,6 +218,10 @@ void TheGame::CreateShaderProgram() {
 }
 
 
+RGBA tint = RGBA::WHITE;
+Vector4 texCoordsQuad = Vector4(0.f, 0.f, 1.f, 1.f);
+
+
 
 //---------------------------------------------------------------------------------------------------------------------------
 void TheGame::CreateMesh() {
@@ -393,7 +397,7 @@ void TheGame::Render() {
 
 	g_meshRenderer.RenderMeshWithMaterial(g_mesh, brickMat);
 
-	UIRenderer::Get()->DrawAABB2(Vector2(0.f, 0.f), Vector2(3840.f, 2160.f), RGBA::WHITE, 1.f);
+	UIRenderer::Get()->DrawAABB2(Vector2(0.f, 0.f), Vector2(800.f, 800.f), RGBA::WHITE, 1.f);
 
 	RHIDeviceWindow::Get()->m_pSwapChain->Present(0, 0);
 }

@@ -19,6 +19,11 @@ cbuffer Model2D : register(b1) {
 	matrix uModel;
 }
 
+cbuffer TexCoordsAndTint : register (b2) {
+	float4 tint;
+	float4 texCoordsQuad;
+}
+
 
 //---------------------------------------------------------------------------------------------------------------------------
 VS_OUTPUT VS(float3 pos : POSITION, float4 color : COLOR, float2 tex : TEXCOORD) {

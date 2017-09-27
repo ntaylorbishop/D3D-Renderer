@@ -8,7 +8,11 @@
   <VertexShader filePath="Data/Shaders/Default2D.hlsl">
   </VertexShader>
   <FragmentShader filePath="Data/Shaders/Default2D.hlsl">
-    <ShaderResourceView                       bindPoint="0"   default="null" />
+    <ConstantBuffer name="TexCoordsAndTint" size="32" bindPoint="2">
+      <Uniform name="tint"      type="rgba" default="default" />
+      <Uniform name="texCoords" type="vec4" default="default" />
+    </ConstantBuffer>
+    <ShaderResourceView bindPoint="0" default="null" />
     <Sampler  type="linear" bindPoint="0" />
   </FragmentShader>
 </Shader>
