@@ -154,9 +154,10 @@ void TheGame::CreateShaderProgram() {
 	
 	brickMat = new D3D11Material("BlinnPhong");
 
-	D3D11Uniform* modelUni	= new D3D11Uniform("Model", UNIFORM_MAT4, &m_World);
-	D3D11Uniform* viewUni	= new D3D11Uniform("View",	UNIFORM_MAT4, &m_playerCamera.m_view);
-	D3D11Uniform* projUni	= new D3D11Uniform("Proj",	UNIFORM_MAT4, &m_playerCamera.m_proj);
+	//WARNING: VALIDATION NEEDS TO HAPPEN IF NAMES ARE WRONG! BUFFER OVERFLOW IF NOT
+	D3D11Uniform* modelUni	= new D3D11Uniform("uModel", UNIFORM_MAT4, &m_World);
+	D3D11Uniform* viewUni	= new D3D11Uniform("uView",	UNIFORM_MAT4, &m_playerCamera.m_view);
+	D3D11Uniform* projUni	= new D3D11Uniform("uProj",	UNIFORM_MAT4, &m_playerCamera.m_proj);
 
 	brickMat->AddUniform("Model3D", modelUni);
 	brickMat->AddUniform("ViewProjection3D", viewUni);
@@ -397,7 +398,8 @@ void TheGame::Render() {
 
 	g_meshRenderer.RenderMeshWithMaterial(g_mesh, brickMat);
 
-	UIRenderer::Get()->DrawAABB2(Vector2(0.f, 0.f), Vector2(800.f, 800.f), RGBA::WHITE, 1.f);
+	//UIRenderer::Get()->DrawAABB2(Vector2(0.f, 0.f), Vector2(800.f, 800.f), RGBA::WHITE, 1.f);
+	Font::DrawText2DWithDefaultFont(Vector2(100.f, 100.f), "Hello this is a test.", 1.f, RGBA::WHITE);
 
 	RHIDeviceWindow::Get()->m_pSwapChain->Present(0, 0);
 }
