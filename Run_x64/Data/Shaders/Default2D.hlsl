@@ -48,5 +48,5 @@ float4 PS(VS_OUTPUT input) : SV_Target {
 	texCoords.y = (texCoordsQuad.w - texCoordsQuad.y) * input.tex.y;
 
 	float4 texDiffuse = txDiffuse.Sample(samLinear, input.tex);
-	return float4(1.f, 1.f, 1.f, 1.f);
+	return texDiffuse * tint;
 }

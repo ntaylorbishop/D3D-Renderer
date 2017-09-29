@@ -163,13 +163,13 @@ void TheGame::CreateShaderProgram() {
 	brickMat->AddUniform("ViewProjection3D", viewUni);
 	brickMat->AddUniform("ViewProjection3D", projUni);
 
-	D3D11Uniform* colUni		= new D3D11Uniform("LightColor",	UNIFORM_RGBA,		&m_light.m_color);
-	D3D11Uniform* minLightDist	= new D3D11Uniform("MinLightDist",	UNIFORM_FLOAT,		&m_light.m_minLightDistance);
-	D3D11Uniform* maxLightdist	= new D3D11Uniform("MaxLightDist",	UNIFORM_FLOAT,		&m_light.m_maxLightDistance);
-	D3D11Uniform* minPower		= new D3D11Uniform("MinPower",		UNIFORM_FLOAT,		&m_light.m_powerAtMin);
-	D3D11Uniform* maxPower		= new D3D11Uniform("MaxPower",		UNIFORM_FLOAT,		&m_light.m_powerAtMax);
-	D3D11Uniform* posUni		= new D3D11Uniform("LightPosition", UNIFORM_VECTOR3,	&m_light.m_position);
-	D3D11Uniform* camPosUni		= new D3D11Uniform("CameraPos",		UNIFORM_VECTOR3,	&m_playerCamera.m_position);
+	D3D11Uniform* colUni		= new D3D11Uniform("color",				UNIFORM_RGBA,		&m_light.m_color);
+	D3D11Uniform* minLightDist	= new D3D11Uniform("minLightDistance",	UNIFORM_FLOAT,		&m_light.m_minLightDistance);
+	D3D11Uniform* maxLightdist	= new D3D11Uniform("maxLightDistance",	UNIFORM_FLOAT,		&m_light.m_maxLightDistance);
+	D3D11Uniform* minPower		= new D3D11Uniform("powerAtMin",		UNIFORM_FLOAT,		&m_light.m_powerAtMin);
+	D3D11Uniform* maxPower		= new D3D11Uniform("powerAtMax",		UNIFORM_FLOAT,		&m_light.m_powerAtMax);
+	D3D11Uniform* posUni		= new D3D11Uniform("position",			UNIFORM_VECTOR3,	&m_light.m_position);
+	D3D11Uniform* camPosUni		= new D3D11Uniform("CameraPos",			UNIFORM_VECTOR3,	&m_playerCamera.m_position);
 
 	m_light.m_position = Vector3(0.f, 10.f, 0.f);
 	m_light.m_color = RGBA::WHITE;
@@ -177,6 +177,8 @@ void TheGame::CreateShaderProgram() {
 	m_light.m_maxLightDistance = 11.f;
 	m_light.m_powerAtMin = 1.f;
 	m_light.m_powerAtMax = 0.f;
+
+	//WARNING: Need to add validation that that uniform name actually exists on the shader
 
 	brickMat->AddUniform("Light", colUni);
 	brickMat->AddUniform("Light", minLightDist);
@@ -398,7 +400,6 @@ void TheGame::Render() {
 
 	g_meshRenderer.RenderMeshWithMaterial(g_mesh, brickMat);
 
-	//UIRenderer::Get()->DrawAABB2(Vector2(0.f, 0.f), Vector2(800.f, 800.f), RGBA::WHITE, 1.f);
 	Font::DrawText2DWithDefaultFont(Vector2(100.f, 100.f), "Hello this is a test.", 1.f, RGBA::WHITE);
 
 	RHIDeviceWindow::Get()->m_pSwapChain->Present(0, 0);
