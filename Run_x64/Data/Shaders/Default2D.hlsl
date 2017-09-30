@@ -42,11 +42,6 @@ VS_OUTPUT VS(float3 pos : POSITION, float4 color : COLOR, float2 tex : TEXCOORD)
 //---------------------------------------------------------------------------------------------------------------------------
 float4 PS(VS_OUTPUT input) : SV_Target {
 
-	//Note that the quad is encoded as such: float4(mins.x, mins.y, maxs.x, maxs.y)
-	float2 texCoords;
-	texCoords.x = (texCoordsQuad.z - texCoordsQuad.x) * input.tex.x;
-	texCoords.y = (texCoordsQuad.w - texCoordsQuad.y) * input.tex.y;
-
 	float4 texDiffuse = txDiffuse.Sample(samLinear, input.tex);
 	return texDiffuse * tint;
 }
