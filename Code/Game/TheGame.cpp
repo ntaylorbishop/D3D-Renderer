@@ -15,6 +15,7 @@
 #include "Engine/Renderer/D3D11/Material/D3D11Material.hpp"
 #include "Engine/Renderer/D3D11/Mesh/D3D11MeshRenderer.hpp"
 #include "Engine/UI/UIRenderer.hpp"
+#include "Engine/Console/Console.hpp"
 #include <d3dcompiler.h>
 
 TheGame* TheGame::s_theGame = nullptr;
@@ -124,6 +125,7 @@ TheGame::TheGame(HINSTANCE applicationInstanceHandle, int nCmdShow) {
 	D3D11Renderer::Get();
 
 	InputSystem::HideMouseCursor();
+	Console::Initialize(CONSOLE_KEYBIND);
 
 	//HRESULT hr = GetDevice()->QueryInterface(__uuidof(ID3D11Debug), reinterpret_cast<void**>(&g_debugDevice));
 	//ASSERT_OR_DIE(SUCCEEDED(hr), "ERROR: Could not query d3d11 debug device.");
@@ -392,6 +394,8 @@ void TheGame::Render() {
 
 	RHI::ClearRenderTarget(RGBA(0.1f, 0.1f, 0.1f, 1.f));
 
+	BeirusEngine::Render();
+
 	m_localModel.r[3] = XMVectorSet(pos.x, pos.y, pos.z, 1.f);
 	m_World = XMMatrixTranspose(m_localModel);
 
@@ -400,7 +404,9 @@ void TheGame::Render() {
 
 	g_meshRenderer.RenderMeshWithMaterial(g_mesh, brickMat);
 
-	Font::DrawText2DWithDefaultFont(Vector2(100.f, 100.f), "Hello this is a test.", 1.f, RGBA::WHITE);
+	//UIRenderer::Get()->DrawAABB2(Vector2(200.f, 200.f), Vector2(200.f, 200.f), RGBA(0.f, 0.f, 0.f, 0.4f));
+
+	//Font::DrawText2DWithDefaultFont(Vector2(100.f, 100.f), "Hello this is a test.", 1.f, RGBA::WHITE);
 
 	RHIDeviceWindow::Get()->m_pSwapChain->Present(0, 0);
 }
