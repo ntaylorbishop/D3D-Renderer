@@ -77,14 +77,9 @@ struct ConstantBuffer
 };
 
 
-D3D11VertexShader*		m_pVertexShader = nullptr;
-D3D11PixelShader*		m_pPixelShader = nullptr;
-ID3D11InputLayout*		m_pVertexLayout = nullptr;
-ID3D11Buffer*			m_pVertexBuffer = nullptr;
-ID3D11Buffer*			m_pIndexBuffer = nullptr;
-ID3D11Buffer*			m_pConstantBuffer = nullptr;
 XMMATRIX				m_World;
 XMMATRIX				m_World2;
+
 XMMATRIX				m_localModel2;
 XMMATRIX				m_View;
 XMMATRIX				m_Projection;
@@ -97,13 +92,8 @@ D3D11MeshRenderer		g_meshRenderer;
 XMMATRIX				m_localModel;
 XMMATRIX				m_localView;
 XMMATRIX				m_localProjection;
-D3D11ConstantBuffer*	m_cBuffer;
-D3D11ConstantBuffer*	m_lightBuffer;
-ID3D11SamplerState*		g_pSamplerLinear = nullptr;
 ID3D11Debug*			g_debugDevice = nullptr;
-D3D11SamplerState		g_samplerState;
 
-D3D11ShaderProgram*		g_blinnPhongShader;
 Light3D m_light;
 
 
@@ -156,22 +146,9 @@ void TheGame::CreateShaderProgram() {
 	
 	brickMat = new D3D11Material("BlinnPhong");
 
-	//WARNING: VALIDATION NEEDS TO HAPPEN IF NAMES ARE WRONG! BUFFER OVERFLOW IF NOT
-	D3D11Uniform* modelUni	= new D3D11Uniform("uModel", UNIFORM_MAT4, &m_World);
-	D3D11Uniform* viewUni	= new D3D11Uniform("uView",	UNIFORM_MAT4, &m_playerCamera.m_view);
-	D3D11Uniform* projUni	= new D3D11Uniform("uProj",	UNIFORM_MAT4, &m_playerCamera.m_proj);
-
-	brickMat->AddUniform("Model3D", modelUni);
-	brickMat->AddUniform("ViewProjection3D", viewUni);
-	brickMat->AddUniform("ViewProjection3D", projUni);
-
-	D3D11Uniform* colUni		= new D3D11Uniform("color",				UNIFORM_RGBA,		&m_light.m_color);
-	D3D11Uniform* minLightDist	= new D3D11Uniform("minLightDistance",	UNIFORM_FLOAT,		&m_light.m_minLightDistance);
-	D3D11Uniform* maxLightdist	= new D3D11Uniform("maxLightDistance",	UNIFORM_FLOAT,		&m_light.m_maxLightDistance);
-	D3D11Uniform* minPower		= new D3D11Uniform("powerAtMin",		UNIFORM_FLOAT,		&m_light.m_powerAtMin);
-	D3D11Uniform* maxPower		= new D3D11Uniform("powerAtMax",		UNIFORM_FLOAT,		&m_light.m_powerAtMax);
-	D3D11Uniform* posUni		= new D3D11Uniform("position",			UNIFORM_VECTOR3,	&m_light.m_position);
-	D3D11Uniform* camPosUni		= new D3D11Uniform("CameraPos",			UNIFORM_VECTOR3,	&m_playerCamera.m_position);
+	brickMat->CreateUniform("uModel", UNIFORM_MAT4, &m_World);
+	brickMat->CreateUniform("uView", UNIFORM_MAT4, &m_playerCamera.m_view);
+	brickMat->CreateUniform("uProj", UNIFORM_MAT4, &m_playerCamera.m_proj);
 
 	m_light.m_position = Vector3(0.f, 10.f, 0.f);
 	m_light.m_color = RGBA::WHITE;
@@ -180,15 +157,13 @@ void TheGame::CreateShaderProgram() {
 	m_light.m_powerAtMin = 1.f;
 	m_light.m_powerAtMax = 0.f;
 
-	//WARNING: Need to add validation that that uniform name actually exists on the shader
-
-	brickMat->AddUniform("Light", colUni);
-	brickMat->AddUniform("Light", minLightDist);
-	brickMat->AddUniform("Light", maxLightdist);
-	brickMat->AddUniform("Light", minPower);
-	brickMat->AddUniform("Light", maxPower);
-	brickMat->AddUniform("Light", posUni);
-	brickMat->AddUniform("Light", camPosUni);
+	brickMat->CreateUniform("color",			UNIFORM_RGBA,		&m_light.m_color);
+	brickMat->CreateUniform("minLightDistance",	UNIFORM_FLOAT,		&m_light.m_minLightDistance);
+	brickMat->CreateUniform("maxLightDistance",	UNIFORM_FLOAT,		&m_light.m_maxLightDistance);
+	brickMat->CreateUniform("powerAtMin",		UNIFORM_FLOAT,		&m_light.m_powerAtMin);
+	brickMat->CreateUniform("powerAtMax",		UNIFORM_FLOAT,		&m_light.m_powerAtMax);
+	brickMat->CreateUniform("position",			UNIFORM_VECTOR3,	&m_light.m_position);
+	brickMat->CreateUniform("CameraPos",		UNIFORM_VECTOR3,	&m_playerCamera.m_position);
 
 	Texture2D* defaultDiffuse = Texture2D::GetTexture("Data/Textures/Brick2.png");
 	Texture2D* defaultNormal = Texture2D::GetTexture("Data/Textures/Brick_Normal.png");
@@ -199,24 +174,20 @@ void TheGame::CreateShaderProgram() {
 	brickMat->AddResource(0, texID, WHICH_SHADER_FRAGMENT);
 	brickMat->AddResource(1, normID, WHICH_SHADER_FRAGMENT);
 
-
-
-
+	
 	brickMat2 = new D3D11Material("BlinnPhong");
 
-	D3D11Uniform* modelUni2 = new D3D11Uniform("Model", UNIFORM_MAT4, &m_World2);
+	brickMat2->CreateUniform("uModel",				UNIFORM_MAT4,		&m_World);
+	brickMat2->CreateUniform("uView",				UNIFORM_MAT4,		&m_playerCamera.m_view);
+	brickMat2->CreateUniform("uProj",				UNIFORM_MAT4,		&m_playerCamera.m_proj);
 
-	brickMat2->AddUniform("Model3D", modelUni2);
-	brickMat2->AddUniform("ViewProjection3D", viewUni);
-	brickMat2->AddUniform("ViewProjection3D", projUni);
-
-	brickMat2->AddUniform("Light", colUni);
-	brickMat2->AddUniform("Light", minLightDist);
-	brickMat2->AddUniform("Light", maxLightdist);
-	brickMat2->AddUniform("Light", minPower);
-	brickMat2->AddUniform("Light", maxPower);
-	brickMat2->AddUniform("Light", posUni);
-	brickMat2->AddUniform("Light", camPosUni);
+	brickMat2->CreateUniform("color",				UNIFORM_RGBA,		&m_light.m_color);
+	brickMat2->CreateUniform("minLightDistance",	UNIFORM_FLOAT,		&m_light.m_minLightDistance);
+	brickMat2->CreateUniform("maxLightDistance",	UNIFORM_FLOAT,		&m_light.m_maxLightDistance);
+	brickMat2->CreateUniform("powerAtMin",			UNIFORM_FLOAT,		&m_light.m_powerAtMin);
+	brickMat2->CreateUniform("powerAtMax",			UNIFORM_FLOAT,		&m_light.m_powerAtMax);
+	brickMat2->CreateUniform("position",			UNIFORM_VECTOR3,	&m_light.m_position);
+	brickMat2->CreateUniform("CameraPos",			UNIFORM_VECTOR3,	&m_playerCamera.m_position);
 
 	brickMat2->AddResource(0, texID, WHICH_SHADER_FRAGMENT);
 	brickMat2->AddResource(1, normID, WHICH_SHADER_FRAGMENT);
@@ -238,65 +209,90 @@ void TheGame::CreateMesh() {
 
 	//FRONT FACE
 	g_mesh->AddVertex(Vector3(-scale, scale, scale), RGBA::WHITE, Vector2(1.f, 0.f),
-		Vector4(-1.f, 0.f, 0.f, 0.f), Vector4(0.f, 0.f, 1.f, 0.f), Vector4(CrossProduct(Vector3(-1.f, 0.f, 0.f), Vector3(0.f, 0.f, 1.f)), 0.f));
+		Vector4(-1.f, 0.f, 0.f, 0.f), Vector4(0.f, 0.f, 1.f, 0.f), 
+		Vector4(CrossProduct(Vector3(-1.f, 0.f, 0.f), Vector3(0.f, 0.f, 1.f)), 0.f));
 	g_mesh->AddVertex(Vector3(-scale, scale, -scale), RGBA::WHITE, Vector2(1.f, 1.f),
-		Vector4(-1.f, 0.f, 0.f, 0.f), Vector4(0.f, 0.f, 1.f, 0.f), Vector4(CrossProduct(Vector3(-1.f, 0.f, 0.f), Vector3(0.f, 0.f, 1.f)), 0.f));
+		Vector4(-1.f, 0.f, 0.f, 0.f), Vector4(0.f, 0.f, 1.f, 0.f), 
+		Vector4(CrossProduct(Vector3(-1.f, 0.f, 0.f), Vector3(0.f, 0.f, 1.f)), 0.f));
 	g_mesh->AddVertex(Vector3(scale, scale, -scale), RGBA::WHITE, Vector2(0.f, 1.f),
-		Vector4(-1.f, 0.f, 0.f, 0.f), Vector4(0.f, 0.f, 1.f, 0.f), Vector4(CrossProduct(Vector3(-1.f, 0.f, 0.f), Vector3(0.f, 0.f, 1.f)), 0.f));
+		Vector4(-1.f, 0.f, 0.f, 0.f), Vector4(0.f, 0.f, 1.f, 0.f), 
+		Vector4(CrossProduct(Vector3(-1.f, 0.f, 0.f), Vector3(0.f, 0.f, 1.f)), 0.f));
 	g_mesh->AddVertex(Vector3(scale, scale, scale), RGBA::WHITE, Vector2(0.f, 0.f),
-		Vector4(-1.f, 0.f, 0.f, 0.f), Vector4(0.f, 0.f, 1.f, 0.f), Vector4(CrossProduct(Vector3(-1.f, 0.f, 0.f), Vector3(0.f, 0.f, 1.f)), 0.f));
+		Vector4(-1.f, 0.f, 0.f, 0.f), Vector4(0.f, 0.f, 1.f, 0.f), 
+		Vector4(CrossProduct(Vector3(-1.f, 0.f, 0.f), Vector3(0.f, 0.f, 1.f)), 0.f));
 
 	//BACK FACE
 	g_mesh->AddVertex(Vector3(-scale, -scale, scale), RGBA::WHITE, Vector2(0.f, 0.f),
-		Vector4(1.f, 0.f, 0.f, 0.f), Vector4(0.f, 0.f, 1.f, 0.f), Vector4(CrossProduct(Vector3(1.f, 0.f, 0.f), Vector3(0.f, 0.f, 1.f)), 0.f));
+		Vector4(1.f, 0.f, 0.f, 0.f), Vector4(0.f, 0.f, 1.f, 0.f), 
+		Vector4(CrossProduct(Vector3(1.f, 0.f, 0.f), Vector3(0.f, 0.f, 1.f)), 0.f));
 	g_mesh->AddVertex(Vector3(-scale, -scale, -scale), RGBA::WHITE, Vector2(0.f, 1.f),
-		Vector4(1.f, 0.f, 0.f, 0.f), Vector4(0.f, 0.f, 1.f, 0.f), Vector4(CrossProduct(Vector3(1.f, 0.f, 0.f), Vector3(0.f, 0.f, 1.f)), 0.f));
+		Vector4(1.f, 0.f, 0.f, 0.f), Vector4(0.f, 0.f, 1.f, 0.f), 
+		Vector4(CrossProduct(Vector3(1.f, 0.f, 0.f), Vector3(0.f, 0.f, 1.f)), 0.f));
 	g_mesh->AddVertex(Vector3(scale, -scale, -scale), RGBA::WHITE, Vector2(1.f, 1.f),
-		Vector4(1.f, 0.f, 0.f, 0.f), Vector4(0.f, 0.f, 1.f, 0.f), Vector4(CrossProduct(Vector3(1.f, 0.f, 0.f), Vector3(0.f, 0.f, 1.f)), 0.f));
+		Vector4(1.f, 0.f, 0.f, 0.f), Vector4(0.f, 0.f, 1.f, 0.f), 
+		Vector4(CrossProduct(Vector3(1.f, 0.f, 0.f), Vector3(0.f, 0.f, 1.f)), 0.f));
 	g_mesh->AddVertex(Vector3(scale, -scale, scale), RGBA::WHITE, Vector2(1.f, 0.f),
-		Vector4(1.f, 0.f, 0.f, 0.f), Vector4(0.f, 0.f, 1.f, 0.f), Vector4(CrossProduct(Vector3(1.f, 0.f, 0.f), Vector3(0.f, 0.f, 1.f)), 0.f));
+		Vector4(1.f, 0.f, 0.f, 0.f), Vector4(0.f, 0.f, 1.f, 0.f), 
+		Vector4(CrossProduct(Vector3(1.f, 0.f, 0.f), Vector3(0.f, 0.f, 1.f)), 0.f));
 
 	//BOTTOM FACE																					
 	g_mesh->AddVertex(Vector3(-scale, scale, -scale), RGBA::WHITE, Vector2(0.f, 1.f),
-		Vector4(1.f, 0.f, 0.f, 0.f), Vector4(0.f, -1.f, 0.f, 0.f), Vector4(CrossProduct(Vector3(1.f, 0.f, 0.f), Vector3(0.f, -1.f, 0.f)), 0.f));
+		Vector4(1.f, 0.f, 0.f, 0.f), Vector4(0.f, -1.f, 0.f, 0.f), 
+		Vector4(CrossProduct(Vector3(1.f, 0.f, 0.f), Vector3(0.f, -1.f, 0.f)), 0.f));
 	g_mesh->AddVertex(Vector3(scale, scale, -scale), RGBA::WHITE, Vector2(1.f, 1.f),
-		Vector4(1.f, 0.f, 0.f, 0.f), Vector4(0.f, -1.f, 0.f, 0.f), Vector4(CrossProduct(Vector3(1.f, 0.f, 0.f), Vector3(0.f, -1.f, 0.f)), 0.f));
+		Vector4(1.f, 0.f, 0.f, 0.f), Vector4(0.f, -1.f, 0.f, 0.f), 
+		Vector4(CrossProduct(Vector3(1.f, 0.f, 0.f), Vector3(0.f, -1.f, 0.f)), 0.f));
 	g_mesh->AddVertex(Vector3(scale, -scale, -scale), RGBA::WHITE, Vector2(1.f, 0.f),
-		Vector4(1.f, 0.f, 0.f, 0.f), Vector4(0.f, -1.f, 0.f, 0.f), Vector4(CrossProduct(Vector3(1.f, 0.f, 0.f), Vector3(0.f, -1.f, 0.f)), 0.f));
+		Vector4(1.f, 0.f, 0.f, 0.f), Vector4(0.f, -1.f, 0.f, 0.f), 
+		Vector4(CrossProduct(Vector3(1.f, 0.f, 0.f), Vector3(0.f, -1.f, 0.f)), 0.f));
 	g_mesh->AddVertex(Vector3(-scale, -scale, -scale), RGBA::WHITE, Vector2(0.f, 0.f),
-		Vector4(1.f, 0.f, 0.f, 0.f), Vector4(0.f, -1.f, 0.f, 0.f), Vector4(CrossProduct(Vector3(1.f, 0.f, 0.f), Vector3(0.f, -1.f, 0.f)), 0.f));
+		Vector4(1.f, 0.f, 0.f, 0.f), Vector4(0.f, -1.f, 0.f, 0.f), 
+		Vector4(CrossProduct(Vector3(1.f, 0.f, 0.f), Vector3(0.f, -1.f, 0.f)), 0.f));
 
 	//TOP FACE																						
 	g_mesh->AddVertex(Vector3(-scale, scale, scale), RGBA::WHITE, Vector2(0.f, 0.f),
-		Vector4(1.f, 0.f, 0.f, 0.f), Vector4(0.f, 1.f, 0.f, 0.f), Vector4(CrossProduct(Vector3(1.f, 0.f, 0.f), Vector3(0.f, 1.f, 0.f)), 0.f));
+		Vector4(1.f, 0.f, 0.f, 0.f), Vector4(0.f, 1.f, 0.f, 0.f), 
+		Vector4(CrossProduct(Vector3(1.f, 0.f, 0.f), Vector3(0.f, 1.f, 0.f)), 0.f));
 	g_mesh->AddVertex(Vector3(-scale, -scale, scale), RGBA::WHITE, Vector2(0.f, 1.f),
-		Vector4(1.f, 0.f, 0.f, 0.f), Vector4(0.f, 1.f, 0.f, 0.f), Vector4(CrossProduct(Vector3(1.f, 0.f, 0.f), Vector3(0.f, 1.f, 0.f)), 0.f));
+		Vector4(1.f, 0.f, 0.f, 0.f), Vector4(0.f, 1.f, 0.f, 0.f), 
+		Vector4(CrossProduct(Vector3(1.f, 0.f, 0.f), Vector3(0.f, 1.f, 0.f)), 0.f));
 	g_mesh->AddVertex(Vector3(scale, -scale, scale), RGBA::WHITE, Vector2(1.f, 1.f),
-		Vector4(1.f, 0.f, 0.f, 0.f), Vector4(0.f, 1.f, 0.f, 0.f), Vector4(CrossProduct(Vector3(1.f, 0.f, 0.f), Vector3(0.f, 1.f, 0.f)), 0.f));
+		Vector4(1.f, 0.f, 0.f, 0.f), Vector4(0.f, 1.f, 0.f, 0.f), 
+		Vector4(CrossProduct(Vector3(1.f, 0.f, 0.f), Vector3(0.f, 1.f, 0.f)), 0.f));
 	g_mesh->AddVertex(Vector3(scale, scale, scale), RGBA::WHITE, Vector2(1.f, 0.f),
-		Vector4(1.f, 0.f, 0.f, 0.f), Vector4(0.f, 1.f, 0.f, 0.f), Vector4(CrossProduct(Vector3(1.f, 0.f, 0.f), Vector3(0.f, 1.f, 0.f)), 0.f));
+		Vector4(1.f, 0.f, 0.f, 0.f), Vector4(0.f, 1.f, 0.f, 0.f), 
+		Vector4(CrossProduct(Vector3(1.f, 0.f, 0.f), Vector3(0.f, 1.f, 0.f)), 0.f));
 
 	//RIGHT FACE																					
 	g_mesh->AddVertex(Vector3(scale, scale, -scale), RGBA::WHITE, Vector2(1.f, 1.f),
-		Vector4(0.f, 1.f, 0.f, 0.f), Vector4(0.f, 0.f, 1.f, 0.f), Vector4(CrossProduct(Vector3(0.f, 1.f, 0.f), Vector3(0.f, 0.f, 1.f)), 0.f));
+		Vector4(0.f, 1.f, 0.f, 0.f), Vector4(0.f, 0.f, 1.f, 0.f), 
+		Vector4(CrossProduct(Vector3(0.f, 1.f, 0.f), Vector3(0.f, 0.f, 1.f)), 0.f));
 	g_mesh->AddVertex(Vector3(scale, scale, scale), RGBA::WHITE, Vector2(1.f, 0.f),
-		Vector4(0.f, 1.f, 0.f, 0.f), Vector4(0.f, 0.f, 1.f, 0.f), Vector4(CrossProduct(Vector3(0.f, 1.f, 0.f), Vector3(0.f, 0.f, 1.f)), 0.f));
+		Vector4(0.f, 1.f, 0.f, 0.f), Vector4(0.f, 0.f, 1.f, 0.f), 
+		Vector4(CrossProduct(Vector3(0.f, 1.f, 0.f), Vector3(0.f, 0.f, 1.f)), 0.f));
 	g_mesh->AddVertex(Vector3(scale, -scale, scale), RGBA::WHITE, Vector2(0.f, 0.f),
-		Vector4(0.f, 1.f, 0.f, 0.f), Vector4(0.f, 0.f, 1.f, 0.f), Vector4(CrossProduct(Vector3(0.f, 1.f, 0.f), Vector3(0.f, 0.f, 1.f)), 0.f));
+		Vector4(0.f, 1.f, 0.f, 0.f), Vector4(0.f, 0.f, 1.f, 0.f), 
+		Vector4(CrossProduct(Vector3(0.f, 1.f, 0.f), Vector3(0.f, 0.f, 1.f)), 0.f));
 	g_mesh->AddVertex(Vector3(scale, -scale, -scale), RGBA::WHITE, Vector2(0.f, 1.f),
-		Vector4(0.f, 1.f, 0.f, 0.f), Vector4(0.f, 0.f, 1.f, 0.f), Vector4(CrossProduct(Vector3(0.f, 1.f, 0.f), Vector3(0.f, 0.f, 1.f)), 0.f));
+		Vector4(0.f, 1.f, 0.f, 0.f), Vector4(0.f, 0.f, 1.f, 0.f), 
+		Vector4(CrossProduct(Vector3(0.f, 1.f, 0.f), Vector3(0.f, 0.f, 1.f)), 0.f));
 
 	//LEFT FACE																						
 	g_mesh->AddVertex(Vector3(-scale, scale, -scale), RGBA::WHITE, Vector2(0.f, 1.f),
-		Vector4(0.f, -1.f, 0.f, 0.f), Vector4(0.f, 0.f, 1.f, 0.f), Vector4(CrossProduct(Vector3(0.f, -1.f, 0.f), Vector3(0.f, 0.f, 1.f)), 0.f));
+		Vector4(0.f, -1.f, 0.f, 0.f), Vector4(0.f, 0.f, 1.f, 0.f), 
+		Vector4(CrossProduct(Vector3(0.f, -1.f, 0.f), Vector3(0.f, 0.f, 1.f)), 0.f));
 	g_mesh->AddVertex(Vector3(-scale, -scale, -scale), RGBA::WHITE, Vector2(1.f, 1.f),
-		Vector4(0.f, -1.f, 0.f, 0.f), Vector4(0.f, 0.f, 1.f, 0.f), Vector4(CrossProduct(Vector3(0.f, -1.f, 0.f), Vector3(0.f, 0.f, 1.f)), 0.f));
+		Vector4(0.f, -1.f, 0.f, 0.f), Vector4(0.f, 0.f, 1.f, 0.f), 
+		Vector4(CrossProduct(Vector3(0.f, -1.f, 0.f), Vector3(0.f, 0.f, 1.f)), 0.f));
 	g_mesh->AddVertex(Vector3(-scale, -scale, scale), RGBA::WHITE, Vector2(1.f, 0.f),
-		Vector4(0.f, -1.f, 0.f, 0.f), Vector4(0.f, 0.f, 1.f, 0.f), Vector4(CrossProduct(Vector3(0.f, -1.f, 0.f), Vector3(0.f, 0.f, 1.f)), 0.f));
+		Vector4(0.f, -1.f, 0.f, 0.f), Vector4(0.f, 0.f, 1.f, 0.f), 
+		Vector4(CrossProduct(Vector3(0.f, -1.f, 0.f), Vector3(0.f, 0.f, 1.f)), 0.f));
 	g_mesh->AddVertex(Vector3(-scale, scale, scale), RGBA::WHITE, Vector2(0.f, 0.f),
-		Vector4(0.f, -1.f, 0.f, 0.f), Vector4(0.f, 0.f, 1.f, 0.f), Vector4(CrossProduct(Vector3(0.f, -1.f, 0.f), Vector3(0.f, 0.f, 1.f)), 0.f));
+		Vector4(0.f, -1.f, 0.f, 0.f), Vector4(0.f, 0.f, 1.f, 0.f), 
+		Vector4(CrossProduct(Vector3(0.f, -1.f, 0.f), Vector3(0.f, 0.f, 1.f)), 0.f));
 
-	uint32_t indices[] = { 2,1,0, 3,2,0, 4,5,6, 4,6,7, 8,9,10, 8,10,11, 12,13,14, 12,14,15, 16,17,18, 16,18,19, 20,21,22, 20,22,23 };
+	uint32_t indices[] = { 2,1,0, 3,2,0, 4,5,6, 4,6,7, 8,9,10, 8,10,11, 12,13,14, 
+		12,14,15, 16,17,18, 16,18,19, 20,21,22, 20,22,23 };
 
 
 	g_mesh->CreateVertexBufferOnDevice();
