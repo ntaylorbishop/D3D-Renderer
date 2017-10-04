@@ -486,6 +486,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Xml Include="..\..\Run_x64\Data\Materials\SponzaMaterials.xml" />
     <Xml Include="..\..\Run_x64\Data\Particle\SmokeParticle.xml" />
     <Xml Include="..\..\Run_x64\Data\Particle\SmokeParticle_NoOIT.xml" />
     <Xml Include="..\..\Run_x64\Data\ShaderDefinitions\BlinnPhong.xml">

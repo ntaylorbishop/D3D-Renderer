@@ -16,6 +16,7 @@
 #include "Engine/Renderer/D3D11/Mesh/D3D11MeshRenderer.hpp"
 #include "Engine/UI/UIRenderer.hpp"
 #include "Engine/Console/Console.hpp"
+#include "Engine/Renderer/D3D11/Material/D3D11MaterialBank.hpp"
 #include <d3dcompiler.h>
 
 TheGame* TheGame::s_theGame = nullptr;
@@ -191,6 +192,9 @@ void TheGame::CreateShaderProgram() {
 
 	brickMat2->AddResource(0, texID, WHICH_SHADER_FRAGMENT);
 	brickMat2->AddResource(1, normID, WHICH_SHADER_FRAGMENT);
+
+	D3D11MaterialBank::AddMaterialsFromXMLFile("Data/Materials/", "SponzaMaterials.xml");
+	//m_scene = Scene::LoadSceneFromDirectory("Data/Mesh/Sponza/");
 }
 
 
