@@ -65,8 +65,8 @@
 
 				SpecularColor       ="0.5880, 0.5880, 0.5880, 1.0"
 				SpecularExponent    ="10.0"
-				DiffuseTexture      ="textures/gi_flag.png"
 		/>
+    <!--DiffuseTexture      ="textures/gi_flag.png" -->
 		<StateProperties
 				DepthTest     ="true"
 				BlendMode     ="opaque"
@@ -316,8 +316,8 @@
 				SpecularColor       ="0.5880, 0.5880, 0.5880, 1.0"
 				SpecularExponent    ="10.0"
 				DiffuseTexture      ="textures/vase_hanging.png"
-				NormalMap           ="textures/vase_hanging_normal.png"
 		/>
+    <!-- NormalMap           ="textures/vase_hanging_normal.png" -->
 		<StateProperties
 				DepthTest     ="true"
 				BlendMode     ="opaque"
@@ -371,8 +371,8 @@
 
 				SpecularColor       ="0.5880, 0.5880, 0.5880, 1.0"
 				SpecularExponent    ="10.0"
-				DiffuseTexture      ="textures/gi_flag.png"
 		/>
+		<!-- DiffuseTexture      ="textures/gi_flag.png" -->
 		<StateProperties
 				DepthTest     ="true"
 				BlendMode     ="opaque"

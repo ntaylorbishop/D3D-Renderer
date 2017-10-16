@@ -9,13 +9,17 @@
   </VertexShader>
   <FragmentShader filePath="Data/Shaders/SimpleTriangle.hlsl">
     <ConstantBuffer name="Light" size="64" bindPoint="2">
-      <Uniform name="color"             type="rgba"  default="default" />
-      <Uniform name="minLightDistance"  type="float" default="default" />
-      <Uniform name="maxLightDistance"  type="float" default="default" />
-      <Uniform name="powerAtMin"        type="float" default="default" />
-      <Uniform name="powerAtMax"        type="float" default="default" />
-      <Uniform name="position"          type="vec3"  default="default" />
-      <Uniform name="CameraPos"         type="vec3"  default="default" />
+      <Uniform name="color"             type="rgba"   default="default" />
+      <Uniform name="minLightDistance"  type="float"  default="default" />
+      <Uniform name="maxLightDistance"  type="float"  default="default" />
+      <Uniform name="powerAtMin"        type="float"  default="default" />
+      <Uniform name="powerAtMax"        type="float"  default="default" />
+      <Uniform name="position"          type="vec3"   default="default" />
+      <Uniform name="CameraPos"         type="vec3"   default="default" />
+    </ConstantBuffer>
+    <ConstantBuffer name="MaterialDefinitions" size="64" bindPoint="3">
+      <Uniform name="uAmbientLight"     type="rgba"   default="default" />
+      <Uniform name="uSpecularExponent" type="float"  default="default" />
     </ConstantBuffer>
     <ShaderResourceView   bindPoint="0" />
     <ShaderResourceView   bindPoint="1" />
