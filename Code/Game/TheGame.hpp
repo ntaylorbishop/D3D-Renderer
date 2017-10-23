@@ -5,6 +5,7 @@
 #include "Engine/Renderer/SpriteRenderer/TheSpriteRenderer.hpp"
 #include "Engine/Input/InputSystem.hpp"
 #include "Engine/Renderer/Cameras/Camera3D.hpp"
+#include "Engine/Scene/D3D11Scene.hpp"
 #include <windows.h>
 
 class TheGame {
@@ -30,6 +31,7 @@ private:
 	void CreateMesh();
 
 	Camera3D m_playerCamera;
+	D3D11Scene* m_scene;
 
 	static TheGame* s_theGame;
 };

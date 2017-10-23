@@ -194,7 +194,7 @@ void TheGame::CreateShaderProgram() {
 	brickMat2->AddResource(1, normID, WHICH_SHADER_FRAGMENT);
 
 	D3D11MaterialBank::Get()->AddMaterialsFromXMLFile("Data/Materials/", "SponzaMaterials.xml");
-	m_scene = Scene::LoadSceneFromDirectory("Data/Mesh/Sponza/");
+	m_scene = D3D11Scene::LoadSceneFromDirectory("Data/Mesh/Sponza/");
 }
 
 
