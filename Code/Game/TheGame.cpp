@@ -151,6 +151,23 @@ void TheGame::CreateShaderProgram() {
 	brickMat->CreateUniform("uView", UNIFORM_MAT4, &m_playerCamera.m_view);
 	brickMat->CreateUniform("uProj", UNIFORM_MAT4, &m_playerCamera.m_proj);
 
+	D3D11ShaderProgram* blinnPhong = D3D11ShaderProgram::CreateOrGetShaderProgram("BlinnPhong");
+	D3D11Uniform* view = blinnPhong->GetUniform("uView");
+	D3D11Uniform* proj = blinnPhong->GetUniform("uProj");
+	D3D11Uniform* model = blinnPhong->GetUniform("uModel");
+
+	Vector4 r1 = Vector4(1.f, 0.f, 0.f, 0.f);
+	Vector4 r2 = Vector4(0.f, 0.f, 1.f, 0.f);
+	Vector4 r3 = Vector4(0.f, 1.f, 0.f, 0.f);
+	Vector4 r4 = Vector4(0.f, 0.f, 0.f, 1.f);
+
+	m_model = Matrix44(r1, r2, r3, r4);
+	//m_model = m_model.Transpose();
+
+	view->SetData(&m_playerCamera.m_view);
+	proj->SetData(&m_playerCamera.m_proj);
+	model->SetData(&m_model);
+
 	m_light.m_position = Vector3(0.f, 10.f, 0.f);
 	m_light.m_color = RGBA::WHITE;
 	m_light.m_minLightDistance = 9.f;
@@ -396,6 +413,7 @@ void TheGame::Render() {
 
 	BeirusEngine::Render();
 
+
 	m_localModel.r[3] = XMVectorSet(pos.x, pos.y, pos.z, 1.f);
 	m_World = XMMatrixTranspose(m_localModel);
 
@@ -403,6 +421,8 @@ void TheGame::Render() {
 	m_World2 = XMMatrixTranspose(m_localModel2);
 
 	g_meshRenderer.RenderMeshWithMaterial(g_mesh, brickMat);
+
+	m_scene->Render();
 
 	//UIRenderer::Get()->DrawAABB2(Vector2(200.f, 200.f), Vector2(200.f, 200.f), RGBA(0.f, 0.f, 0.f, 0.4f));
 

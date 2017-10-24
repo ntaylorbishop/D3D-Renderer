@@ -32,6 +32,7 @@ private:
 
 	Camera3D m_playerCamera;
 	D3D11Scene* m_scene;
+	Matrix44 m_model;
 
 	static TheGame* s_theGame;
 };
